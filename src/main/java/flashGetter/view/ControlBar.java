@@ -1,7 +1,5 @@
 package flashGetter.view;
 
-import java.awt.Color;
-
 import javax.swing.JPanel;
 
 /**
@@ -10,7 +8,7 @@ import javax.swing.JPanel;
  * 2015年1月26日
  * 
  */
-public class ControlBar extends EmptyPanel{
+public class ControlBar extends JPanel{
     
     public ControlBar() {
     }

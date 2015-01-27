@@ -3,13 +3,8 @@ package flashGetter.view;
 import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.GridLayout;
-import java.awt.event.ComponentEvent;
-import java.awt.event.ComponentListener;
-import java.awt.event.FocusEvent;
-import java.awt.event.FocusListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
-import java.awt.event.MouseMotionListener;
 
 import javax.swing.Icon;
 import javax.swing.ImageIcon;
@@ -17,21 +12,9 @@ import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 
-
-
-
-
-
-
-
-
-
-
-
-
-
 import org.apache.log4j.Logger;
 
+import flashGetter.Resources;
 import flashGetter.util.ImageUtil;
 
 /**
@@ -40,11 +23,11 @@ import flashGetter.util.ImageUtil;
  * 2015年1月26日
  * 
  */
-public class DownloadOptionPanel extends EmptyPanel{
+public class DownloadOptionPanel extends JPanel{
     
     private static Logger logger = Logger.getLogger(DownloadOptionPanel.class);
     
-    private static class OptionPanel extends EmptyPanel{
+    private static class OptionPanel extends JPanel{
         
         private JLabel iconLabel;
         private JLabel optionLabel;
@@ -86,6 +69,7 @@ public class DownloadOptionPanel extends EmptyPanel{
             this.icon2 = icon2;
             
             iconLabel = new JLabel(icon1);
+            iconLabel.setOpaque(true);
             optionLabel = new JLabel(option);
             iconLabel.addMouseListener(adapter);
             optionLabel.addMouseListener(adapter);
@@ -104,22 +88,22 @@ public class DownloadOptionPanel extends EmptyPanel{
     
     public DownloadOptionPanel() {
         
-        JPanel downloadingPanel = new OptionPanel(ImageUtil.readIcon("/images/downloading.png", 50),
-                                                  ImageUtil.readIcon("/images/downloading(white).png", 50), "Downloading");
-        JPanel downloadedPanel = new OptionPanel(ImageUtil.readIcon("/images/downloaded.png", 50),
-                                                 ImageUtil.readIcon("/images/downloaded(white).png", 50), "Downloaded");
-        JPanel deletedPanel = new OptionPanel(ImageUtil.readIcon("/images/deleted.png", 50), 
-                                              ImageUtil.readIcon("/images/deleted(white).png", 50), "Deleted");
+        JPanel downloadingPanel = new OptionPanel(ImageUtil.readIcon(Resources.downloading, 50),
+                                                  ImageUtil.readIcon(Resources.downloadingChoosed, 50), "Downloading");
+        JPanel downloadedPanel = new OptionPanel(ImageUtil.readIcon(Resources.downloaded, 50),
+                                                 ImageUtil.readIcon(Resources.downloadedChoosed, 50), "Downloaded");
+        JPanel deletedPanel = new OptionPanel(ImageUtil.readIcon(Resources.deleted, 50), 
+                                              ImageUtil.readIcon(Resources.deletedChoosed, 50), "Deleted");
         
         setLayout(new GridLayout(6, 1));
         
         
-        add(new EmptyPanel());
+        add(new JPanel());
         add(downloadingPanel);
         add(downloadedPanel);
         add(deletedPanel);
-        add(new EmptyPanel());
-        add(new EmptyPanel());
+        add(new JPanel());
+        add(new JPanel());
         
     }
     

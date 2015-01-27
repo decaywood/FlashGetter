@@ -2,7 +2,6 @@ package flashGetter.view;
 
 import java.awt.BorderLayout;
 import java.awt.Color;
-import java.awt.Dimension;
 import java.awt.GridLayout;
 
 import javax.swing.ImageIcon;
@@ -10,6 +9,7 @@ import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 
+import flashGetter.Resources;
 import flashGetter.util.ImageUtil;
 
 /**
@@ -36,7 +36,7 @@ public class UserInfoPanel extends JPanel {
             return "please click photo to login";
         }
         public ImageIcon getUserPhoto() {
-            return ImageUtil.readIcon("/images/defaultUser.jpg", 50, 50);
+            return ImageUtil.readIcon(Resources.defaultUser, 50);
         }
         public boolean isVip() {
             return false;
@@ -44,7 +44,7 @@ public class UserInfoPanel extends JPanel {
         
     }
     
-    private static class InfoPanel extends EmptyPanel{
+    private static class InfoPanel extends JPanel{
         
         public InfoPanel(String value, String key){
             
@@ -74,11 +74,11 @@ public class UserInfoPanel extends JPanel {
         setVisible(true);
         
         
-        userPhotoPanel = new EmptyPanel(new BorderLayout());
+        userPhotoPanel = new JPanel(new BorderLayout());
         userPhotoPanel.add(new JLabel(userInfo.getUserPhoto()), BorderLayout.CENTER);
         add(userPhotoPanel);
         
-        infoPanel = new EmptyPanel();
+        infoPanel = new JPanel();
         infoPanel.setLayout(new GridLayout(3, 1, 0, 20));
         infoPanel.add(new InfoPanel("UserID", userInfo.getUserID()));
         infoPanel.add(new InfoPanel("UserName", userInfo.getUserName()));

@@ -10,6 +10,8 @@ import java.net.URL;
 import javax.imageio.ImageIO;
 import javax.swing.ImageIcon;
 
+import flashGetter.Resources;
+
 /**
  * @author decaywood
  * 
@@ -23,6 +25,20 @@ public class ImageUtil {
         return readIcon(url, size, size);
         
     }
+    
+    public static ImageIcon readIcon(Resources url, int size){
+        
+        return readIcon(url, size, size);
+        
+    }
+    
+    public static ImageIcon readIcon(Resources url, int width, int height){
+        
+        return readIcon(ImageUtil.class.getResource(url.getAddress()), width, height);
+        
+    }
+    
+   
     
     public static ImageIcon readIcon(String url, int size){
         

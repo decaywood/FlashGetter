@@ -2,6 +2,7 @@ package flashGetter.view;
 
 import java.awt.BorderLayout;
 import java.awt.Color;
+import java.awt.Font;
 import java.awt.GridLayout;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
@@ -27,64 +28,6 @@ public class DownloadOptionPanel extends JPanel{
     
     private static Logger logger = Logger.getLogger(DownloadOptionPanel.class);
     
-    private static class OptionPanel extends JPanel{
-        
-        private JLabel iconLabel;
-        private JLabel optionLabel;
-        private Icon icon1;
-        private Icon icon2;
-        
-        private MouseAdapter adapter = new MouseAdapter() {
-            
-            @Override
-            public void mouseEntered(MouseEvent e) {
-                OptionPanel.this.lightComponent();
-            };
-            
-            @Override
-            public void mouseExited(MouseEvent e) {
-                OptionPanel.this.darkComponent();
-            };
-            
-            @Override
-            public void mousePressed(MouseEvent e) {
-                
-            };
-            
-        };
-        
-        private void lightComponent(){
-            iconLabel.setIcon(icon2);
-            optionLabel.setForeground(Color.YELLOW);
-        }
-        
-        private void darkComponent(){
-            iconLabel.setIcon(icon1);
-            optionLabel.setForeground(Color.WHITE);
-        }
-        
-        public OptionPanel(ImageIcon icon1, ImageIcon icon2, String option){
-            
-            this.icon1 = icon1;
-            this.icon2 = icon2;
-            
-            iconLabel = new JLabel(icon1);
-            iconLabel.setOpaque(true);
-            optionLabel = new JLabel(option);
-            iconLabel.addMouseListener(adapter);
-            optionLabel.addMouseListener(adapter);
-            addMouseListener(adapter);
-            
-            optionLabel.setForeground(Color.WHITE);
-            
-            setLayout(new BorderLayout());
-          
-            add(iconLabel, BorderLayout.WEST);
-            add(optionLabel, BorderLayout.EAST);
-            
-        }
-        
-    }
     
     public DownloadOptionPanel() {
         
@@ -92,8 +35,8 @@ public class DownloadOptionPanel extends JPanel{
                                                   ImageUtil.readIcon(Resources.downloadingChoosed, 50), "Downloading");
         JPanel downloadedPanel = new OptionPanel(ImageUtil.readIcon(Resources.downloaded, 50),
                                                  ImageUtil.readIcon(Resources.downloadedChoosed, 50), "Downloaded");
-        JPanel deletedPanel = new OptionPanel(ImageUtil.readIcon(Resources.deleted, 50), 
-                                              ImageUtil.readIcon(Resources.deletedChoosed, 50), "Deleted");
+        JPanel deletedPanel = new OptionPanel(ImageUtil.readIcon(Resources.recycleStation, 50), 
+                                              ImageUtil.readIcon(Resources.recycleStationChoosed, 50), "Deleted");
         
         setLayout(new GridLayout(6, 1));
         

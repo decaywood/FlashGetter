@@ -51,6 +51,9 @@ public class UserInfoPanel extends JPanel {
             JLabel valueLabel = new JLabel(value+" : ");
             JLabel keyLabel = new JLabel(key);
             
+            valueLabel.setFont(Resources.getFont());
+            keyLabel.setFont(Resources.getFont());
+            
             valueLabel.setForeground(Color.WHITE);
             keyLabel.setForeground(Color.WHITE);
             

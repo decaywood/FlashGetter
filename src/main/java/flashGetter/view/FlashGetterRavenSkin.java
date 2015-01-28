@@ -5,6 +5,7 @@ import org.pushingpixels.substance.api.skin.RavenSkin;
 import org.pushingpixels.substance.api.watermark.SubstanceImageWatermark;
 
 import flashGetter.Resources;
+import flashGetter.view.sidebar.SideBar;
 
 /**
  * @author decaywood

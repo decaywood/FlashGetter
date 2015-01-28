@@ -1,4 +1,4 @@
-package flashGetter.view;
+package flashGetter.view.sidebar;
 
 import java.awt.BorderLayout;
 import java.awt.Dimension;
@@ -20,6 +20,8 @@ import org.pushingpixels.substance.api.skin.RavenSkin;
 import org.pushingpixels.substance.api.skin.SubstanceRavenLookAndFeel;
 import org.pushingpixels.substance.api.watermark.SubstanceImageWatermark;
 import org.pushingpixels.substance.api.watermark.SubstanceWatermark;
+
+import flashGetter.view.FlashGetterRavenSkin;
 
 /**
  * @author decaywood

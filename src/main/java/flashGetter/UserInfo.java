@@ -2,7 +2,7 @@ package flashGetter;
 
 import javax.swing.ImageIcon;
 
-import flashGetter.view.UserInfoView;
+import flashGetter.view.sidebar.UserInfoView;
 
 /**
  * @author decaywood

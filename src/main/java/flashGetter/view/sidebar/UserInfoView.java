@@ -1,4 +1,4 @@
-package flashGetter.view;
+package flashGetter.view.sidebar;
 
 import javax.swing.ImageIcon;
 

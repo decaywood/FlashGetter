@@ -1,13 +1,16 @@
-package flashGetter.view;
+package flashGetter.view.sidebar;
 
 import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.GridLayout;
+import java.awt.Label;
 
 import javax.swing.ImageIcon;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
+
+import org.apache.commons.lang3.StringUtils;
 
 import flashGetter.Resources;
 import flashGetter.util.ImageUtil;
@@ -46,20 +49,29 @@ public class UserInfoPanel extends JPanel {
     
     private static class InfoPanel extends JPanel{
         
-        public InfoPanel(String value, String key){
+        public InfoPanel(String key, String value){
             
-            JLabel valueLabel = new JLabel(value+" : ");
-            JLabel keyLabel = new JLabel(key);
+            String text = null;
+            int width = 30;
+            text = value.length() > width ? 
+                    value.replaceAll(value.substring(width - 3, value.length()), "...")
+                    : value + StringUtils.repeat(' ', width - value.length());
+                
+           System.out.println(text.length());
+            JLabel keyLabel = new JLabel(key + " : ");
+            JLabel valueLabel = new JLabel(text);
             
-            valueLabel.setFont(Resources.getFont());
+            valueLabel.setToolTipText(value);
+           
             keyLabel.setFont(Resources.getFont());
+            valueLabel.setFont(Resources.getFont());
             
-            valueLabel.setForeground(Color.WHITE);
             keyLabel.setForeground(Color.WHITE);
+            valueLabel.setForeground(Color.WHITE);
             
-            setLayout(new BorderLayout(0, 0));
-            add(valueLabel, BorderLayout.WEST);
-            add(keyLabel, BorderLayout.EAST);
+            setLayout(new BorderLayout());
+            add(valueLabel, BorderLayout.EAST);
+            add(keyLabel, BorderLayout.WEST);
             
         }
         

@@ -14,6 +14,7 @@ import org.pushingpixels.substance.api.skin.SubstanceRavenLookAndFeel;
 
 import flashGetter.view.controlbar.ControlBarPlatter;
 import flashGetter.view.sidebar.SideBar;
+import flashGetter.view.tasktable.TaskTablePlatter;
 
 import java.awt.BorderLayout;
 import java.awt.Color;
@@ -36,6 +37,7 @@ public class MainFrame extends JFrame{
         
         rightSidePanel.setLayout(new BorderLayout());
         rightSidePanel.add(new ControlBarPlatter(), BorderLayout.NORTH);
+//        rightSidePanel.add(new TaskTablePlatter(), BorderLayout.CENTER);
         rightSidePanel.setBorder(BorderFactory.createLineBorder(Color.DARK_GRAY));
         add(rightSidePanel, BorderLayout.CENTER);
         

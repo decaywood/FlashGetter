@@ -11,7 +11,9 @@ import javax.swing.table.TableRowSorter;
 public class TaskTableRowSorter<T extends TaskTableModel> extends TableRowSorter<T>{
     
     public TaskTableRowSorter(T model) {
+        
         super(model);
+        
     }
 
 }

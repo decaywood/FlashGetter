@@ -4,6 +4,8 @@ import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import java.util.ArrayList;
+import java.util.Vector;
 
 import javax.swing.Icon;
 import javax.swing.ImageIcon;
@@ -25,7 +27,7 @@ public class OptionPanel extends JPanel{
     private JLabel optionLabel;
     private Icon icon1;
     private Icon icon2;
-    protected ViewEvent event;
+    protected ArrayList<ViewEvent> viewEvents;
     
     private MouseAdapter adapter = new MouseAdapter() {
         
@@ -56,8 +58,8 @@ public class OptionPanel extends JPanel{
     }
     
     protected void mousePressed(){
-        if(event != null)
-            ViewEventDispatcher.InnerClass.instance.fireEvent(event);
+        if(!viewEvents.isEmpty())
+            viewEvents.forEach(event -> ViewEventDispatcher.InnerClass.instance.fireEvent(event));
     }
     
     protected void lightComponent(){
@@ -70,13 +72,13 @@ public class OptionPanel extends JPanel{
         optionLabel.setForeground(Color.WHITE);
     }
     
-    public OptionPanel(ImageIcon icon1, ImageIcon icon2, String option, ViewEvent event){
+    public OptionPanel(ImageIcon icon1, ImageIcon icon2, String option, ViewEvent... event){
         this(icon1, icon2, option, null, event);
     }
     
     
     public OptionPanel(ImageIcon icon1, ImageIcon icon2, String option, String tip){
-        this(icon1, icon2, option, tip, null);
+        this(icon1, icon2, option, tip, new ViewEvent[0]);
     }
     
     public OptionPanel(
@@ -84,9 +86,12 @@ public class OptionPanel extends JPanel{
             ImageIcon icon2,
             String option, 
             String tip,
-            ViewEvent event){
+            ViewEvent... events){
         
-        this.event = event;
+        this.viewEvents = new ArrayList<ViewEvent>();
+        
+        for(ViewEvent event : events)
+            this.viewEvents.add(event);
         
         this.icon1 = icon1;
         this.icon2 = icon2;

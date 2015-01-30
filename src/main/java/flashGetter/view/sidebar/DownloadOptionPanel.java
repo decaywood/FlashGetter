@@ -14,6 +14,9 @@ import flashGetter.view.ViewEvent;
 import flashGetter.view.controlbar.DeletedControlBar;
 import flashGetter.view.controlbar.DownloadedControlBar;
 import flashGetter.view.controlbar.DownloadingControlBar;
+import flashGetter.view.tasktable.DeletedTable;
+import flashGetter.view.tasktable.DownloadedTable;
+import flashGetter.view.tasktable.DownloadingTable;
 
 /**
  * @author decaywood
@@ -30,19 +33,22 @@ public class DownloadOptionPanel extends JPanel{
         JPanel downloadingPanel = new SideBarOptionPanel(ImageUtil.readIcon(Resources.downloading, 50),
                                                   ImageUtil.readIcon(Resources.downloadingChoosed, 50), 
                                                   "Downloading",
+                                                  true,
                                                   new ViewEvent().setTarget(DownloadingControlBar.class),
-                                                  true);
+                                                  new ViewEvent().setTarget(DownloadingTable.class));
         
         
         JPanel downloadedPanel = new SideBarOptionPanel(ImageUtil.readIcon(Resources.downloaded, 50),
                                                  ImageUtil.readIcon(Resources.downloadedChoosed, 50), 
                                                  "Downloaded",
-                                                 new ViewEvent().setTarget(DownloadedControlBar.class));
+                                                 new ViewEvent().setTarget(DownloadedControlBar.class),
+                                                 new ViewEvent().setTarget(DownloadedTable.class));
         
         JPanel deletedPanel = new SideBarOptionPanel(ImageUtil.readIcon(Resources.recycleStation, 50), 
                                               ImageUtil.readIcon(Resources.recycleStationChoosed, 50), 
                                               "Deleted",
-                                              new ViewEvent().setTarget(DeletedControlBar.class));
+                                              new ViewEvent().setTarget(DeletedControlBar.class),
+                                              new ViewEvent().setTarget(DeletedTable.class));
         
         setLayout(new GridLayout(6, 1));
         

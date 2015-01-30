@@ -1,5 +1,6 @@
 package flashGetter.view;
 
+import javax.swing.JComponent;
 import javax.swing.JPanel;
 
 /**
@@ -10,14 +11,14 @@ import javax.swing.JPanel;
  */
 public class ViewEvent {
     
-    Class<? extends JPanel> target;
+    Class<? extends JComponent> target;
     
-    public ViewEvent setTarget(Class<? extends JPanel> target) {
+    public ViewEvent setTarget(Class<? extends JComponent> target) {
         this.target = target;
         return this;
     }
     
-    public Class<? extends JPanel> getTarget() {
+    public Class<? extends JComponent> getTarget() {
         return target;
     }
 

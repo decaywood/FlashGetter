@@ -1,23 +1,13 @@
 package flashGetter.view.tasktable;
 
-import java.awt.Color;
-import java.awt.Component;
-import java.awt.event.ActionListener;
-import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
+import java.util.ArrayList;
 import java.util.List;
 
-import javax.swing.JButton;
-import javax.swing.JFrame;
-import javax.swing.JLabel;
 import javax.swing.JTable;
-import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.TableCellRenderer;
-
-import flashGetter.Resources;
-import flashGetter.view.ViewEvent;
-import flashGetter.view.ViewEventDispatcher;
+import javax.swing.table.TableColumn;
 
 /**
  * @author decaywood
@@ -25,13 +15,19 @@ import flashGetter.view.ViewEventDispatcher;
  * 2015年1月28日
  * 
  */
-public abstract class TaskTable extends JTable implements MouseListener{
+public abstract class TaskTable<T extends TaskTableModel> extends JTable implements MouseListener{
+    
+    protected List<TableHeadRenderer> headerLabels;
+    protected List<TableCellRenderer> columnCellRenderers;
+    protected TaskTableModel tableModel;
     
     protected TableHeadRenderer typeLabel;
     protected TableHeadRenderer nameLabel;
     protected TableHeadRenderer sizeLabel;
     protected TableHeadRenderer progressLabel;
     protected TableHeadRenderer remainTimeLabel;
+    protected TableHeadRenderer finishTimeLabel;
+    protected TableHeadRenderer createTimeLabel;
     protected TableHeadRenderer speedLabel;
     
     protected FileIconRenderer fileIconRenderer;
@@ -41,7 +37,17 @@ public abstract class TaskTable extends JTable implements MouseListener{
     protected StringCellRenderer timeCellRenderer;
     protected StringCellRenderer speedCellRenderer;
     
-    public TaskTable() {
+    public TaskTable(T tableModel) {
+        
+        headerLabels = new ArrayList<TableHeadRenderer>();
+        columnCellRenderers = new ArrayList<TableCellRenderer>();
+                
+        this.tableModel = tableModel;
+        
+        setModel(tableModel);
+        setRowHeight(30);
+        
+        tableHeader.addMouseListener(this);
         
         /**
          * headIcon
@@ -51,6 +57,8 @@ public abstract class TaskTable extends JTable implements MouseListener{
         sizeLabel = new TableHeadRenderer("Flie Size");
         progressLabel = new TableHeadRenderer("Progress");
         remainTimeLabel = new TableHeadRenderer("Remain Time");
+        finishTimeLabel = new TableHeadRenderer("Finish Time");
+        createTimeLabel = new TableHeadRenderer("Create Time");
         speedLabel = new TableHeadRenderer("Download Speed");
         
         /**
@@ -63,7 +71,40 @@ public abstract class TaskTable extends JTable implements MouseListener{
         timeCellRenderer = new StringCellRenderer(data -> "time not be implemented yet");
         speedCellRenderer = new StringCellRenderer(data -> "speed not be implemented yet");
        
-       
+//      setRowSorter(new DownloadingTaskTableRowSorter());
+        
+        initParameter();
+        
+        for(int i = 0; i < headerLabels.size(); i++){
+            TableColumn column = getColumnModel().getColumn(i);
+            column.setCellRenderer(columnCellRenderers.get(i));
+            column.setHeaderRenderer(headerLabels.get(i));
+            column.setIdentifier(headerLabels.get(i));
+        }
+        
+          
+    }
+    
+    protected void addBundle(TableHeadRenderer headerLabel, TableCellRenderer columnCellRenderer){
+        headerLabels.add(headerLabel);
+        columnCellRenderers.add(columnCellRenderer);
+    }
+    
+    protected abstract void initParameter();
+        
+    
+    @Override
+    public void mouseReleased(MouseEvent e) {
+        headerLabels.forEach(l -> l.releaseLabel());
+        getTableHeader().repaint();
+    }
+
+    @Override
+    public void mousePressed(MouseEvent e) {
+        int selectColumn = getTableHeader().columnAtPoint(e.getPoint());
+        TableHeadRenderer label = (TableHeadRenderer)getColumnModel().getColumn(selectColumn).getIdentifier();
+        label.pressLabel();
+        getTableHeader().repaint();
     }
     
     @Override

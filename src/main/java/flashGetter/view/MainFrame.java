@@ -37,7 +37,7 @@ public class MainFrame extends JFrame{
         
         rightSidePanel.setLayout(new BorderLayout());
         rightSidePanel.add(new ControlBarPlatter(), BorderLayout.NORTH);
-//        rightSidePanel.add(new TaskTablePlatter(), BorderLayout.CENTER);
+        rightSidePanel.add(new TaskTablePlatter(), BorderLayout.CENTER);
         rightSidePanel.setBorder(BorderFactory.createLineBorder(Color.DARK_GRAY));
         add(rightSidePanel, BorderLayout.CENTER);
         

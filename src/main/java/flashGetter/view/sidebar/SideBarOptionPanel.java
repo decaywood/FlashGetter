@@ -1,11 +1,13 @@
 package flashGetter.view.sidebar;
 
+import java.awt.Event;
+
 import javax.swing.ImageIcon;
 
 import flashGetter.view.OptionPanel;
 import flashGetter.view.ViewEvent;
 import flashGetter.view.ViewEventDispatcher;
-import flashGetter.view.ViewHandler;
+import flashGetter.view.ViewEventHandler;
 
 /**
  * @author decaywood
@@ -13,7 +15,7 @@ import flashGetter.view.ViewHandler;
  * 2015年1月28日
  * 
  */
-public class SideBarOptionPanel extends OptionPanel implements ViewHandler<SideBarOptionPanel>{
+public class SideBarOptionPanel extends OptionPanel implements ViewEventHandler<SideBarOptionPanel>{
     
     private ViewEvent sideBarEvent;
     private boolean isChoosed;
@@ -22,16 +24,16 @@ public class SideBarOptionPanel extends OptionPanel implements ViewHandler<SideB
             ImageIcon icon1,
             ImageIcon icon2,
             String option,
-            ViewEvent event){
-        this(icon1, icon2, option, event, false);
+            ViewEvent... event){
+        this(icon1, icon2, option, false, event);
     }
     
     public SideBarOptionPanel(
             ImageIcon icon1,
             ImageIcon icon2,
             String option,
-            ViewEvent event,
-            boolean highlight){
+            boolean highlight,
+            ViewEvent... event){
         super(icon1, icon2, option, event);
         
         ViewEventDispatcher.InnerClass.instance.register(this);

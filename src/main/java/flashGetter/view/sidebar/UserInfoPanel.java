@@ -57,7 +57,6 @@ public class UserInfoPanel extends JPanel {
                     value.replaceAll(value.substring(width - 3, value.length()), "...")
                     : value + StringUtils.repeat(' ', width - value.length());
                 
-           System.out.println(text.length());
             JLabel keyLabel = new JLabel(key + " : ");
             JLabel valueLabel = new JLabel(text);
             

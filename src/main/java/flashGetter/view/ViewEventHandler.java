@@ -6,7 +6,7 @@ package flashGetter.view;
  * 2015年1月27日
  * 
  */
-public interface ViewHandler <C> {
+public interface ViewEventHandler <C> {
     
     public void invoke(ViewEvent event);
     

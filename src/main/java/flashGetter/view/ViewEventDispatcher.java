@@ -12,7 +12,7 @@ import java.util.List;
  */
 public class ViewEventDispatcher {
     
-    private List<ViewHandler> listeners;
+    private List<ViewEventHandler> listeners;
     
     public static class InnerClass{
         
@@ -21,10 +21,10 @@ public class ViewEventDispatcher {
     }
     
     private ViewEventDispatcher() {
-        listeners = new ArrayList<ViewHandler>();
+        listeners = new ArrayList<ViewEventHandler>();
     }
     
-    public void register(ViewHandler handler){
+    public void register(ViewEventHandler handler){
         listeners.add(handler);
     }
     

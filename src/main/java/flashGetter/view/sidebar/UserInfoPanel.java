@@ -93,7 +93,7 @@ public class UserInfoPanel extends JPanel {
         add(userPhotoPanel);
         
         infoPanel = new JPanel();
-        infoPanel.setLayout(new GridLayout(3, 1, 0, 20));
+        infoPanel.setLayout(new GridLayout(3, 1, 0, 5));
         infoPanel.add(new InfoPanel("UserID", userInfo.getUserID()));
         infoPanel.add(new InfoPanel("UserName", userInfo.getUserName()));
         infoPanel.add(new InfoPanel("Level", userInfo.getLevel()));

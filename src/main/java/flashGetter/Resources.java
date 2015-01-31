@@ -33,7 +33,14 @@ public enum Resources {
     removeTask("/images/removeTask.png"),
     removeTaskChoosed("/images/removeTaskChoosed.png"),
     removeAllTask("/images/removeAllTask.png"),
-    removeAllTaskChoosed("/images/removeAllTaskChoosed.png");
+    removeAllTaskChoosed("/images/removeAllTaskChoosed.png"),
+    downloadingSpeed("/images/downloadingSpeed.png"),
+    downloadingSpeedChoosed("/images/downloadingSpeedChoosed.png"),
+    pageChange("/images/pageChange.png"),
+    pageChangeChoosed("/images/pageChangeChoosed.png"),
+    pageRecovered("/images/pageRecover.png"),
+    pageRecoveredChoosed("/images/pageRecoverChoosed.png");
+    
     
     String resourcesAddress;
     

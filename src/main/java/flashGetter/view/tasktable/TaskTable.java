@@ -6,6 +6,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import javax.swing.JTable;
+import javax.swing.table.JTableHeader;
 import javax.swing.table.TableCellRenderer;
 import javax.swing.table.TableColumn;
 
@@ -17,8 +18,10 @@ import javax.swing.table.TableColumn;
  */
 public abstract class TaskTable<T extends TaskTableModel> extends JTable implements MouseListener{
     
+    public static final int ROW_HEIGHT = 30;
+    
     protected List<TableHeadRenderer> headerLabels;
-    protected List<TableCellRenderer> columnCellRenderers;
+    protected List<WidthScaleCellRenderer> columnCellRenderers;
     protected TaskTableModel tableModel;
     
     protected TableHeadRenderer typeLabel;
@@ -30,22 +33,22 @@ public abstract class TaskTable<T extends TaskTableModel> extends JTable impleme
     protected TableHeadRenderer createTimeLabel;
     protected TableHeadRenderer speedLabel;
     
-    protected FileIconRenderer fileIconRenderer;
-    protected StringCellRenderer nameCellRenderer;
-    protected StringCellRenderer sizeCellRenderer;
-    protected ProgressBarCellRender progressBarCellRender;
-    protected StringCellRenderer timeCellRenderer;
-    protected StringCellRenderer speedCellRenderer;
+    protected WidthScaleCellRenderer fileIconRenderer;
+    protected WidthScaleCellRenderer nameCellRenderer;
+    protected WidthScaleCellRenderer sizeCellRenderer;
+    protected WidthScaleCellRenderer progressBarCellRender;
+    protected WidthScaleCellRenderer timeCellRenderer;
+    protected WidthScaleCellRenderer speedCellRenderer;
     
     public TaskTable(T tableModel) {
         
         headerLabels = new ArrayList<TableHeadRenderer>();
-        columnCellRenderers = new ArrayList<TableCellRenderer>();
+        columnCellRenderers = new ArrayList<WidthScaleCellRenderer>();
                 
         this.tableModel = tableModel;
         
         setModel(tableModel);
-        setRowHeight(30);
+        setRowHeight(ROW_HEIGHT);
         
         tableHeader.addMouseListener(this);
         
@@ -53,39 +56,66 @@ public abstract class TaskTable<T extends TaskTableModel> extends JTable impleme
          * headIcon
          */
         typeLabel = new TableHeadRenderer("Flie Type");
+        typeLabel.setToolTipText("Flie Type");
+        
         nameLabel = new TableHeadRenderer("Flie Name");
+        typeLabel.setToolTipText("Flie Name");
+        
         sizeLabel = new TableHeadRenderer("Flie Size");
+        sizeLabel.setToolTipText("File Size");
+        
         progressLabel = new TableHeadRenderer("Progress");
+        progressLabel.setToolTipText("Progress");
+        
         remainTimeLabel = new TableHeadRenderer("Remain Time");
+        remainTimeLabel.setToolTipText("Remain Time");
+        
         finishTimeLabel = new TableHeadRenderer("Finish Time");
+        finishTimeLabel.setToolTipText("Finish Time");
+        
         createTimeLabel = new TableHeadRenderer("Create Time");
+        createTimeLabel.setToolTipText("Create Time");
+        
         speedLabel = new TableHeadRenderer("Download Speed");
+        speedLabel.setToolTipText("Download Speed");
         
         /**
          * cellRenderer per column
          */
         fileIconRenderer = new FileIconRenderer();
-        nameCellRenderer = new StringCellRenderer(data -> "name not be implemented yet");
-        sizeCellRenderer = new StringCellRenderer(data -> "size not be implemented yet");
+        
+        nameCellRenderer = new StringCellRenderer(" xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx.rmvb ".length(),
+                data -> "name not be implemented yet");
+        
+        sizeCellRenderer = new StringCellRenderer(" xxx xb ".length(),
+                data -> "size not be implemented yet");
+        
         progressBarCellRender = new ProgressBarCellRender();
-        timeCellRenderer = new StringCellRenderer(data -> "time not be implemented yet");
-        speedCellRenderer = new StringCellRenderer(data -> "speed not be implemented yet");
+        
+        timeCellRenderer = new StringCellRenderer(" xxxx-xx-xx xx:xx:xx ".length(),
+                data -> "time not be implemented yet");
+        
+        speedCellRenderer = new StringCellRenderer(" xxx xb/s ".length(),
+                data -> "speed not be implemented yet");
        
 //      setRowSorter(new DownloadingTaskTableRowSorter());
         
         initParameter();
         
         for(int i = 0; i < headerLabels.size(); i++){
+            WidthScaleCellRenderer cellRenderer = columnCellRenderers.get(i);
             TableColumn column = getColumnModel().getColumn(i);
-            column.setCellRenderer(columnCellRenderers.get(i));
-            column.setHeaderRenderer(headerLabels.get(i));
-            column.setIdentifier(headerLabels.get(i));
+            TableHeadRenderer headRenderer = headerLabels.get(i);
+            column.setCellRenderer(cellRenderer);
+            cellRenderer.scaleWidth(column);
+            column.setHeaderRenderer(headRenderer);
+            column.setIdentifier(headRenderer);
         }
         
           
     }
     
-    protected void addBundle(TableHeadRenderer headerLabel, TableCellRenderer columnCellRenderer){
+    protected void addBundle(TableHeadRenderer headerLabel, WidthScaleCellRenderer columnCellRenderer){
         headerLabels.add(headerLabel);
         columnCellRenderers.add(columnCellRenderer);
     }

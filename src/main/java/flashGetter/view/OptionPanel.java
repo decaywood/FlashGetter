@@ -23,8 +23,8 @@ import flashGetter.Resources;
  */
 public class OptionPanel extends JPanel{
     
-    private JLabel iconLabel;
-    private JLabel optionLabel;
+    protected JLabel iconLabel;
+    protected JLabel optionLabel;
     private Icon icon1;
     private Icon icon2;
     protected ArrayList<ViewEvent> viewEvents;
@@ -108,8 +108,13 @@ public class OptionPanel extends JPanel{
         
         setLayout(new BorderLayout());
       
-        add(iconLabel, BorderLayout.WEST);
-        add(optionLabel, BorderLayout.EAST);
+        if(option != null){
+            add(iconLabel, BorderLayout.WEST);
+            add(optionLabel, BorderLayout.EAST);
+        }else {
+            add(iconLabel, BorderLayout.CENTER);
+        }
+        
         
         if(tip != null){
             iconLabel.setToolTipText(tip);

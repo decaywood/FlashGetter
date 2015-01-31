@@ -11,15 +11,25 @@ import javax.swing.JPanel;
  */
 public class ViewEvent {
     
-    Class<? extends JComponent> target;
+    Class<?> target;
+    Object data;
     
-    public ViewEvent setTarget(Class<? extends JComponent> target) {
+    public ViewEvent setTarget(Class<?> target) {
         this.target = target;
         return this;
     }
     
-    public Class<? extends JComponent> getTarget() {
+    public ViewEvent setData(Object data) {
+        this.data = data;
+        return this;
+    }
+    
+    public Class<?> getTarget() {
         return target;
+    }
+    
+    public Object getData() {
+        return data;
     }
 
 }

@@ -30,28 +30,42 @@ public class DownloadOptionPanel extends JPanel{
     
     
     public DownloadOptionPanel() {
-        JPanel downloadingPanel = new SideBarOptionPanel(ImageUtil.readIcon(Resources.downloading, 50),
-                                                  ImageUtil.readIcon(Resources.downloadingChoosed, 50), 
-                                                  "Downloading",
-                                                  true,
-                                                  new ViewEvent().setTarget(DownloadingControlBar.class),
-                                                  new ViewEvent().setTarget(DownloadingTable.class));
-        
-        
-        JPanel downloadedPanel = new SideBarOptionPanel(ImageUtil.readIcon(Resources.downloaded, 50),
-                                                 ImageUtil.readIcon(Resources.downloadedChoosed, 50), 
-                                                 "Downloaded",
-                                                 new ViewEvent().setTarget(DownloadedControlBar.class),
-                                                 new ViewEvent().setTarget(DownloadedTable.class));
-        
-        JPanel deletedPanel = new SideBarOptionPanel(ImageUtil.readIcon(Resources.recycleStation, 50), 
-                                              ImageUtil.readIcon(Resources.recycleStationChoosed, 50), 
-                                              "Deleted",
-                                              new ViewEvent().setTarget(DeletedControlBar.class),
-                                              new ViewEvent().setTarget(DeletedTable.class));
         
         setLayout(new GridLayout(6, 1));
+        init(null, null, null);
         
+    }
+    
+    public DownloadOptionPanel(String tag1, String tag2, String tag3) {
+       
+        setLayout(new GridLayout(6, 1));
+        init(tag1, tag2, tag3);
+        
+    }
+    
+    public void init(String tag1, String tag2, String tag3){
+        JPanel downloadingPanel = new SideBarOptionPanel(SideBarOptionPanel.DOWNLOADING,
+                ImageUtil.readIcon(Resources.downloading, 50),
+                ImageUtil.readIcon(Resources.downloadingChoosed, 50), 
+                tag1,
+                true,
+                new ViewEvent().setTarget(DownloadingControlBar.class),
+                new ViewEvent().setTarget(DownloadingTable.class));
+
+
+        JPanel downloadedPanel = new SideBarOptionPanel(SideBarOptionPanel.DOWNLOADED,
+                ImageUtil.readIcon(Resources.downloaded, 50),
+                       ImageUtil.readIcon(Resources.downloadedChoosed, 50), 
+                       tag2,
+                       new ViewEvent().setTarget(DownloadedControlBar.class),
+                       new ViewEvent().setTarget(DownloadedTable.class));
+        
+        JPanel deletedPanel = new SideBarOptionPanel(SideBarOptionPanel.DELETED,
+                ImageUtil.readIcon(Resources.recycleStation, 50), 
+                    ImageUtil.readIcon(Resources.recycleStationChoosed, 50), 
+                    tag3,
+                    new ViewEvent().setTarget(DeletedControlBar.class),
+                    new ViewEvent().setTarget(DeletedTable.class));
         
         add(new JPanel());
         add(downloadingPanel);
@@ -59,14 +73,9 @@ public class DownloadOptionPanel extends JPanel{
         add(deletedPanel);
         add(new JPanel());
         add(new JPanel());
-        
+
     }
     
-    public static void main(String[] args) {
-        JFrame jFrame = new JFrame();
-        jFrame.setVisible(true);
-        jFrame.add(new DownloadOptionPanel());
-        
-    }
+    
 
 }

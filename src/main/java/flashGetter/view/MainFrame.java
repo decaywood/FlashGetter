@@ -14,6 +14,8 @@ import org.pushingpixels.substance.api.skin.SubstanceRavenLookAndFeel;
 
 import flashGetter.view.controlbar.ControlBarPlatter;
 import flashGetter.view.sidebar.SideBar;
+import flashGetter.view.sidebar.SideBarPlatter;
+import flashGetter.view.speedbar.SpeedPlatter;
 import flashGetter.view.tasktable.TaskTablePlatter;
 
 import java.awt.BorderLayout;
@@ -31,13 +33,14 @@ public class MainFrame extends JFrame{
     public MainFrame() {
         getContentPane().setLayout(new BorderLayout());
         
-        add(new SideBar(), BorderLayout.WEST);
+        add(new SideBarPlatter(), BorderLayout.WEST);
         
         JPanel rightSidePanel = new JPanel();
         
         rightSidePanel.setLayout(new BorderLayout());
         rightSidePanel.add(new ControlBarPlatter(), BorderLayout.NORTH);
         rightSidePanel.add(new TaskTablePlatter(), BorderLayout.CENTER);
+        rightSidePanel.add(new SpeedPlatter(), BorderLayout.SOUTH);
         rightSidePanel.setBorder(BorderFactory.createLineBorder(Color.DARK_GRAY));
         add(rightSidePanel, BorderLayout.CENTER);
         
@@ -52,7 +55,7 @@ public class MainFrame extends JFrame{
                 try {
 //                    JFrame.setDefaultLookAndFeelDecorated(true); //加上此语句连同窗体外框也改变  
 //                    JDialog.setDefaultLookAndFeelDecorated(true); //加上此语句会使弹出的对话框也改变  
-                    SubstanceSkin skin = new FlashGetterRavenSkin(0.8f, ImageWatermarkKind.APP_CENTER);
+                    SubstanceSkin skin = new FlashGetterRavenSkin(0.5f, ImageWatermarkKind.APP_CENTER);
                     UIManager.setLookAndFeel(new SubstanceRavenLookAndFeel());
                     SubstanceLookAndFeel.setSkin(skin);
                 } catch (UnsupportedLookAndFeelException e) {

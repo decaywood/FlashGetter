@@ -5,6 +5,7 @@ import java.awt.Component;
 import javax.swing.JProgressBar;
 import javax.swing.JTable;
 import javax.swing.table.TableCellRenderer;
+import javax.swing.table.TableColumn;
 
 /**
  * @author decaywood
@@ -12,8 +13,7 @@ import javax.swing.table.TableCellRenderer;
  * 2015年1月29日
  * 
  */
-public class ProgressBarCellRender extends JProgressBar implements
-        TableCellRenderer {
+public class ProgressBarCellRender extends JProgressBar implements WidthScaleCellRenderer {
 
     @Override
     public Component getTableCellRendererComponent(JTable table, Object value,
@@ -21,6 +21,11 @@ public class ProgressBarCellRender extends JProgressBar implements
         setValue((Integer)value);
         setStringPainted(true);
         return this;
+    }
+
+    @Override
+    public void scaleWidth(TableColumn column) {
+        column.setMaxWidth(TaskTable.ROW_HEIGHT * 50);
     }
 
 }

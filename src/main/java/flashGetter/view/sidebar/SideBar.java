@@ -22,6 +22,7 @@ import org.pushingpixels.substance.api.watermark.SubstanceImageWatermark;
 import org.pushingpixels.substance.api.watermark.SubstanceWatermark;
 
 import flashGetter.view.FlashGetterRavenSkin;
+import flashGetter.view.sidebar.SideBarPlatter.SidebarPlatter;
 
 /**
  * @author decaywood
@@ -29,48 +30,23 @@ import flashGetter.view.FlashGetterRavenSkin;
  * 2015年1月26日
  * 
  */
-public class SideBar extends JPanel{
+public class SideBar extends JPanel implements SidebarPlatter {
     
-    private static Logger logger = Logger.getLogger(SideBar.class);
-    
-    private JPanel userInfoPanel;
-    
-    private JPanel downloadOptionPanel;
     
     public SideBar() {
         
+        JPanel downloadOptionPanel = new DownloadOptionPanel("Downloading", "Downloaded", "Deleted");
+        downloadOptionPanel.setPreferredSize(new Dimension(100, 400));
+        
+        JPanel allocatePanel = new JPanel(new BorderLayout());
+        allocatePanel.add(new UserInfoPanel(), BorderLayout.NORTH);
+        allocatePanel.add(downloadOptionPanel, BorderLayout.SOUTH);
         
         setLayout(new BorderLayout());
-        userInfoPanel = new UserInfoPanel();
-        add(userInfoPanel, BorderLayout.NORTH);
         
+        add(allocatePanel, BorderLayout.NORTH);
         add(new JPanel(), BorderLayout.CENTER);
         
-        downloadOptionPanel = new DownloadOptionPanel();
-        downloadOptionPanel.setPreferredSize(new Dimension(100, 400));
-        add(downloadOptionPanel, BorderLayout.SOUTH);
     }
 
-    public static void main(String[] args) {
-        SwingUtilities.invokeLater(new Runnable() {  
-            public void run() {  
-                try {
-//                    JFrame.setDefaultLookAndFeelDecorated(true); //加上此语句连同窗体外框也改变  
-//                    JDialog.setDefaultLookAndFeelDecorated(true); //加上此语句会使弹出的对话框也改变  
-                    SubstanceSkin skin = new FlashGetterRavenSkin(0.8f, ImageWatermarkKind.APP_CENTER);
-                    UIManager.setLookAndFeel(new SubstanceRavenLookAndFeel());
-                    SubstanceLookAndFeel.setSkin(skin);
-                } catch (UnsupportedLookAndFeelException e) {
-                    e.printStackTrace();
-                } 
-                JFrame jFrame = new JFrame();
-                jFrame.setVisible(true);
-                jFrame.add(new SideBar());
-            }  
-        });  
-      
-       
-       
-       
-    }
 }

@@ -11,8 +11,8 @@ import javax.swing.JPanel;
  */
 public class ViewEvent {
     
-    Class<?> target;
-    Object data;
+    private Class<?> target;
+    private Object data;
     
     public ViewEvent setTarget(Class<?> target) {
         this.target = target;

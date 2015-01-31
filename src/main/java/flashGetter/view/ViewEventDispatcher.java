@@ -34,7 +34,7 @@ public class ViewEventDispatcher {
         
             listeners.stream()
             .filter(target -> target.getGroupClass().isAssignableFrom(event.getTarget()))
-            .forEach(listener -> listener.invoke(event));;
+            .forEach(listener -> listener.invoke(event));
     }
 
 }

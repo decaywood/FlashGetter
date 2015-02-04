@@ -1,7 +1,7 @@
 package flashGetter.view;
 
-import javax.swing.JComponent;
-import javax.swing.JPanel;
+import java.awt.event.MouseEvent;
+
 
 /**
  * @author decaywood
@@ -13,6 +13,18 @@ public class InfoEvent {
     
     private Class<?> target;
     private int operationKey;
+    
+    private String info;
+    
+    
+    public InfoEvent setInfo(String info) {
+        this.info = info;
+        return this;
+    }
+    
+    public String getInfo() {
+        return info;
+    }
     
     public InfoEvent setTarget(Class<?> target) {
         this.target = target;

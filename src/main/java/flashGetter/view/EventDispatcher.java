@@ -31,9 +31,9 @@ public class EventDispatcher {
         
         if(event == null) return;
         
-            listeners.parallelStream()
-            .filter(target -> target.getGroupClass().isAssignableFrom(event.getTarget()))
-            .forEach(listener -> listener.invoke(event));
+        listeners.stream()
+        .filter(target -> target.getGroupClass().isAssignableFrom(event.getTarget()))
+        .forEach(listener -> listener.invoke(event));
     }
 
 }

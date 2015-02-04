@@ -12,6 +12,7 @@ import org.pushingpixels.substance.api.SubstanceSkin;
 import org.pushingpixels.substance.api.SubstanceConstants.ImageWatermarkKind;
 import org.pushingpixels.substance.api.skin.SubstanceRavenLookAndFeel;
 
+import flashGetter.downloader.DownloadManager;
 import flashGetter.view.controlbar.ControlBarPlatter;
 import flashGetter.view.sidebar.SideBar;
 import flashGetter.view.sidebar.SideBarPlatter;
@@ -33,6 +34,9 @@ public class MainFrame extends JFrame{
     public static MainFrame mainFrame;
     
     public MainFrame() {
+        
+//        new DownloadManager();
+        
         getContentPane().setLayout(new BorderLayout());
         
         add(new SideBarPlatter(), BorderLayout.WEST);

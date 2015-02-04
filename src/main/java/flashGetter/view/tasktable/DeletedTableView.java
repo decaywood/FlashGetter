@@ -3,7 +3,7 @@ package flashGetter.view.tasktable;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 
-import flashGetter.view.tasktable.DownloadedTableView.DownloadedTableModel;
+import model.DeletedTableTableModel;
 
 /**
  * @author decaywood
@@ -11,15 +11,9 @@ import flashGetter.view.tasktable.DownloadedTableView.DownloadedTableModel;
  * 2015年1月30日
  * 
  */
-public class DeletedTableView extends TaskTableView<DeletedTableView.DeletedTableTableModel> {
+public class DeletedTableView extends TaskTableView<DeletedTableTableModel> {
     
-    public static class DeletedTableTableModel extends TaskTableModel{
-        
-        public DeletedTableTableModel() {
-            super(4);
-        }
-        
-    }
+   
 
     @Override
     protected void initParameter() {

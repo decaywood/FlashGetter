@@ -10,6 +10,8 @@ import javax.swing.table.JTableHeader;
 import javax.swing.table.TableCellRenderer;
 import javax.swing.table.TableColumn;
 
+import model.TaskTableModel;
+
 /**
  * @author decaywood
  * 

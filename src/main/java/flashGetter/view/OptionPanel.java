@@ -27,7 +27,7 @@ public class OptionPanel extends JPanel{
     protected JLabel optionLabel;
     private Icon icon1;
     private Icon icon2;
-    protected ArrayList<ViewEvent> viewEvents;
+    protected ArrayList<InfoEvent> viewEvents;
     
     private MouseAdapter adapter = new MouseAdapter() {
         
@@ -59,7 +59,7 @@ public class OptionPanel extends JPanel{
     
     protected void mousePressed(){
         if(!viewEvents.isEmpty())
-            viewEvents.forEach(event -> ViewEventDispatcher.InnerClass.instance.fireEvent(event));
+            viewEvents.forEach(event -> EventDispatcher.InnerClass.instance.fireEvent(event));
     }
     
     protected void lightComponent(){
@@ -72,13 +72,13 @@ public class OptionPanel extends JPanel{
         optionLabel.setForeground(Color.WHITE);
     }
     
-    public OptionPanel(ImageIcon icon1, ImageIcon icon2, String option, ViewEvent... event){
+    public OptionPanel(ImageIcon icon1, ImageIcon icon2, String option, InfoEvent... event){
         this(icon1, icon2, option, null, event);
     }
     
     
     public OptionPanel(ImageIcon icon1, ImageIcon icon2, String option, String tip){
-        this(icon1, icon2, option, tip, new ViewEvent[0]);
+        this(icon1, icon2, option, tip, new InfoEvent[0]);
     }
     
     public OptionPanel(
@@ -86,11 +86,11 @@ public class OptionPanel extends JPanel{
             ImageIcon icon2,
             String option, 
             String tip,
-            ViewEvent... events){
+            InfoEvent... events){
         
-        this.viewEvents = new ArrayList<ViewEvent>();
+        this.viewEvents = new ArrayList<InfoEvent>();
         
-        for(ViewEvent event : events)
+        for(InfoEvent event : events)
             this.viewEvents.add(event);
         
         this.icon1 = icon1;

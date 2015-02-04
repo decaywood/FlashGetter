@@ -10,8 +10,8 @@ import javax.swing.JPanel;
 import flashGetter.Resources;
 import flashGetter.util.ImageUtil;
 import flashGetter.view.OptionPanel;
-import flashGetter.view.ViewEventDispatcher;
-import flashGetter.view.ViewEvent;
+import flashGetter.view.EventDispatcher;
+import flashGetter.view.InfoEvent;
 
 /**
  * @author decaywood
@@ -36,8 +36,8 @@ public class ControlBarView extends JPanel{
         taskPanel.addMouseListener(new MouseAdapter() {
             @Override
             public void mousePressed(MouseEvent e) {
-                ViewEvent event = new ViewEvent();
-                ViewEventDispatcher.InnerClass.instance.fireEvent(event);
+                InfoEvent event = new InfoEvent();
+                EventDispatcher.InnerClass.instance.fireEvent(event);
             }
         });
         add(taskPanel);

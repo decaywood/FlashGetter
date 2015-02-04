@@ -1,6 +1,5 @@
 package flashGetter.view;
 
-import java.lang.annotation.Target;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -10,29 +9,29 @@ import java.util.List;
  * 2015年1月28日
  * 
  */
-public class ViewEventDispatcher {
+public class EventDispatcher {
     
-    private List<ViewEventHandler> listeners;
+    private List<EventHandler<?>> listeners;
     
     public static class InnerClass{
         
-        public static final ViewEventDispatcher instance = new ViewEventDispatcher();
+        public static final EventDispatcher instance = new EventDispatcher();
         
     }
     
-    private ViewEventDispatcher() {
-        listeners = new ArrayList<ViewEventHandler>();
+    private EventDispatcher() {
+        listeners = new ArrayList<EventHandler<?>>();
     }
     
-    public void register(ViewEventHandler handler){
+    public void register(EventHandler<?> handler){
         listeners.add(handler);
     }
     
-    public void fireEvent(ViewEvent event){
+    public void fireEvent(InfoEvent event){
         
         if(event == null) return;
         
-            listeners.stream()
+            listeners.parallelStream()
             .filter(target -> target.getGroupClass().isAssignableFrom(event.getTarget()))
             .forEach(listener -> listener.invoke(event));
     }

@@ -7,9 +7,9 @@ import javax.swing.JComponent;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
 
-import flashGetter.view.ViewEvent;
-import flashGetter.view.ViewEventDispatcher;
-import flashGetter.view.ViewEventHandler;
+import flashGetter.view.InfoEvent;
+import flashGetter.view.EventDispatcher;
+import flashGetter.view.EventHandler;
 
 /**
  * @author decaywood
@@ -17,13 +17,13 @@ import flashGetter.view.ViewEventHandler;
  * 2015年1月28日
  * 
  */
-public class TaskTablePlatterView extends JScrollPane implements ViewEventHandler<TaskTableView>{
+public class TaskTablePlatterView extends JScrollPane implements EventHandler<TaskTableView>{
     
     private Map<Class<? extends TaskTableView>, TaskTableView> tables;
     
     public TaskTablePlatterView() {
         
-        ViewEventDispatcher.InnerClass.instance.register(this);
+        EventDispatcher.InnerClass.instance.register(this);
         
         tables = new HashMap<Class<? extends TaskTableView>, TaskTableView>();
         
@@ -39,7 +39,7 @@ public class TaskTablePlatterView extends JScrollPane implements ViewEventHandle
     }
 
     @Override
-    public void invoke(ViewEvent event) {
+    public void invoke(InfoEvent event) {
         JTable table = tables.get(event.getTarget());
         setViewportView(table);
         table.repaint();

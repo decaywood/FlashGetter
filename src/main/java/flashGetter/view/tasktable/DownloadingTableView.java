@@ -1,7 +1,12 @@
 package flashGetter.view.tasktable;
 
-import javax.swing.JFrame;
+import javax.swing.ImageIcon;
 import javax.swing.JLabel;
+
+import model.DownloadingTableModel;
+import flashGetter.presenter.DownloadingTablePresenter;
+
+
 
 /**
  * @author decaywood
@@ -9,19 +14,12 @@ import javax.swing.JLabel;
  * 2015年1月28日
  * 
  */
-public class DownloadingTableView extends TaskTableView<DownloadingTableView.DownloadingTableModel> {
+public class DownloadingTableView extends TaskTableView<DownloadingTableModel> 
+    implements DownloadingTablePresenter.DownloadingTablePresenterView {
     
            
-    public static class DownloadingTableModel extends TaskTableModel{
-        public DownloadingTableModel() {
-            super(6);
-        }
-    }
-    
     public DownloadingTableView() {
         super(new DownloadingTableModel());
-        for(int i = 0; i < 40; i++)
-        tableModel.addRow(new Object[]{new JLabel(),"aa","bb",50,"cc","dd"});
     }
 
     @Override
@@ -36,13 +34,11 @@ public class DownloadingTableView extends TaskTableView<DownloadingTableView.Dow
         
     }
     
-    public static void main(String[] args) {
-        JFrame jFrame = new JFrame();
-//        jFrame.add(new TaskTablePlatter(new DownloadingTable()));
-        
-        jFrame.setVisible(true);
-        jFrame.pack();
-        
+ 
+    @Override
+    public void addRow(ImageIcon icon, String fileName, String fileSize,
+            int progress, String time, String speed) {
+         
     }
 
 

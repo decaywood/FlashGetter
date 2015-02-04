@@ -7,9 +7,9 @@ import javax.swing.JPanel;
 import flashGetter.Resources;
 import flashGetter.util.ImageUtil;
 import flashGetter.view.OptionPanel;
-import flashGetter.view.ViewEvent;
-import flashGetter.view.ViewEventDispatcher;
-import flashGetter.view.ViewEventHandler;
+import flashGetter.view.InfoEvent;
+import flashGetter.view.EventDispatcher;
+import flashGetter.view.EventHandler;
 import flashGetter.view.sidebar.SideBarView;
 import flashGetter.view.sidebar.SideBarChangedView;
 
@@ -19,7 +19,7 @@ import flashGetter.view.sidebar.SideBarChangedView;
  * 2015年1月30日
  * 
  */
-public class SpeedPlatterView extends JPanel implements ViewEventHandler<SpeedPlatterView.AbstractOption>{
+public class SpeedPlatterView extends JPanel implements EventHandler<SpeedPlatterView.AbstractOption>{
     
     private OptionPanel fold;
     private OptionPanel extend;
@@ -32,18 +32,18 @@ public class SpeedPlatterView extends JPanel implements ViewEventHandler<SpeedPl
     public SpeedPlatterView() {
         
         setLayout(new BorderLayout());
-        ViewEventDispatcher.InnerClass.instance.register(this);
+        EventDispatcher.InnerClass.instance.register(this);
         
         fold = new OptionPanel(ImageUtil.readIcon(Resources.pageChange, 30),
                 ImageUtil.readIcon(Resources.pageChangeChoosed, 30),
                 "Fold", 
-                new ViewEvent().setTarget(SideBarChangedView.class),
-                new ViewEvent().setTarget(Fold.class));
+                new InfoEvent().setTarget(SideBarChangedView.class),
+                new InfoEvent().setTarget(Fold.class));
         
         extend = new OptionPanel(ImageUtil.readIcon(Resources.pageRecovered, 30),
                 ImageUtil.readIcon(Resources.pageRecoveredChoosed, 30),
-                "Fold", new ViewEvent().setTarget(SideBarView.class),
-                new ViewEvent().setTarget(Extend.class));
+                "Fold", new InfoEvent().setTarget(SideBarView.class),
+                new InfoEvent().setTarget(Extend.class));
         
         buttonPanel = new JPanel();
         buttonPanel.add(fold);
@@ -54,7 +54,7 @@ public class SpeedPlatterView extends JPanel implements ViewEventHandler<SpeedPl
     }
 
     @Override
-    public void invoke(ViewEvent event) {
+    public void invoke(InfoEvent event) {
         buttonPanel.removeAll();
         if(event.getTarget() == Fold.class) buttonPanel.add(extend);
         if(event.getTarget() == Extend.class) buttonPanel.add(fold);

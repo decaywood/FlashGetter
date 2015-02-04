@@ -6,7 +6,7 @@ import javax.swing.JPanel;
 import flashGetter.Resources;
 import flashGetter.util.ImageUtil;
 import flashGetter.view.OptionPanel;
-import flashGetter.view.ViewEvent;
+import flashGetter.view.InfoEvent;
 
 import java.awt.BorderLayout;
 
@@ -23,7 +23,7 @@ public class SpeedOptionPanelView extends OptionPanel {
         
         super(ImageUtil.readIcon(Resources.downloadingSpeed, 30),
                             ImageUtil.readIcon(Resources.downloadingSpeedChoosed, 30),
-                            "0 kb/s", "Flow monitoring", new ViewEvent().setTarget(SpeedPlatterView.class));
+                            "0 kb/s", "Flow monitoring", new InfoEvent().setTarget(SpeedPlatterView.class));
     }
 
     public void setText(String text){

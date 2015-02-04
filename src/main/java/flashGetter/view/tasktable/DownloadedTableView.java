@@ -3,6 +3,9 @@ package flashGetter.view.tasktable;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 
+import model.DownloadedTableModel;
+import model.TaskTableModel;
+
 /**
  * @author decaywood
  * 
@@ -10,16 +13,8 @@ import javax.swing.JLabel;
  * 
  * 
  */
-public class DownloadedTableView extends TaskTableView<DownloadedTableView.DownloadedTableModel>{
+public class DownloadedTableView extends TaskTableView<DownloadedTableModel>{
     
-
-    public static class DownloadedTableModel extends TaskTableModel{
-        
-        public DownloadedTableModel() {
-            super(4);
-        }
-        
-    }
 
     @Override
     protected void initParameter() {
@@ -35,7 +30,6 @@ public class DownloadedTableView extends TaskTableView<DownloadedTableView.Downl
     public DownloadedTableView() {
         
         super(new DownloadedTableModel());
-        tableModel.addRow(new Object[]{new JLabel(),"aa","bbcc","dd"});
         
     }
     

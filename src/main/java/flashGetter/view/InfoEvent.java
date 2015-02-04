@@ -9,18 +9,18 @@ import javax.swing.JPanel;
  * 2015年1月28日
  * 
  */
-public class ViewEvent {
+public class InfoEvent {
     
     private Class<?> target;
-    private Object data;
+    private int operationKey;
     
-    public ViewEvent setTarget(Class<?> target) {
+    public InfoEvent setTarget(Class<?> target) {
         this.target = target;
         return this;
     }
     
-    public ViewEvent setData(Object data) {
-        this.data = data;
+    public InfoEvent setOperationKey(int key) {
+        this.operationKey = key;
         return this;
     }
     
@@ -28,8 +28,8 @@ public class ViewEvent {
         return target;
     }
     
-    public Object getData() {
-        return data;
+    public int getOperationKey() {
+        return operationKey;
     }
 
 }

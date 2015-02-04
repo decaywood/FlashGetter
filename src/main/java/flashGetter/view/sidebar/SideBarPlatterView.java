@@ -6,9 +6,9 @@ import java.util.Map;
 
 import javax.swing.JPanel;
 
-import flashGetter.view.ViewEvent;
-import flashGetter.view.ViewEventDispatcher;
-import flashGetter.view.ViewEventHandler;
+import flashGetter.view.InfoEvent;
+import flashGetter.view.EventDispatcher;
+import flashGetter.view.EventHandler;
 
 /**
  * @author decaywood
@@ -16,7 +16,7 @@ import flashGetter.view.ViewEventHandler;
  * 2015年1月31日
  * 
  */
-public class SideBarPlatterView extends JPanel implements ViewEventHandler<SideBarPlatterView.SidebarPlatter>{
+public class SideBarPlatterView extends JPanel implements EventHandler<SideBarPlatterView.SidebarPlatter>{
     
     private Map<Class<? extends JPanel>, JPanel> sideBars;
     
@@ -24,14 +24,14 @@ public class SideBarPlatterView extends JPanel implements ViewEventHandler<SideB
     
     public SideBarPlatterView() {
         sideBars = new HashMap<Class<? extends JPanel>, JPanel>();
-        ViewEventDispatcher.InnerClass.instance.register(this);
+        EventDispatcher.InnerClass.instance.register(this);
         sideBars.put(SideBarView.class, new SideBarView());
         sideBars.put(SideBarChangedView.class, new SideBarChangedView());
         add(sideBars.get(SideBarView.class));
     }
 
     @Override
-    public void invoke(ViewEvent event) {
+    public void invoke(InfoEvent event) {
         removeAll();
         add(sideBars.get(event.getTarget()));
         updateUI();

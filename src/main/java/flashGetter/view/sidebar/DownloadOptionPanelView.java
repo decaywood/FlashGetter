@@ -2,15 +2,11 @@ package flashGetter.view.sidebar;
 
 import java.awt.GridLayout;
 
-import javax.swing.JFrame;
 import javax.swing.JPanel;
-
-import org.apache.log4j.Logger;
 
 import flashGetter.Resources;
 import flashGetter.util.ImageUtil;
-import flashGetter.view.OptionPanel;
-import flashGetter.view.ViewEvent;
+import flashGetter.view.InfoEvent;
 import flashGetter.view.controlbar.DeletedControlBarView;
 import flashGetter.view.controlbar.DownloadedControlBarView;
 import flashGetter.view.controlbar.DownloadingControlBarView;
@@ -25,8 +21,6 @@ import flashGetter.view.tasktable.DownloadingTableView;
  * 
  */
 public class DownloadOptionPanelView extends JPanel{
-    
-    private static Logger logger = Logger.getLogger(DownloadOptionPanelView.class);
     
     
     public DownloadOptionPanelView() {
@@ -49,23 +43,23 @@ public class DownloadOptionPanelView extends JPanel{
                 ImageUtil.readIcon(Resources.downloadingChoosed, 50), 
                 tag1,
                 true,
-                new ViewEvent().setTarget(DownloadingControlBarView.class),
-                new ViewEvent().setTarget(DownloadingTableView.class));
+                new InfoEvent().setTarget(DownloadingControlBarView.class),
+                new InfoEvent().setTarget(DownloadingTableView.class));
 
 
         JPanel downloadedPanel = new SideBarOptionPanelView(SideBarOptionPanelView.DOWNLOADED,
                 ImageUtil.readIcon(Resources.downloaded, 50),
                        ImageUtil.readIcon(Resources.downloadedChoosed, 50), 
                        tag2,
-                       new ViewEvent().setTarget(DownloadedControlBarView.class),
-                       new ViewEvent().setTarget(DownloadedTableView.class));
+                       new InfoEvent().setTarget(DownloadedControlBarView.class),
+                       new InfoEvent().setTarget(DownloadedTableView.class));
         
         JPanel deletedPanel = new SideBarOptionPanelView(SideBarOptionPanelView.DELETED,
                 ImageUtil.readIcon(Resources.recycleStation, 50), 
                     ImageUtil.readIcon(Resources.recycleStationChoosed, 50), 
                     tag3,
-                    new ViewEvent().setTarget(DeletedControlBarView.class),
-                    new ViewEvent().setTarget(DeletedTableView.class));
+                    new InfoEvent().setTarget(DeletedControlBarView.class),
+                    new InfoEvent().setTarget(DeletedTableView.class));
         
         add(new JPanel());
         add(downloadingPanel);

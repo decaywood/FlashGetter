@@ -7,9 +7,9 @@ import java.util.Map;
 import javax.swing.BorderFactory;
 import javax.swing.JPanel;
 
-import flashGetter.view.ViewEvent;
-import flashGetter.view.ViewEventDispatcher;
-import flashGetter.view.ViewEventHandler;
+import flashGetter.view.InfoEvent;
+import flashGetter.view.EventDispatcher;
+import flashGetter.view.EventHandler;
 
 /**
  * @author decaywood
@@ -17,7 +17,7 @@ import flashGetter.view.ViewEventHandler;
  * 2015年1月28日
  * 
  */
-public class ControlBarPlatterView extends JPanel implements ViewEventHandler<ControlBarView> {
+public class ControlBarPlatterView extends JPanel implements EventHandler<ControlBarView> {
     
     private Map<Class<? extends ControlBarView>, ControlBarView> controlBars;
     
@@ -25,7 +25,7 @@ public class ControlBarPlatterView extends JPanel implements ViewEventHandler<Co
         
         controlBars = new HashMap<Class<? extends ControlBarView>, ControlBarView>();
         
-        ViewEventDispatcher dispatcher = ViewEventDispatcher.InnerClass.instance;
+        EventDispatcher dispatcher = EventDispatcher.InnerClass.instance;
         dispatcher.register(this);
         
         controlBars.put(DeletedControlBarView.class, new DeletedControlBarView());
@@ -38,7 +38,7 @@ public class ControlBarPlatterView extends JPanel implements ViewEventHandler<Co
     }
 
     @Override
-    public void invoke(ViewEvent event) {
+    public void invoke(InfoEvent event) {
         removeAll();
         add(controlBars.get(event.getTarget()));
         updateUI();

@@ -77,9 +77,7 @@ public class OptionPanel extends JPanel{
     }
     
     
-    public OptionPanel(ImageIcon icon1, ImageIcon icon2, String option, String tip){
-        this(icon1, icon2, option, tip, new InfoEvent[0]);
-    }
+   
     
     public OptionPanel(
             ImageIcon icon1, 

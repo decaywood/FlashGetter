@@ -17,24 +17,24 @@ import flashGetter.view.EventHandler;
  * 2015年1月28日
  * 
  */
-public class TaskTablePlatterView extends JScrollPane implements EventHandler<TaskTableView>{
+public class TaskTablePlatter extends JScrollPane implements EventHandler<TaskTable>{
     
-    private Map<Class<? extends TaskTableView>, TaskTableView> tables;
+    private Map<Class<? extends TaskTable>, TaskTable> tables;
     
-    public TaskTablePlatterView() {
+    public TaskTablePlatter() {
         
         EventDispatcher.InnerClass.instance.register(this);
         
-        tables = new HashMap<Class<? extends TaskTableView>, TaskTableView>();
+        tables = new HashMap<Class<? extends TaskTable>, TaskTable>();
         
-        tables.put(DownloadingTableView.class, new DownloadingTableView());
-        tables.put(DownloadedTableView.class, new DownloadedTableView());
-        tables.put(DeletedTableView.class, new DeletedTableView());
+        tables.put(DownloadingTable.class, new DownloadingTable());
+        tables.put(DownloadedTable.class, new DownloadedTable());
+        tables.put(DeletedTable.class, new DeletedTable());
         
         setHorizontalScrollBarPolicy(HORIZONTAL_SCROLLBAR_NEVER);
         setVerticalScrollBarPolicy(VERTICAL_SCROLLBAR_AS_NEEDED);
         
-        setViewportView((tables.get(DownloadingTableView.class)));
+        setViewportView((tables.get(DownloadingTable.class)));
         
     }
 
@@ -46,8 +46,8 @@ public class TaskTablePlatterView extends JScrollPane implements EventHandler<Ta
     }
 
     @Override
-    public Class<TaskTableView> getGroupClass() {
-        return TaskTableView.class;
+    public Class<TaskTable> getGroupClass() {
+        return TaskTable.class;
     }
 
 }

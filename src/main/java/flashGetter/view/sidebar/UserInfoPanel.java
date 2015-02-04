@@ -8,11 +8,11 @@ import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 
+import model.UserInfoModel;
+
 import org.apache.commons.lang3.StringUtils;
 
 import flashGetter.Resources;
-import flashGetter.presenter.UserInfoPresenter;
-import flashGetter.presenter.UserInfoPresenter.UserInfoPresenterView;
 
 /**
  * @author decaywood
@@ -20,12 +20,11 @@ import flashGetter.presenter.UserInfoPresenter.UserInfoPresenterView;
  * 2015年1月26日
  * 
  */
-public class UserInfoPanelView extends JPanel implements UserInfoPresenterView {
+public class UserInfoPanel extends JPanel {
     
     private JPanel userPhotoPanel;
     private JPanel infoPanel;
-    
-    private UserInfoPresenter presenter;
+    private UserInfoModel model;
     
     private static class InfoPanel extends JPanel{
         
@@ -57,14 +56,12 @@ public class UserInfoPanelView extends JPanel implements UserInfoPresenterView {
     }
     
    
-    public UserInfoPanelView() {
+    public UserInfoPanel() {
         
-        presenter = new UserInfoPresenter(this);
-        
+        model = new UserInfoModel();
         setLayout(new GridLayout(2, 1));
         setVisible(true);
-        
-        presenter.initView();
+        setUserInfoView(model.getUserInfo());
         
     }
     
@@ -72,12 +69,11 @@ public class UserInfoPanelView extends JPanel implements UserInfoPresenterView {
     public static void main(String[] args) {
         JFrame frame = new JFrame();
         frame.setVisible(true);
-        frame.add(new UserInfoPanelView());
+        frame.add(new UserInfoPanel());
     }
 
 
-    @Override
-    public void setUserInfoView(UserInfoView userInfo) {
+    public void setUserInfoView(UserInfo userInfo) {
         
         removeAll();
         

@@ -16,14 +16,14 @@ import java.awt.BorderLayout;
  * 2015年1月30日
  * 
  */
-public class SpeedOptionPanelView extends OptionPanel {
+public class SpeedOptionPanel extends OptionPanel {
     
     
-    public SpeedOptionPanelView() {
+    public SpeedOptionPanel() {
         
         super(ImageUtil.readIcon(Resources.downloadingSpeed, 30),
                             ImageUtil.readIcon(Resources.downloadingSpeedChoosed, 30),
-                            "0 kb/s", "Flow monitoring", new InfoEvent().setTarget(SpeedPlatterView.class));
+                            "0 kb/s", "Flow monitoring", new InfoEvent().setTarget(SpeedPlatter.class));
     }
 
     public void setText(String text){

@@ -18,7 +18,7 @@ import model.TaskTableModel;
  * 2015年1月28日
  * 
  */
-public abstract class TaskTableView<T extends TaskTableModel> extends JTable implements MouseListener{
+public abstract class TaskTable<T extends TaskTableModel> extends JTable implements MouseListener{
     
     public static final int ROW_HEIGHT = 30;
     
@@ -42,13 +42,12 @@ public abstract class TaskTableView<T extends TaskTableModel> extends JTable imp
     protected WidthScaleCellRenderer timeCellRenderer;
     protected WidthScaleCellRenderer speedCellRenderer;
     
-    public TaskTableView(T tableModel) {
+    public TaskTable(T tableModel) {
         
         headerLabels = new ArrayList<TableHeadRenderer>();
         columnCellRenderers = new ArrayList<WidthScaleCellRenderer>();
                 
         this.tableModel = tableModel;
-        
         setModel(tableModel);
         setRowHeight(ROW_HEIGHT);
         

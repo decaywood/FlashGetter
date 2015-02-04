@@ -4,7 +4,7 @@ import javax.swing.ImageIcon;
 
 import flashGetter.Resources;
 import flashGetter.util.ImageUtil;
-import flashGetter.view.sidebar.UserInfoView;
+import flashGetter.view.sidebar.UserInfo;
 
 /**
  * @author decaywood
@@ -14,7 +14,7 @@ import flashGetter.view.sidebar.UserInfoView;
  */
 public class UserInfoModel {
     
-    private static class DefaultUserInfo implements UserInfoView{
+    private static class DefaultUserInfo implements UserInfo{
 
         public String getLevel() {
             return "Null";
@@ -34,7 +34,7 @@ public class UserInfoModel {
         
     }
     
-    public UserInfoView getUserInfo(){
+    public UserInfo getUserInfo(){
         return new DefaultUserInfo();
     }
 

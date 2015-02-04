@@ -13,7 +13,7 @@ import model.TaskTableModel;
  * 
  * 
  */
-public class DownloadedTableView extends TaskTableView<DownloadedTableModel>{
+public class DownloadedTable extends TaskTable<DownloadedTableModel>{
     
 
     @Override
@@ -27,7 +27,7 @@ public class DownloadedTableView extends TaskTableView<DownloadedTableModel>{
     }
     
     
-    public DownloadedTableView() {
+    public DownloadedTable() {
         
         super(new DownloadedTableModel());
         

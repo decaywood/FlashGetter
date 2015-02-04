@@ -8,7 +8,7 @@ import javax.swing.ImageIcon;
  * 2015年1月26日
  * 
  */
-public interface UserInfoView {
+public interface UserInfo {
     
     public String getLevel();
       

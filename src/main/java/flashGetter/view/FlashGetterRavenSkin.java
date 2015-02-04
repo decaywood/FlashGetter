@@ -5,7 +5,7 @@ import org.pushingpixels.substance.api.skin.RavenSkin;
 import org.pushingpixels.substance.api.watermark.SubstanceImageWatermark;
 
 import flashGetter.Resources;
-import flashGetter.view.sidebar.SideBarView;
+import flashGetter.view.sidebar.SideBar;
 
 /**
  * @author decaywood
@@ -35,7 +35,7 @@ public class FlashGetterRavenSkin extends RavenSkin {
     public FlashGetterRavenSkin(float opacity, ImageWatermarkKind kind) {
         super();
         imageWatermark = new SubstanceImageWatermark(
-                SideBarView.class.getResourceAsStream(Resources.background.getAddress()));
+                SideBar.class.getResourceAsStream(Resources.background.getAddress()));
         watermark = imageWatermark;
         imageWatermark.setOpacity(opacity);
         imageWatermark.setKind(kind);

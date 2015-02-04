@@ -17,22 +17,22 @@ import flashGetter.view.EventHandler;
  * 2015年1月28日
  * 
  */
-public class ControlBarPlatterView extends JPanel implements EventHandler<ControlBarView> {
+public class ControlBarPlatter extends JPanel implements EventHandler<ControlBar> {
     
-    private Map<Class<? extends ControlBarView>, ControlBarView> controlBars;
+    private Map<Class<? extends ControlBar>, ControlBar> controlBars;
     
-    public ControlBarPlatterView() {
+    public ControlBarPlatter() {
         
-        controlBars = new HashMap<Class<? extends ControlBarView>, ControlBarView>();
+        controlBars = new HashMap<Class<? extends ControlBar>, ControlBar>();
         
         EventDispatcher dispatcher = EventDispatcher.InnerClass.instance;
         dispatcher.register(this);
         
-        controlBars.put(DeletedControlBarView.class, new DeletedControlBarView());
-        controlBars.put(DownloadedControlBarView.class, new DownloadedControlBarView());
-        controlBars.put(DownloadingControlBarView.class, new DownloadingControlBarView());
+        controlBars.put(DeletedControlBar.class, new DeletedControlBar());
+        controlBars.put(DownloadedControlBar.class, new DownloadedControlBar());
+        controlBars.put(DownloadingControlBar.class, new DownloadingControlBar());
         
-        add(controlBars.get(DownloadingControlBarView.class));
+        add(controlBars.get(DownloadingControlBar.class));
         setBorder(BorderFactory.createLineBorder(Color.DARK_GRAY));
         
     }
@@ -45,8 +45,8 @@ public class ControlBarPlatterView extends JPanel implements EventHandler<Contro
     }
 
     @Override
-    public Class<ControlBarView> getGroupClass() {
-        return ControlBarView.class;
+    public Class<ControlBar> getGroupClass() {
+        return ControlBar.class;
     }
 
     

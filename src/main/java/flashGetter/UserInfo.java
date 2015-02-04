@@ -2,15 +2,13 @@ package flashGetter;
 
 import javax.swing.ImageIcon;
 
-import flashGetter.view.sidebar.UserInfoView;
-
 /**
  * @author decaywood
  * 
  * 2015年1月26日
  * 
  */
-public class UserInfo implements UserInfoView{
+public class UserInfo {
     
     private String userID;
     

@@ -4,7 +4,6 @@ import javax.swing.ImageIcon;
 import javax.swing.JLabel;
 
 import model.DownloadingTableModel;
-import flashGetter.presenter.DownloadingTablePresenter;
 
 
 
@@ -14,11 +13,10 @@ import flashGetter.presenter.DownloadingTablePresenter;
  * 2015年1月28日
  * 
  */
-public class DownloadingTableView extends TaskTableView<DownloadingTableModel> 
-    implements DownloadingTablePresenter.DownloadingTablePresenterView {
+public class DownloadingTable extends TaskTable<DownloadingTableModel> {
     
            
-    public DownloadingTableView() {
+    public DownloadingTable() {
         super(new DownloadingTableModel());
     }
 
@@ -35,11 +33,4 @@ public class DownloadingTableView extends TaskTableView<DownloadingTableModel>
     }
     
  
-    @Override
-    public void addRow(ImageIcon icon, String fileName, String fileSize,
-            int progress, String time, String speed) {
-         
-    }
-
-
 }

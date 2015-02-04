@@ -11,7 +11,7 @@ import model.DeletedTableTableModel;
  * 2015年1月30日
  * 
  */
-public class DeletedTableView extends TaskTableView<DeletedTableTableModel> {
+public class DeletedTable extends TaskTable<DeletedTableTableModel> {
     
    
 
@@ -26,7 +26,7 @@ public class DeletedTableView extends TaskTableView<DeletedTableTableModel> {
     }
     
     
-    public DeletedTableView() {
+    public DeletedTable() {
         
         super(new DeletedTableTableModel());
         tableModel.addRow(new Object[]{new JLabel(),"aa","bbcc","dd"});

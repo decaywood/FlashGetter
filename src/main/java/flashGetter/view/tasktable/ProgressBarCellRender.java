@@ -25,7 +25,7 @@ public class ProgressBarCellRender extends JProgressBar implements WidthScaleCel
 
     @Override
     public void scaleWidth(TableColumn column) {
-        column.setMaxWidth(TaskTableView.ROW_HEIGHT * 50);
+        column.setMaxWidth(TaskTable.ROW_HEIGHT * 50);
     }
 
 }

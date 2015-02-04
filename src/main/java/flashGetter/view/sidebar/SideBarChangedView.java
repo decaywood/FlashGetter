@@ -10,7 +10,7 @@ import javax.swing.JPanel;
 
 import flashGetter.Resources;
 import flashGetter.util.ImageUtil;
-import flashGetter.view.sidebar.SideBarPlatter.SidebarPlatter;
+import flashGetter.view.sidebar.SideBarPlatterView.SidebarPlatter;
 
 /**
  * @author decaywood
@@ -18,14 +18,14 @@ import flashGetter.view.sidebar.SideBarPlatter.SidebarPlatter;
  * 2015年1月31日
  * 
  */
-public class SideBarChanged extends JPanel implements SidebarPlatter {
+public class SideBarChangedView extends JPanel implements SidebarPlatter {
     
-    public SideBarChanged() {
+    public SideBarChangedView() {
         
         JPanel userPhotoPanel = new JPanel(new BorderLayout());
         userPhotoPanel.add(new JLabel(ImageUtil.readIcon(Resources.defaultUser, 50)), BorderLayout.CENTER);
         
-        JPanel downloadOptionPanel = new DownloadOptionPanel();
+        JPanel downloadOptionPanel = new DownloadOptionPanelView();
         downloadOptionPanel.setPreferredSize(new Dimension(100, 400));
         
         JPanel allocatePanel = new JPanel(new BorderLayout());
@@ -42,7 +42,7 @@ public class SideBarChanged extends JPanel implements SidebarPlatter {
     public static void main(String[] args) {
         JFrame jFrame = new JFrame();
         jFrame.setVisible(true);
-        jFrame.add(new SideBarChanged());
+        jFrame.add(new SideBarChangedView());
     }
 
 }

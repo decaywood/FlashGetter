@@ -16,18 +16,18 @@ import flashGetter.view.ViewEventHandler;
  * 2015年1月31日
  * 
  */
-public class SideBarPlatter extends JPanel implements ViewEventHandler<SideBarPlatter.SidebarPlatter>{
+public class SideBarPlatterView extends JPanel implements ViewEventHandler<SideBarPlatterView.SidebarPlatter>{
     
     private Map<Class<? extends JPanel>, JPanel> sideBars;
     
     public static interface SidebarPlatter {}
     
-    public SideBarPlatter() {
+    public SideBarPlatterView() {
         sideBars = new HashMap<Class<? extends JPanel>, JPanel>();
         ViewEventDispatcher.InnerClass.instance.register(this);
-        sideBars.put(SideBar.class, new SideBar());
-        sideBars.put(SideBarChanged.class, new SideBarChanged());
-        add(sideBars.get(SideBar.class));
+        sideBars.put(SideBarView.class, new SideBarView());
+        sideBars.put(SideBarChangedView.class, new SideBarChangedView());
+        add(sideBars.get(SideBarView.class));
     }
 
     @Override
@@ -38,8 +38,8 @@ public class SideBarPlatter extends JPanel implements ViewEventHandler<SideBarPl
     }
 
     @Override
-    public Class<SideBarPlatter.SidebarPlatter> getGroupClass() {
-        return SideBarPlatter.SidebarPlatter.class;
+    public Class<SideBarPlatterView.SidebarPlatter> getGroupClass() {
+        return SideBarPlatterView.SidebarPlatter.class;
     }
 
 }

@@ -10,7 +10,7 @@ import javax.swing.JLabel;
  * 
  * 
  */
-public class DownloadedTable extends TaskTable<DownloadedTable.DownloadedTableModel>{
+public class DownloadedTableView extends TaskTableView<DownloadedTableView.DownloadedTableModel>{
     
 
     public static class DownloadedTableModel extends TaskTableModel{
@@ -32,7 +32,7 @@ public class DownloadedTable extends TaskTable<DownloadedTable.DownloadedTableMo
     }
     
     
-    public DownloadedTable() {
+    public DownloadedTableView() {
         
         super(new DownloadedTableModel());
         tableModel.addRow(new Object[]{new JLabel(),"aa","bbcc","dd"});

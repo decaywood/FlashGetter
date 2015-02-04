@@ -8,9 +8,9 @@ import flashGetter.Resources;
  * 2015年1月28日
  * 
  */
-public class DeletedControlBar extends ControlBar {
+public class DeletedControlBarView extends ControlBarView {
     
-    public DeletedControlBar() {
+    public DeletedControlBarView() {
         
         
         addPanel(Resources.recoverTask, Resources.recoverTaskChoosed, "New Task", "Create a Task");

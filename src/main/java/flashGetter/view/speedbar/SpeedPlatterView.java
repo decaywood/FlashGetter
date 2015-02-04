@@ -10,8 +10,8 @@ import flashGetter.view.OptionPanel;
 import flashGetter.view.ViewEvent;
 import flashGetter.view.ViewEventDispatcher;
 import flashGetter.view.ViewEventHandler;
-import flashGetter.view.sidebar.SideBar;
-import flashGetter.view.sidebar.SideBarChanged;
+import flashGetter.view.sidebar.SideBarView;
+import flashGetter.view.sidebar.SideBarChangedView;
 
 /**
  * @author decaywood
@@ -19,7 +19,7 @@ import flashGetter.view.sidebar.SideBarChanged;
  * 2015年1月30日
  * 
  */
-public class SpeedPlatter extends JPanel implements ViewEventHandler<SpeedPlatter.AbstractOption>{
+public class SpeedPlatterView extends JPanel implements ViewEventHandler<SpeedPlatterView.AbstractOption>{
     
     private OptionPanel fold;
     private OptionPanel extend;
@@ -29,7 +29,7 @@ public class SpeedPlatter extends JPanel implements ViewEventHandler<SpeedPlatte
     private static interface Fold extends AbstractOption{}
     private static interface Extend extends AbstractOption{}
     
-    public SpeedPlatter() {
+    public SpeedPlatterView() {
         
         setLayout(new BorderLayout());
         ViewEventDispatcher.InnerClass.instance.register(this);
@@ -37,18 +37,18 @@ public class SpeedPlatter extends JPanel implements ViewEventHandler<SpeedPlatte
         fold = new OptionPanel(ImageUtil.readIcon(Resources.pageChange, 30),
                 ImageUtil.readIcon(Resources.pageChangeChoosed, 30),
                 "Fold", 
-                new ViewEvent().setTarget(SideBarChanged.class),
+                new ViewEvent().setTarget(SideBarChangedView.class),
                 new ViewEvent().setTarget(Fold.class));
         
         extend = new OptionPanel(ImageUtil.readIcon(Resources.pageRecovered, 30),
                 ImageUtil.readIcon(Resources.pageRecoveredChoosed, 30),
-                "Fold", new ViewEvent().setTarget(SideBar.class),
+                "Fold", new ViewEvent().setTarget(SideBarView.class),
                 new ViewEvent().setTarget(Extend.class));
         
         buttonPanel = new JPanel();
         buttonPanel.add(fold);
         
-        add(new SpeedOptionPanel(),BorderLayout.EAST);
+        add(new SpeedOptionPanelView(),BorderLayout.EAST);
         add(buttonPanel,BorderLayout.WEST);
         
     }

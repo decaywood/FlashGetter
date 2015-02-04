@@ -12,11 +12,11 @@ import org.pushingpixels.substance.api.SubstanceSkin;
 import org.pushingpixels.substance.api.SubstanceConstants.ImageWatermarkKind;
 import org.pushingpixels.substance.api.skin.SubstanceRavenLookAndFeel;
 
-import flashGetter.view.controlbar.ControlBarPlatter;
-import flashGetter.view.sidebar.SideBar;
-import flashGetter.view.sidebar.SideBarPlatter;
-import flashGetter.view.speedbar.SpeedPlatter;
-import flashGetter.view.tasktable.TaskTablePlatter;
+import flashGetter.view.controlbar.ControlBarPlatterView;
+import flashGetter.view.sidebar.SideBarView;
+import flashGetter.view.sidebar.SideBarPlatterView;
+import flashGetter.view.speedbar.SpeedPlatterView;
+import flashGetter.view.tasktable.TaskTablePlatterView;
 
 import java.awt.BorderLayout;
 import java.awt.Color;
@@ -33,14 +33,14 @@ public class MainFrame extends JFrame{
     public MainFrame() {
         getContentPane().setLayout(new BorderLayout());
         
-        add(new SideBarPlatter(), BorderLayout.WEST);
+        add(new SideBarPlatterView(), BorderLayout.WEST);
         
         JPanel rightSidePanel = new JPanel();
         
         rightSidePanel.setLayout(new BorderLayout());
-        rightSidePanel.add(new ControlBarPlatter(), BorderLayout.NORTH);
-        rightSidePanel.add(new TaskTablePlatter(), BorderLayout.CENTER);
-        rightSidePanel.add(new SpeedPlatter(), BorderLayout.SOUTH);
+        rightSidePanel.add(new ControlBarPlatterView(), BorderLayout.NORTH);
+        rightSidePanel.add(new TaskTablePlatterView(), BorderLayout.CENTER);
+        rightSidePanel.add(new SpeedPlatterView(), BorderLayout.SOUTH);
         rightSidePanel.setBorder(BorderFactory.createLineBorder(Color.DARK_GRAY));
         add(rightSidePanel, BorderLayout.CENTER);
         

@@ -22,7 +22,7 @@ import org.pushingpixels.substance.api.watermark.SubstanceImageWatermark;
 import org.pushingpixels.substance.api.watermark.SubstanceWatermark;
 
 import flashGetter.view.FlashGetterRavenSkin;
-import flashGetter.view.sidebar.SideBarPlatter.SidebarPlatter;
+import flashGetter.view.sidebar.SideBarPlatterView.SidebarPlatter;
 
 /**
  * @author decaywood
@@ -30,16 +30,16 @@ import flashGetter.view.sidebar.SideBarPlatter.SidebarPlatter;
  * 2015年1月26日
  * 
  */
-public class SideBar extends JPanel implements SidebarPlatter {
+public class SideBarView extends JPanel implements SidebarPlatter {
     
     
-    public SideBar() {
+    public SideBarView() {
         
-        JPanel downloadOptionPanel = new DownloadOptionPanel("Downloading", "Downloaded", "Deleted");
+        JPanel downloadOptionPanel = new DownloadOptionPanelView("Downloading", "Downloaded", "Deleted");
         downloadOptionPanel.setPreferredSize(new Dimension(100, 400));
         
         JPanel allocatePanel = new JPanel(new BorderLayout());
-        allocatePanel.add(new UserInfoPanel(), BorderLayout.NORTH);
+        allocatePanel.add(new UserInfoPanelView(), BorderLayout.NORTH);
         allocatePanel.add(downloadOptionPanel, BorderLayout.SOUTH);
         
         setLayout(new BorderLayout());

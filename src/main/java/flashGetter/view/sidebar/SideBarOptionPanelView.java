@@ -15,7 +15,7 @@ import flashGetter.view.ViewEventHandler;
  * 2015年1月28日
  * 
  */
-public class SideBarOptionPanel extends OptionPanel implements ViewEventHandler<SideBarOptionPanel>{
+public class SideBarOptionPanelView extends OptionPanel implements ViewEventHandler<SideBarOptionPanelView>{
     
     private ViewEvent sideBarEvent;
     private boolean isChoosed;
@@ -25,7 +25,7 @@ public class SideBarOptionPanel extends OptionPanel implements ViewEventHandler<
     public static final int DOWNLOADED =  0x0000ff00;
     public static final int DELETED =     0x00ff0000;
     
-    public SideBarOptionPanel(
+    public SideBarOptionPanelView(
             int type,
             ImageIcon icon1,
             ImageIcon icon2,
@@ -34,7 +34,7 @@ public class SideBarOptionPanel extends OptionPanel implements ViewEventHandler<
         this(type, icon1, icon2, option, false, event);
     }
     
-    public SideBarOptionPanel(
+    public SideBarOptionPanelView(
             int type,
             ImageIcon icon1,
             ImageIcon icon2,
@@ -49,7 +49,7 @@ public class SideBarOptionPanel extends OptionPanel implements ViewEventHandler<
             lightComponent();
             isChoosed = true;
         }
-        sideBarEvent = new ViewEvent().setTarget(SideBarOptionPanel.class).setData(type);
+        sideBarEvent = new ViewEvent().setTarget(SideBarOptionPanelView.class).setData(type);
         
     }
     
@@ -77,8 +77,8 @@ public class SideBarOptionPanel extends OptionPanel implements ViewEventHandler<
     }
 
     @Override
-    public Class<SideBarOptionPanel> getGroupClass() {
-        return SideBarOptionPanel.class;
+    public Class<SideBarOptionPanelView> getGroupClass() {
+        return SideBarOptionPanelView.class;
     }
     
 

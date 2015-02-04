@@ -29,7 +29,7 @@ public class FileIconRenderer extends JLabel implements WidthScaleCellRenderer {
 
     @Override
     public void scaleWidth(TableColumn column) {
-        column.setMaxWidth(TaskTable.ROW_HEIGHT);
+        column.setMaxWidth(TaskTableView.ROW_HEIGHT);
     }
 
 }

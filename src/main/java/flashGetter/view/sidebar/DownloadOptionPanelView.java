@@ -11,12 +11,12 @@ import flashGetter.Resources;
 import flashGetter.util.ImageUtil;
 import flashGetter.view.OptionPanel;
 import flashGetter.view.ViewEvent;
-import flashGetter.view.controlbar.DeletedControlBar;
-import flashGetter.view.controlbar.DownloadedControlBar;
-import flashGetter.view.controlbar.DownloadingControlBar;
-import flashGetter.view.tasktable.DeletedTable;
-import flashGetter.view.tasktable.DownloadedTable;
-import flashGetter.view.tasktable.DownloadingTable;
+import flashGetter.view.controlbar.DeletedControlBarView;
+import flashGetter.view.controlbar.DownloadedControlBarView;
+import flashGetter.view.controlbar.DownloadingControlBarView;
+import flashGetter.view.tasktable.DeletedTableView;
+import flashGetter.view.tasktable.DownloadedTableView;
+import flashGetter.view.tasktable.DownloadingTableView;
 
 /**
  * @author decaywood
@@ -24,19 +24,19 @@ import flashGetter.view.tasktable.DownloadingTable;
  * 2015年1月26日
  * 
  */
-public class DownloadOptionPanel extends JPanel{
+public class DownloadOptionPanelView extends JPanel{
     
-    private static Logger logger = Logger.getLogger(DownloadOptionPanel.class);
+    private static Logger logger = Logger.getLogger(DownloadOptionPanelView.class);
     
     
-    public DownloadOptionPanel() {
+    public DownloadOptionPanelView() {
         
         setLayout(new GridLayout(6, 1));
         init(null, null, null);
         
     }
     
-    public DownloadOptionPanel(String tag1, String tag2, String tag3) {
+    public DownloadOptionPanelView(String tag1, String tag2, String tag3) {
        
         setLayout(new GridLayout(6, 1));
         init(tag1, tag2, tag3);
@@ -44,28 +44,28 @@ public class DownloadOptionPanel extends JPanel{
     }
     
     public void init(String tag1, String tag2, String tag3){
-        JPanel downloadingPanel = new SideBarOptionPanel(SideBarOptionPanel.DOWNLOADING,
+        JPanel downloadingPanel = new SideBarOptionPanelView(SideBarOptionPanelView.DOWNLOADING,
                 ImageUtil.readIcon(Resources.downloading, 50),
                 ImageUtil.readIcon(Resources.downloadingChoosed, 50), 
                 tag1,
                 true,
-                new ViewEvent().setTarget(DownloadingControlBar.class),
-                new ViewEvent().setTarget(DownloadingTable.class));
+                new ViewEvent().setTarget(DownloadingControlBarView.class),
+                new ViewEvent().setTarget(DownloadingTableView.class));
 
 
-        JPanel downloadedPanel = new SideBarOptionPanel(SideBarOptionPanel.DOWNLOADED,
+        JPanel downloadedPanel = new SideBarOptionPanelView(SideBarOptionPanelView.DOWNLOADED,
                 ImageUtil.readIcon(Resources.downloaded, 50),
                        ImageUtil.readIcon(Resources.downloadedChoosed, 50), 
                        tag2,
-                       new ViewEvent().setTarget(DownloadedControlBar.class),
-                       new ViewEvent().setTarget(DownloadedTable.class));
+                       new ViewEvent().setTarget(DownloadedControlBarView.class),
+                       new ViewEvent().setTarget(DownloadedTableView.class));
         
-        JPanel deletedPanel = new SideBarOptionPanel(SideBarOptionPanel.DELETED,
+        JPanel deletedPanel = new SideBarOptionPanelView(SideBarOptionPanelView.DELETED,
                 ImageUtil.readIcon(Resources.recycleStation, 50), 
                     ImageUtil.readIcon(Resources.recycleStationChoosed, 50), 
                     tag3,
-                    new ViewEvent().setTarget(DeletedControlBar.class),
-                    new ViewEvent().setTarget(DeletedTable.class));
+                    new ViewEvent().setTarget(DeletedControlBarView.class),
+                    new ViewEvent().setTarget(DeletedTableView.class));
         
         add(new JPanel());
         add(downloadingPanel);

@@ -3,7 +3,7 @@ package flashGetter.view.tasktable;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 
-import flashGetter.view.tasktable.DownloadedTable.DownloadedTableModel;
+import flashGetter.view.tasktable.DownloadedTableView.DownloadedTableModel;
 
 /**
  * @author decaywood
@@ -11,7 +11,7 @@ import flashGetter.view.tasktable.DownloadedTable.DownloadedTableModel;
  * 2015年1月30日
  * 
  */
-public class DeletedTable extends TaskTable<DeletedTable.DeletedTableTableModel> {
+public class DeletedTableView extends TaskTableView<DeletedTableView.DeletedTableTableModel> {
     
     public static class DeletedTableTableModel extends TaskTableModel{
         
@@ -32,7 +32,7 @@ public class DeletedTable extends TaskTable<DeletedTable.DeletedTableTableModel>
     }
     
     
-    public DeletedTable() {
+    public DeletedTableView() {
         
         super(new DeletedTableTableModel());
         tableModel.addRow(new Object[]{new JLabel(),"aa","bbcc","dd"});

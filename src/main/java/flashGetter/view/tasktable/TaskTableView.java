@@ -16,7 +16,7 @@ import javax.swing.table.TableColumn;
  * 2015年1月28日
  * 
  */
-public abstract class TaskTable<T extends TaskTableModel> extends JTable implements MouseListener{
+public abstract class TaskTableView<T extends TaskTableModel> extends JTable implements MouseListener{
     
     public static final int ROW_HEIGHT = 30;
     
@@ -40,7 +40,7 @@ public abstract class TaskTable<T extends TaskTableModel> extends JTable impleme
     protected WidthScaleCellRenderer timeCellRenderer;
     protected WidthScaleCellRenderer speedCellRenderer;
     
-    public TaskTable(T tableModel) {
+    public TaskTableView(T tableModel) {
         
         headerLabels = new ArrayList<TableHeadRenderer>();
         columnCellRenderers = new ArrayList<WidthScaleCellRenderer>();

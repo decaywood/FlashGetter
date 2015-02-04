@@ -19,19 +19,19 @@ import flashGetter.view.ViewEvent;
  * 2015年1月26日
  * 
  */
-public class ControlBar extends JPanel{
+public class ControlBarView extends JPanel{
     
    
-    public ControlBar() {
+    public ControlBarView() {
         setLayout(new FlowLayout());
     }
  
-    protected ControlBar addPanel(
+    protected ControlBarView addPanel(
             Resources type, 
             Resources typeChoosed, 
             String name, 
             String tip){
-        OptionPanel taskPanel = new ControlBarOptionPanel(ImageUtil.readIcon(type, 30),
+        OptionPanel taskPanel = new ControlBarOptionPanelView(ImageUtil.readIcon(type, 30),
                 ImageUtil.readIcon(typeChoosed, 30), null, tip);
         taskPanel.addMouseListener(new MouseAdapter() {
             @Override

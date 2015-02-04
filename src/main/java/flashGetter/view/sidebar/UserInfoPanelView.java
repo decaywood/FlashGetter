@@ -21,7 +21,7 @@ import flashGetter.util.ImageUtil;
  * 2015年1月26日
  * 
  */
-public class UserInfoPanel extends JPanel {
+public class UserInfoPanelView extends JPanel {
     
     private JPanel userPhotoPanel;
     private JPanel infoPanel;
@@ -76,11 +76,11 @@ public class UserInfoPanel extends JPanel {
         
     }
     
-    public UserInfoPanel(){
+    public UserInfoPanelView(){
         this(new DefaultUserInfo());
     }
     
-    public UserInfoPanel(UserInfoView userInfoView) {
+    public UserInfoPanelView(UserInfoView userInfoView) {
         
         userInfo = userInfoView;
         
@@ -105,7 +105,7 @@ public class UserInfoPanel extends JPanel {
     public static void main(String[] args) {
         JFrame frame = new JFrame();
         frame.setVisible(true);
-        frame.add(new UserInfoPanel());
+        frame.add(new UserInfoPanelView());
     }
     
 }

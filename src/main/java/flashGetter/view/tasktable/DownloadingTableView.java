@@ -9,7 +9,7 @@ import javax.swing.JLabel;
  * 2015年1月28日
  * 
  */
-public class DownloadingTable extends TaskTable<DownloadingTable.DownloadingTableModel> {
+public class DownloadingTableView extends TaskTableView<DownloadingTableView.DownloadingTableModel> {
     
            
     public static class DownloadingTableModel extends TaskTableModel{
@@ -18,7 +18,7 @@ public class DownloadingTable extends TaskTable<DownloadingTable.DownloadingTabl
         }
     }
     
-    public DownloadingTable() {
+    public DownloadingTableView() {
         super(new DownloadingTableModel());
         for(int i = 0; i < 40; i++)
         tableModel.addRow(new Object[]{new JLabel(),"aa","bb",50,"cc","dd"});

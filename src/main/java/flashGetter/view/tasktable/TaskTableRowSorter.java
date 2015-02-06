@@ -2,7 +2,7 @@ package flashGetter.view.tasktable;
 
 import javax.swing.table.TableRowSorter;
 
-import model.TaskTableModel;
+import flashGetter.view.model.TaskTableModel;
 
 /**
  * @author decaywood

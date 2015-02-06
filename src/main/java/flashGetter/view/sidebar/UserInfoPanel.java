@@ -8,11 +8,10 @@ import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 
-import model.UserInfoModel;
-
 import org.apache.commons.lang3.StringUtils;
 
 import flashGetter.Resources;
+import flashGetter.view.model.UserInfoModel;
 
 /**
  * @author decaywood

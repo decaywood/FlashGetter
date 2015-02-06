@@ -7,9 +7,9 @@ import java.util.Map;
 import javax.swing.BorderFactory;
 import javax.swing.JPanel;
 
-import flashGetter.view.InfoEvent;
 import flashGetter.view.EventDispatcher;
 import flashGetter.view.EventHandler;
+import flashGetter.view.InfoEvent;
 
 /**
  * @author decaywood
@@ -19,9 +19,12 @@ import flashGetter.view.EventHandler;
  */
 public class ControlBarPlatter extends JPanel implements EventHandler<ControlBar> {
     
+    protected static final int CREATE_DIALOG = 0x0000000f;
+    
     private Map<Class<? extends ControlBar>, ControlBar> controlBars;
     
     public ControlBarPlatter() {
+        
         
         controlBars = new HashMap<Class<? extends ControlBar>, ControlBar>();
         
@@ -39,6 +42,10 @@ public class ControlBarPlatter extends JPanel implements EventHandler<ControlBar
 
     @Override
     public void invoke(InfoEvent event) {
+        if(event.getOperationKey() == CREATE_DIALOG){
+            new TaskDialog();
+            return;
+        }
         removeAll();
         add(controlBars.get(event.getTarget()));
         updateUI();

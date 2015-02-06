@@ -1,9 +1,7 @@
 package flashGetter;
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Comparator;
-import java.util.stream.Stream;
+import flashGetter.downloader.DownloadManager;
+import flashGetter.view.MainFrame;
 
 /**
  * @author decaywood
@@ -14,5 +12,8 @@ import java.util.stream.Stream;
 public class MainApp {
 
     public static void main(String[] args) {
+        
+        MainFrame.initializeMainFrame();
+        DownloadManager.initializeDownloadManager();
     }
 }

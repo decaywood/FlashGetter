@@ -1,6 +1,7 @@
 package flashGetter.view;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 /**
@@ -25,6 +26,12 @@ public class EventDispatcher {
     
     public void register(EventHandler<?> handler){
         listeners.add(handler);
+    }
+    
+   public void fireEventStream(InfoEvent... event){
+        
+       Arrays.stream(event).forEach(e -> fireEvent(e));
+        
     }
     
     public void fireEvent(InfoEvent event){

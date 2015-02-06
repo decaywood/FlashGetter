@@ -3,8 +3,8 @@ package flashGetter.view.tasktable;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 
-import model.DownloadedTableModel;
-import model.TaskTableModel;
+import flashGetter.view.model.DownloadedTableModel;
+import flashGetter.view.model.TaskTableModel;
 
 /**
  * @author decaywood

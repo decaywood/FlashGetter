@@ -14,17 +14,17 @@ import flashGetter.view.MainFrame;
  * 2015年1月28日
  * 
  */
-public class DownloadingControlBar extends ControlBar implements EventHandler<DownloadingControlBar>{
+public class DownloadingControlBar extends ControlBar {
 
     public DownloadingControlBar() {
-        
-        EventDispatcher.InnerClass.instance.register(this);
         
         addPanel(Resources.newTask, 
                 Resources.newTaskChoosed,
                 null,
                 "Create a Task",
-                new InfoEvent().setTarget(DownloadingControlBar.class));
+                new InfoEvent()
+        .setOperationKey(ControlBarPlatter.CREATE_DIALOG)
+        .setTarget(ControlBar.class));
         
         addPanel(Resources.startTask,
                 Resources.startTaskChoosed, 
@@ -46,15 +46,6 @@ public class DownloadingControlBar extends ControlBar implements EventHandler<Do
         
     }
 
-    @Override
-    public void invoke(InfoEvent event) {
-        JDialog dialog = new TaskDialog();
-    }
-
-    @Override
-    public Class<DownloadingControlBar> getGroupClass() {
-        return DownloadingControlBar.class;
-    }
 
     
 }

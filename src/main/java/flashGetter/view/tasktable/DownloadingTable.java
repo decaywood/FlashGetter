@@ -3,7 +3,7 @@ package flashGetter.view.tasktable;
 import javax.swing.ImageIcon;
 import javax.swing.JLabel;
 
-import model.DownloadingTableModel;
+import flashGetter.view.model.DownloadingTableModel;
 
 
 

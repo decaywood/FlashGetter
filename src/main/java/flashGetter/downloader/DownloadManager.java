@@ -2,6 +2,7 @@ package flashGetter.downloader;
 
 import java.net.URL;
 
+import flashGetter.downloader.executor.DownloadingExecutor;
 import flashGetter.view.EventDispatcher;
 import flashGetter.view.EventHandler;
 import flashGetter.view.InfoEvent;
@@ -12,14 +13,25 @@ import flashGetter.view.InfoEvent;
  * 2015年2月4日
  * 
  */
-public abstract class DownloadManager implements EventHandler<DownloadManager>, DownloadRegulation{
+public class DownloadManager implements EventHandler<DownloadManager> {
+    
+    private static DownloadManager manager;
+    
+    public static void initializeDownloadManager(){
+        if(manager != null) return;
+        manager = new DownloadManager();
+    }
     
     public static final int CREATE_TASK = 0x0000000f;
     public static final int START_TASK  = 0x000000f0;
     public static final int PAUSE_TASK  = 0x00000f00;
     public static final int DELETE_TASK = 0x0000f000;
     
+    
+    private DownloadingOperation downloadingExecutor;
+    
     public DownloadManager() {
+        downloadingExecutor = new DownloadingExecutor();
         EventDispatcher.InnerClass.instance.register(this);
     }
 
@@ -27,7 +39,7 @@ public abstract class DownloadManager implements EventHandler<DownloadManager>, 
     public void invoke(InfoEvent event) {
         int operationKey = event.getOperationKey();
         if(operationKey == CREATE_TASK)
-            createTask(event.getInfo());
+            downloadingExecutor.createTask(event.getInfo(0), event.getInfo(1));
     }
 
     @Override
@@ -35,10 +47,8 @@ public abstract class DownloadManager implements EventHandler<DownloadManager>, 
         return DownloadManager.class;
     }
 
-    @Override
-    public void createTask(String address) {
-        
-    }
+    
+ 
 
     
 

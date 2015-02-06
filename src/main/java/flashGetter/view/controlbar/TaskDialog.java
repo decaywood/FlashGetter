@@ -83,10 +83,11 @@ public class TaskDialog extends JDialog {
         JButton buttonOK = new JButton("Confirm");
         buttonOK.setFont(font);
         buttonOK.addActionListener(l -> {
-            String address = textArea.getText();
+            String downloadAddr = textArea.getText();
+            String savePath = jTextField.getText();
             InfoEvent event = new InfoEvent()
             .setTarget(DownloadManager.class)
-            .setInfo(address)
+            .setInfo(downloadAddr, savePath)
             .setOperationKey(DownloadManager.CREATE_TASK);
             EventDispatcher.InnerClass.instance.fireEvent(event);
             dispose();

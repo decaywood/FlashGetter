@@ -20,7 +20,9 @@ public class DownloadedControlBar extends ControlBar {
                 Resources.newTaskChoosed,
                 null,
                 "Create a Task", 
-                new InfoEvent());
+                new InfoEvent()
+        .setOperationKey(ControlBarPlatter.CREATE_DIALOG)
+        .setTarget(ControlBar.class));
         
         addPanel(Resources.deleteTask, 
                 Resources.deleteTaskChoosed, 

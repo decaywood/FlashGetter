@@ -3,7 +3,7 @@ package flashGetter.view.tasktable;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 
-import model.DeletedTableTableModel;
+import flashGetter.view.model.DeletedTableTableModel;
 
 /**
  * @author decaywood

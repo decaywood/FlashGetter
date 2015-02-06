@@ -14,16 +14,16 @@ public class InfoEvent {
     private Class<?> target;
     private int operationKey;
     
-    private String info;
+    private String[] info;
     
     
-    public InfoEvent setInfo(String info) {
+    public InfoEvent setInfo(String... info) {
         this.info = info;
         return this;
     }
     
-    public String getInfo() {
-        return info;
+    public String getInfo(int i) {
+        return info[i];
     }
     
     public InfoEvent setTarget(Class<?> target) {

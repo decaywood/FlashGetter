@@ -1,4 +1,4 @@
-package model;
+package flashGetter.view.model;
 
 import javax.swing.ImageIcon;
 

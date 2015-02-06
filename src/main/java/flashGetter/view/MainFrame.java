@@ -33,9 +33,25 @@ public class MainFrame extends JFrame{
     
     public static MainFrame mainFrame;
     
-    public MainFrame() {
+    public static void initializeMainFrame(){
+        if(mainFrame != null) return;
+        SwingUtilities.invokeLater(new Runnable() {  
+            public void run() {  
+                try {
+                    SubstanceSkin skin = new FlashGetterRavenSkin(0.5f, ImageWatermarkKind.APP_CENTER);
+                    UIManager.setLookAndFeel(new SubstanceRavenLookAndFeel());
+                    SubstanceLookAndFeel.setSkin(skin);
+                } catch (UnsupportedLookAndFeelException e) {
+                    e.printStackTrace();
+                } 
+                mainFrame = new MainFrame();
+                mainFrame.setVisible(true);
+            }  
+        });  
         
-//        new DownloadManager();
+    }
+    
+    public MainFrame() {
         
         getContentPane().setLayout(new BorderLayout());
         
@@ -55,26 +71,5 @@ public class MainFrame extends JFrame{
         setDefaultCloseOperation(DISPOSE_ON_CLOSE);
     }
     
-    public static void main(String[] args) {
-        SwingUtilities.invokeLater(new Runnable() {  
-            public void run() {  
-                try {
-//                    JFrame.setDefaultLookAndFeelDecorated(true); //加上此语句连同窗体外框也改变  
-//                    JDialog.setDefaultLookAndFeelDecorated(true); //加上此语句会使弹出的对话框也改变  
-                    SubstanceSkin skin = new FlashGetterRavenSkin(0.5f, ImageWatermarkKind.APP_CENTER);
-                    UIManager.setLookAndFeel(new SubstanceRavenLookAndFeel());
-                    SubstanceLookAndFeel.setSkin(skin);
-                } catch (UnsupportedLookAndFeelException e) {
-                    e.printStackTrace();
-                } 
-                mainFrame = new MainFrame();
-                mainFrame.setVisible(true);
-            }  
-        });  
-      
-       
-       
-       
-    }
 
 }

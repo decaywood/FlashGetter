@@ -10,9 +10,9 @@ http://maven.apache.org/xsd/maven-4.0.0.xsd">
   
   <dependencies>
     <dependency>
-      <groupId>com.turn</groupId>
-      <artifactId>ttorrent</artifactId>
-      <version>1.4</version>
+        <groupId>commons-net</groupId>
+        <artifactId>commons-net</artifactId>
+        <version>3.3</version>
     </dependency>
     <dependency>
         <groupId>log4j</groupId>

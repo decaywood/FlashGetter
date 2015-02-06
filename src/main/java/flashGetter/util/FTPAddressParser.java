@@ -51,11 +51,27 @@ public class FTPAddressParser {
     private static final String REGEX_2 = ":";
     private static final String REGEX_3 = "@";
     private static final String REGEX_4 = "/";
-    
+    private static final String REGEX_IP=
+            "(2[5][0-5]|2[0-4]\\d|1\\d{2}|\\d{1,2})\\."
+            + "(25[0-5]|2[0-4]\\d|1\\d{2}|\\d{1,2})\\."
+            + "(25[0-5]|2[0-4]\\d|1\\d{2}|\\d{1,2})\\."
+            + "(25[0-5]|2[0-4]\\d|1\\d{2}|\\d{1,2})";  
     
     public static FTPInfo parseAdress(String address){
         
         FTPInfo info = new FTPInfo();
+        
+//        "ftp://192.168.59.1:12"
+        String maybeIP = StringUtils.substringAfter(address, REGEX_1);
+        maybeIP = StringUtils.substringBefore(maybeIP, REGEX_2);
+        
+        if(isboolIP(maybeIP)){
+            info.server = maybeIP;
+            String port = StringUtils.substringAfter(address, REGEX_1);
+            port = StringUtils.substringAfter(port, REGEX_2);
+            info.port = getPort(port);
+            return info;
+        }
         
         info.userName = StringUtils.substringBetween(address, REGEX_1, REGEX_2);
         address = StringUtils.substringAfter(address, REGEX_1);
@@ -77,7 +93,21 @@ public class FTPAddressParser {
         return info;
     }
     
+    public static boolean isboolIP(String ipAddress){ 
+       
+        Pattern pattern = Pattern.compile(REGEX_IP);  
+        Matcher matcher = pattern.matcher(ipAddress);  
+        return matcher.matches();  
+        
+    }
     
+    public static int getPort(String value) {  
+        try {  
+            return Integer.parseInt(value);  
+        } catch (NumberFormatException e) {  
+            return 0;  
+        }  
+    }  
     
     
 }

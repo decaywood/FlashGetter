@@ -43,7 +43,7 @@ public class URLTest {
     }
 
     public static void main(String[] args) throws IOException {
-        String urlpath = "ftp://ygdy8:ygdy8@y201.dygod.org:1180/[阳光电影www.ygdy8.com].致胜王牌.HD.576p.中英双字幕.rmvb";
+        String urlpath = "ftp://192.168.59.1:21";
         FTPInfo info = FTPAddressParser.parseAdress(urlpath);
         connectServer(info.getServer(), info.getPort(), info.getUserName(), info.getPassword(), urlpath);
     }

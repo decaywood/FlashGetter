@@ -1,7 +1,5 @@
 package flashGetter.util;
 
-import java.net.InetAddress;
-import java.net.UnknownHostException;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -17,6 +15,7 @@ import org.apache.log4j.Logger;
  * 
  */
 public class FTPAddressParser {
+    
     
     public static class FTPInfo{
         
@@ -42,16 +41,27 @@ public class FTPAddressParser {
             return port;
         }
         
+        @Override
+        public String toString() {
+            return "User Name : " + userName + ", Password : " + password
+                    + ", Server IP : " + server + ", Port : " + port 
+                    + ", File Name : " + fileName;
+        }
         
     }
     
     private static final Logger LOGGER = Logger.getLogger(FTPAddressParser.class);
     
     private static final String REGEX_1 = "://";
+    
     private static final String REGEX_2 = ":";
+    
     private static final String REGEX_3 = "@";
+    
     private static final String REGEX_4 = "/";
+    
     private static final String REGEX_IP=
+            
             "(2[5][0-5]|2[0-4]\\d|1\\d{2}|\\d{1,2})\\."
             + "(25[0-5]|2[0-4]\\d|1\\d{2}|\\d{1,2})\\."
             + "(25[0-5]|2[0-4]\\d|1\\d{2}|\\d{1,2})\\."
@@ -60,18 +70,9 @@ public class FTPAddressParser {
     public static FTPInfo parseAdress(String address){
         
         FTPInfo info = new FTPInfo();
-        
-//        "ftp://192.168.59.1:12"
-        String maybeIP = StringUtils.substringAfter(address, REGEX_1);
-        maybeIP = StringUtils.substringBefore(maybeIP, REGEX_2);
-        
-        if(isboolIP(maybeIP)){
-            info.server = maybeIP;
-            String port = StringUtils.substringAfter(address, REGEX_1);
-            port = StringUtils.substringAfter(port, REGEX_2);
-            info.port = getPort(port);
-            return info;
-        }
+ 
+        boolean done = parseNoAuthAdress(info, address);
+        if(done) return info;
         
         info.userName = StringUtils.substringBetween(address, REGEX_1, REGEX_2);
         address = StringUtils.substringAfter(address, REGEX_1);
@@ -88,10 +89,12 @@ public class FTPAddressParser {
         address = StringUtils.substringAfter(address, REGEX_2);
         
         info.port = port != "" ? Integer.parseInt(port) : 0;
-        info.fileName = StringUtils.substringAfter(address, REGEX_4);
+        info.fileName = getFileName(address);
         
         return info;
     }
+    
+    
     
     public static boolean isboolIP(String ipAddress){ 
        
@@ -101,13 +104,58 @@ public class FTPAddressParser {
         
     }
     
+    private static String getFileName(String address){ 
+        
+        while(address.contains(REGEX_4))
+            address = StringUtils.substringAfter(address, REGEX_4);
+        
+        return address;
+        
+    }
+    
+    public static boolean parseNoAuthAdress(FTPInfo info, String address) {  
+        
+        boolean done = false;
+         
+        String maybeIP = StringUtils.substringAfter(address, REGEX_1);
+        maybeIP = StringUtils.substringBefore(maybeIP, REGEX_2);
+        
+        if(isboolIP(maybeIP)){
+            info.server = maybeIP;
+            address = StringUtils.substringAfter(address, REGEX_1);
+            String port = isPort(address) ? StringUtils.substringAfter(address, REGEX_2)
+                    : StringUtils.substringBetween(address, REGEX_2, REGEX_4);
+             
+            info.port = getPort(port);
+            info.fileName = getFileName(address);
+            
+            done = true;
+        }
+        
+        return done;
+    }  
+    
+    
+    /**
+     *  judge whether the string is integer by catch exception
+     */
     public static int getPort(String value) {  
         try {  
             return Integer.parseInt(value);  
         } catch (NumberFormatException e) {  
+            LOGGER.info("Wrong Number!!", e);
             return 0;  
         }  
     }  
+    
+    private static boolean isPort(String value){
+        try {  
+            Integer.parseInt(value);  
+            return true;
+        } catch (NumberFormatException e) {  
+            return false;  
+        }  
+    }
     
     
 }

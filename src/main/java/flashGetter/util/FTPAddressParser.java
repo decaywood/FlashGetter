@@ -5,6 +5,7 @@ import java.util.regex.Pattern;
 
 import org.apache.commons.lang3.StringUtils;
 import org.apache.log4j.Logger;
+import org.omg.PortableServer.POA;
 
 /**
  * @author decaywood
@@ -22,21 +23,30 @@ public class FTPAddressParser {
         private String userName;
         private String password;
         private String server;
+        private String filePath;
         private String fileName;
         private int port;
         
         public String getUserName() {
             return userName;
         }
+        
         public String getPassword() {
             return password;
         }
+        
         public String getServer() {
             return server;
         }
+        
+        public String getFilePath() {
+            return filePath;
+        }
+        
         public String getFileName() {
             return fileName;
         }
+        
         public int getPort() {
             return port;
         }
@@ -45,7 +55,7 @@ public class FTPAddressParser {
         public String toString() {
             return "User Name : " + userName + ", Password : " + password
                     + ", Server IP : " + server + ", Port : " + port 
-                    + ", File Name : " + fileName;
+                    + ", File Path : " + filePath + ", File Name : " + fileName;
         }
         
     }
@@ -69,40 +79,47 @@ public class FTPAddressParser {
     
     public static FTPInfo parseAdress(String address){
         
+        String parseAddress = address;
         FTPInfo info = new FTPInfo();
  
-        boolean done = parseNoAuthAdress(info, address);
-        if(done) return info;
+        address = getNoAuthIP(info, parseAddress);
+        if(info.server == null) address = getAuthIP(info, parseAddress);
+       
+        address = getPort(info, address);
         
-        info.userName = StringUtils.substringBetween(address, REGEX_1, REGEX_2);
-        address = StringUtils.substringAfter(address, REGEX_1);
+        info.filePath = address;
         
-        info.password = StringUtils.substringBetween(address, REGEX_2, REGEX_3);
-        address = StringUtils.substringAfter(address, REGEX_2);
-        
-        
-        info.server = StringUtils.substringBetween(address, REGEX_3, REGEX_2);
-        address = StringUtils.substringAfter(address, REGEX_3);
-        
-        String port = StringUtils.substringBetween(address, REGEX_2, REGEX_4);
-        port = port != null ? port : StringUtils.substringAfter(address, REGEX_2);
-        address = StringUtils.substringAfter(address, REGEX_2);
-        
-        info.port = port != "" ? Integer.parseInt(port) : 0;
         info.fileName = getFileName(address);
         
         return info;
     }
     
-    
+    public static void main(String[] args) {
+        System.out.println(parseAdress("ftp://192.168.59.1"));
+        System.out.println(parseAdress("ftp://192.168.59.1:23"));
+        System.out.println(parseAdress("ftp://192.168.59.1:23/aa"));
+        System.out.println(parseAdress("ftp://192.168.59.1/aa"));
+        System.out.println(parseAdress("ftp://192.168.59.1:23/aa/bb/cc"));
+        System.out.println(parseAdress("ftp://192.168.59.1/aa/bb/cc"));
+        System.out.println(parseAdress("ftp://userName:passwd@192.168.59.1"));
+        System.out.println(parseAdress("ftp://userName:passwd@192.168.59.1:23"));
+        System.out.println(parseAdress("ftp://userName:passwd@192.168.59.1:23/aa"));
+        System.out.println(parseAdress("ftp://userName:passwd@192.168.59.1/aa"));
+        System.out.println(parseAdress("ftp://userName:passwd@192.168.59.1:23/aa/bb/cc"));
+        System.out.println(parseAdress("ftp://userName:passwd@192.168.59.1/aa/bb/cc"));
+        
+    }
     
     public static boolean isboolIP(String ipAddress){ 
        
+        if(ipAddress == null) return false;
+        
         Pattern pattern = Pattern.compile(REGEX_IP);  
         Matcher matcher = pattern.matcher(ipAddress);  
         return matcher.matches();  
         
     }
+ 
     
     private static String getFileName(String address){ 
         
@@ -113,38 +130,55 @@ public class FTPAddressParser {
         
     }
     
-    public static boolean parseNoAuthAdress(FTPInfo info, String address) {  
+    private static String getAuthIP(FTPInfo info, String address) {  
         
-        boolean done = false;
+         
+        info.userName = StringUtils.substringBetween(address, REGEX_1, REGEX_2);
+        address = StringUtils.substringAfter(address, REGEX_1);
+        
+        info.password = StringUtils.substringBetween(address, REGEX_2, REGEX_3);
+        address = StringUtils.substringAfter(address, REGEX_2);
+        
+        
+        String serverIP = StringUtils.substringBetween(address, REGEX_3, REGEX_2);
+        serverIP = isboolIP(serverIP) ? serverIP : StringUtils.substringBetween(address, REGEX_3, REGEX_4);
+        info.server = isboolIP(serverIP) ? serverIP : StringUtils.substringAfter(address, REGEX_3);
+       
+        return StringUtils.substringAfter(address, serverIP);
+    }  
+    
+    
+
+    private static String getNoAuthIP(FTPInfo info, String address) {  
+        
          
         String maybeIP = StringUtils.substringAfter(address, REGEX_1);
-        maybeIP = StringUtils.substringBefore(maybeIP, REGEX_2);
+        maybeIP = isboolIP(maybeIP) ? maybeIP : StringUtils.substringBefore(maybeIP, REGEX_2);
+        maybeIP = isboolIP(maybeIP) ? maybeIP : StringUtils.substringBefore(maybeIP, REGEX_4);
         
         if(isboolIP(maybeIP)){
             info.server = maybeIP;
-            address = StringUtils.substringAfter(address, REGEX_1);
-            String port = isPort(address) ? StringUtils.substringAfter(address, REGEX_2)
-                    : StringUtils.substringBetween(address, REGEX_2, REGEX_4);
-             
-            info.port = getPort(port);
-            info.fileName = getFileName(address);
-            
-            done = true;
+            address = StringUtils.substringAfter(address, maybeIP);
         }
         
-        return done;
+        return address;
     }  
     
     
     /**
      *  judge whether the string is integer by catch exception
      */
-    public static int getPort(String value) {  
+    public static String getPort(FTPInfo info, String value) {  
+        String portValue = value;
         try {  
-            return Integer.parseInt(value);  
+            if(!value.contains(REGEX_2)) return portValue;
+            value = StringUtils.substringAfter(value, REGEX_2);
+            value = isPort(value) ? value : StringUtils.substringBefore(value, REGEX_4);
+            info.port = Integer.parseInt(value);  
+            return StringUtils.substringAfter(portValue, value);
         } catch (NumberFormatException e) {  
             LOGGER.info("Wrong Number!!", e);
-            return 0;  
+            return portValue;  
         }  
     }  
     

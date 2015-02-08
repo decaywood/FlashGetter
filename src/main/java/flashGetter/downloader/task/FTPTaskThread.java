@@ -5,10 +5,10 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.PrintWriter;
-import java.net.URL;
-import java.net.URLConnection;
 import java.util.Arrays;
+import java.util.Optional;
 
+import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.net.PrintCommandListener;
 import org.apache.commons.net.ftp.FTP;
 import org.apache.commons.net.ftp.FTPClient;
@@ -16,7 +16,6 @@ import org.apache.commons.net.ftp.FTPFile;
 import org.apache.commons.net.ftp.FTPReply;
 import org.apache.log4j.Logger;
 
-import flashGetter.downloader.TaskMapper;
 import flashGetter.util.FTPAddressParser;
 import flashGetter.util.FTPAddressParser.FTPInfo;
 
@@ -33,6 +32,7 @@ public class FTPTaskThread implements Runnable, TaskRunnable{
     private FTPClient ftpClient;
     private DownloadingTask taskInfo;
     private FTPFile remotefile;
+    private FTPInfo ftpInfo;
     
     public FTPTaskThread(DownloadingTask task) {
        
@@ -45,10 +45,8 @@ public class FTPTaskThread implements Runnable, TaskRunnable{
         try {
             
             FTPFile[] files = ftpClient.listFiles();
-            
-            if(files.length == 0) throw new Exception();
-            
-            this.remotefile = files[0];
+            this.remotefile = Arrays.stream(files)
+                    .filter(file -> file.getName().equals(ftpInfo.getFileName())).findFirst().get();
             
             this.taskInfo.setFileName(remotefile.getName());
             this.taskInfo.setFileSize(remotefile.getSize());
@@ -66,21 +64,21 @@ public class FTPTaskThread implements Runnable, TaskRunnable{
             ftpClient.addProtocolCommandListener(new PrintCommandListener(new PrintWriter(System.out)));
             
             String downloadURL = taskInfo.getDownloadURL();
-            FTPInfo info = FTPAddressParser.parseAdress(downloadURL);
+            ftpInfo = FTPAddressParser.parseAdress(downloadURL);
             
-            ftpClient.connect(info.getServer(), info.getPort());
+            ftpClient.connect(ftpInfo.getServer(), ftpInfo.getPort());
             ftpClient.setControlEncoding("GBK");
             ftpClient.enterLocalPassiveMode();
             ftpClient.setFileType(FTP.BINARY_FILE_TYPE);
             
-            ftpClient.login(info.getUserName(), info.getPassword());
-            String user = info.getUserName();
-            String password = info.getPassword();
+            String user = ftpInfo.getUserName();
+            String password = ftpInfo.getPassword();
          
             
             if (FTPReply.isPositiveCompletion(ftpClient.getReplyCode())) {
                 if(user != null && password != null)
                     ftpClient.login(user, password);
+                ftpClient.changeWorkingDirectory(ftpInfo.getFilePath());
             }
                 
             
@@ -89,8 +87,7 @@ public class FTPTaskThread implements Runnable, TaskRunnable{
         }
     }
 
-    @Override
-    public void run() {
+    private void execute(){
         
         try {
             String fileName = taskInfo.getFileName();
@@ -98,20 +95,36 @@ public class FTPTaskThread implements Runnable, TaskRunnable{
             String filePath = savePath.concat(fileName);
             
             long startOffset = taskInfo.getStartOffset();
-            long endOffset = taskInfo.getEndOffset();
-            
-            File outputFile = new File(savePath);
+            File outputFile = new File(filePath);
             
             if(outputFile.length() >= remotefile.getSize()) return; // downloading done
             
-            FileOutputStream fos = new FileOutputStream(outputFile);
+            FileOutputStream fos = new FileOutputStream(outputFile, true); // data append mode
             
-            InputStream in = ftpClient.retrieveFileStream(filePath);
+            ftpClient.setRestartOffset(startOffset); // begin from startOffset
+            InputStream in = ftpClient.retrieveFileStream(ftpInfo.getFilePath());
             
+            byte[] buffer = new byte[1024 * 1024];
+            int dataSize = 0;
+            
+            while ((dataSize = in.read(buffer)) != -1) {
+                startOffset = taskInfo.getStartOffset();
+                fos.write(buffer, 0, dataSize);
+                taskInfo.setStartOffset(startOffset + dataSize);
+            }
+            System.out.println("done");
+            fos.flush();
+            fos.close();
         } catch (IOException e) {
-            e.printStackTrace();
-        }
-        
+            LOGGER.info("IO problem!", e);
+        } 
     }
+    
+    @Override
+    public void run() {
+        execute();
+    }
+    
+    
 
 }

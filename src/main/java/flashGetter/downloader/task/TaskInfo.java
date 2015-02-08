@@ -31,7 +31,7 @@ public class TaskInfo implements DownloadingTask, DownloadedTask, DeletedTask, S
     
     private ImageIcon fileType;
     private String fileName;
-    private String fileSize;
+    private long fileSize;
     private String progress;
     private String remainTime;
     private String downloadSpeed;
@@ -40,7 +40,6 @@ public class TaskInfo implements DownloadingTask, DownloadedTask, DeletedTask, S
     private String createTime;
     
     private long startOffset;
-    private long endOffset;
     
     public TaskInfo(long taskID, String URL, String downloadSavePath) {
         this.taskID = taskID;
@@ -103,15 +102,7 @@ public class TaskInfo implements DownloadingTask, DownloadedTask, DeletedTask, S
         return fileSavePath;
     }
     
-    @Override
-    public long getStartOffset() {
-        return startOffset;
-    }
-    
-    @Override
-    public long getEndOffset() {
-        return endOffset;
-    }
+   
     
     @Override
     public String getFileName() {
@@ -129,20 +120,27 @@ public class TaskInfo implements DownloadingTask, DownloadedTask, DeletedTask, S
         
     }
     
-    @Override
-    public void setStartOffset(long startOffset) {
-        this.startOffset = startOffset;
-    }
     
-    @Override
-    public void setEndOffset(long endOffset) {
-        this.endOffset = endOffset;
-    }
 
     @Override
     public void setFileSize(long fileSize) {
-        this.fileSize = String.valueOf(fileSize);
+        this.fileSize = fileSize;
     }
+
+    @Override
+    public long getStartOffset() {
+        return startOffset;
+    }
+
+    @Override
+    public void setStartOffset(long startOffset) {
+        double prog = startOffset / fileSize;
+        this.startOffset = startOffset;
+        this.progress = String.valueOf(prog);
+    }
+
+    
+    
     
 
 }

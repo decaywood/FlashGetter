@@ -26,6 +26,7 @@ public class FTPAddressParser {
         private String password;
         private String server;
         private String filePath;
+        private String fileName;
         private int port;
         
         public String getUserName() {
@@ -44,6 +45,9 @@ public class FTPAddressParser {
             return filePath;
         }
         
+        public String getFileName() {
+            return fileName;
+        }
        
         public int getPort() {
             return port;
@@ -53,7 +57,7 @@ public class FTPAddressParser {
         public String toString() {
             return "User Name : " + userName + ", Password : " + password
                     + ", Server IP : " + server + ", Port : " + port 
-                    + ", File Path : " + filePath;
+                    + ", File Path : " + filePath + ", File Name : " + fileName;
         }
         
     }
@@ -123,6 +127,10 @@ public class FTPAddressParser {
         
         info.filePath = address;
         
+        while(address.contains(REGEX_4))
+            address = StringUtils.substringAfter(address, REGEX_4);
+        
+        info.fileName = address;
     }
     
     private static String getAuthIP(FTPInfo info, String address) {  

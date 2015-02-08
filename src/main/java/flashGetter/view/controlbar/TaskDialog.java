@@ -84,7 +84,7 @@ public class TaskDialog extends JDialog {
         buttonOK.setFont(font);
         buttonOK.addActionListener(l -> {
             String downloadAddr = textArea.getText();
-            String savePath = jTextField.getText().concat("/");
+            String savePath = jTextField.getText();
             InfoEvent event = new InfoEvent()
             .setTarget(DownloadManager.class)
             .setInfo(downloadAddr, savePath)

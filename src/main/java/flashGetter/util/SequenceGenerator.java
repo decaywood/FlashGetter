@@ -7,6 +7,8 @@ import java.util.UUID;
  * 
  * 2015年2月6日
  * 
+ * generate unique taskID (unit : long with wrapper)
+ * 
  */
 public class SequenceGenerator {
     

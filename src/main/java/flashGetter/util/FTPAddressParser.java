@@ -1,5 +1,7 @@
 package flashGetter.util;
 
+import java.net.InetAddress;
+import java.net.UnknownHostException;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -24,7 +26,6 @@ public class FTPAddressParser {
         private String password;
         private String server;
         private String filePath;
-        private String fileName;
         private int port;
         
         public String getUserName() {
@@ -43,10 +44,7 @@ public class FTPAddressParser {
             return filePath;
         }
         
-        public String getFileName() {
-            return fileName;
-        }
-        
+       
         public int getPort() {
             return port;
         }
@@ -55,7 +53,7 @@ public class FTPAddressParser {
         public String toString() {
             return "User Name : " + userName + ", Password : " + password
                     + ", Server IP : " + server + ", Port : " + port 
-                    + ", File Path : " + filePath + ", File Name : " + fileName;
+                    + ", File Path : " + filePath;
         }
         
     }
@@ -86,47 +84,44 @@ public class FTPAddressParser {
         if(info.server == null) address = getAuthIP(info, parseAddress);
        
         address = getPort(info, address);
-        
-        info.filePath = address;
-        
-        info.fileName = getFileName(address);
+        getFileInfo(info, address);
         
         return info;
     }
     
-    public static void main(String[] args) {
-        System.out.println(parseAdress("ftp://192.168.59.1"));
-        System.out.println(parseAdress("ftp://192.168.59.1:23"));
-        System.out.println(parseAdress("ftp://192.168.59.1:23/aa"));
-        System.out.println(parseAdress("ftp://192.168.59.1/aa"));
-        System.out.println(parseAdress("ftp://192.168.59.1:23/aa/bb/cc"));
-        System.out.println(parseAdress("ftp://192.168.59.1/aa/bb/cc"));
-        System.out.println(parseAdress("ftp://userName:passwd@192.168.59.1"));
-        System.out.println(parseAdress("ftp://userName:passwd@192.168.59.1:23"));
-        System.out.println(parseAdress("ftp://userName:passwd@192.168.59.1:23/aa"));
-        System.out.println(parseAdress("ftp://userName:passwd@192.168.59.1/aa"));
-        System.out.println(parseAdress("ftp://userName:passwd@192.168.59.1:23/aa/bb/cc"));
-        System.out.println(parseAdress("ftp://userName:passwd@192.168.59.1/aa/bb/cc"));
-        
-    }
+    
     
     public static boolean isboolIP(String ipAddress){ 
        
         if(ipAddress == null) return false;
         
-        Pattern pattern = Pattern.compile(REGEX_IP);  
-        Matcher matcher = pattern.matcher(ipAddress);  
-        return matcher.matches();  
+        try {
+            ipAddress = StringUtils.substringAfter(InetAddress.getByName(ipAddress).toString(), REGEX_4);
+            Pattern pattern = Pattern.compile(REGEX_IP);  
+            Matcher matcher = pattern.matcher(ipAddress);  
+            return matcher.matches();  
+        } catch (UnknownHostException e) {
+            LOGGER.info("Wrong IP Address!", e);
+            return false;
+        }
+        
+       
         
     }
  
+    private static String getIP(String ipAddress){
+        try {
+            if(isboolIP(ipAddress)) return ipAddress;
+            ipAddress = StringUtils.substringAfter(InetAddress.getByName(ipAddress).toString(), REGEX_4);
+        } catch (UnknownHostException e) {
+            LOGGER.info("Wrong IP Address!", e);
+        }
+        return ipAddress;
+    }
     
-    private static String getFileName(String address){ 
+    private static void getFileInfo(FTPInfo info, String address){ 
         
-        while(address.contains(REGEX_4))
-            address = StringUtils.substringAfter(address, REGEX_4);
-        
-        return address;
+        info.filePath = address;
         
     }
     
@@ -142,7 +137,7 @@ public class FTPAddressParser {
         
         String serverIP = StringUtils.substringBetween(address, REGEX_3, REGEX_2);
         serverIP = isboolIP(serverIP) ? serverIP : StringUtils.substringBetween(address, REGEX_3, REGEX_4);
-        info.server = isboolIP(serverIP) ? serverIP : StringUtils.substringAfter(address, REGEX_3);
+        info.server = isboolIP(serverIP) ? getIP(serverIP) : StringUtils.substringAfter(address, REGEX_3);
        
         return StringUtils.substringAfter(address, serverIP);
     }  
@@ -157,7 +152,7 @@ public class FTPAddressParser {
         maybeIP = isboolIP(maybeIP) ? maybeIP : StringUtils.substringBefore(maybeIP, REGEX_4);
         
         if(isboolIP(maybeIP)){
-            info.server = maybeIP;
+            info.server = getIP(maybeIP);
             address = StringUtils.substringAfter(address, maybeIP);
         }
         

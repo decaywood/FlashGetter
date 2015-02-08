@@ -7,9 +7,11 @@ import java.util.concurrent.Executors;
 
 import flashGetter.downloader.DownloadingOperation;
 import flashGetter.downloader.TaskMapper;
+import flashGetter.downloader.task.FTPTaskThread;
 import flashGetter.downloader.task.TaskInfo;
-import flashGetter.downloader.task.TaskThread;
+import flashGetter.downloader.task.TaskRunnable;
 import flashGetter.util.SequenceGenerator;
+import flashGetter.util.TaskGenerator;
 
 /**
  * @author decaywood
@@ -31,13 +33,10 @@ public class DownloadingExecutor implements DownloadingOperation {
     public void createTask(String downloadAddr, String savePath) {
         
         Long sequence = SequenceGenerator.generateSequence();
-        TaskInfo taskInfo = new TaskInfo(sequence);
+        TaskInfo taskInfo = new TaskInfo(sequence, downloadAddr, savePath);
         TaskMapper.InnerClass.instance.registerTask(sequence, taskInfo);
         taskSequences.add(sequence);
-        taskInfo.setUrl(downloadAddr);
-        taskInfo.setFileSavePath(savePath);
-        TaskThread taskThread = new TaskThread(taskInfo);
-        taskInfo.setTask(taskThread);
+        TaskRunnable taskThread = TaskGenerator.generateTask(taskInfo);
         
     }
 
@@ -59,7 +58,7 @@ public class DownloadingExecutor implements DownloadingOperation {
         
     }
 
-
+    
 
    
 

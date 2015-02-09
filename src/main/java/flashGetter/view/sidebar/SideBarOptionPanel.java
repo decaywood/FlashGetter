@@ -14,7 +14,7 @@ import flashGetter.view.OptionPanel;
  * 2015年1月28日
  * 
  */
-public class SideBarOptionPanel extends OptionPanel implements EventHandler<SideBarOptionPanel>{
+public class SideBarOptionPanel extends OptionPanel implements EventHandler {
     
     private InfoEvent sideBarEvent;
     private boolean isChoosed;
@@ -75,10 +75,10 @@ public class SideBarOptionPanel extends OptionPanel implements EventHandler<Side
         darkComponent();
     }
 
+   
     @Override
-    public Class<SideBarOptionPanel> getGroupClass() {
-        return SideBarOptionPanel.class;
+    public boolean filter(InfoEvent event) {
+        return SideBarOptionPanel.class.isAssignableFrom(event.getTarget());
     }
-    
 
 }

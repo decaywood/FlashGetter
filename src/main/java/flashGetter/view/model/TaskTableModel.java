@@ -5,6 +5,7 @@ import javax.swing.table.DefaultTableModel;
 import flashGetter.view.EventDispatcher;
 import flashGetter.view.EventHandler;
 import flashGetter.view.InfoEvent;
+import flashGetter.view.sidebar.SideBarPlatter;
 
 /**
  * @author decaywood
@@ -12,7 +13,7 @@ import flashGetter.view.InfoEvent;
  * 2015年1月28日
  * 
  */
-public class TaskTableModel extends DefaultTableModel implements EventHandler<TaskTableModel>{
+public class TaskTableModel extends DefaultTableModel implements EventHandler {
     
     private int columnCount;
     private Class<? extends TaskTableModel> ID;
@@ -44,14 +45,11 @@ public class TaskTableModel extends DefaultTableModel implements EventHandler<Ta
         
     }
 
-
-
     @Override
-    public Class<TaskTableModel> getGroupClass() {
-        return TaskTableModel.class;
+    public boolean filter(InfoEvent event) {
+        return TaskTableModel.class.isAssignableFrom(event.getTarget());
     }
-    
-   
+
      
  
 }

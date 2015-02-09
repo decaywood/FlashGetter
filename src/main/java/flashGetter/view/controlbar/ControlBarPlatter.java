@@ -10,6 +10,7 @@ import javax.swing.JPanel;
 import flashGetter.view.EventDispatcher;
 import flashGetter.view.EventHandler;
 import flashGetter.view.InfoEvent;
+import flashGetter.view.model.TaskTableModel;
 
 /**
  * @author decaywood
@@ -17,7 +18,7 @@ import flashGetter.view.InfoEvent;
  * 2015年1月28日
  * 
  */
-public class ControlBarPlatter extends JPanel implements EventHandler<ControlBar> {
+public class ControlBarPlatter extends JPanel implements EventHandler {
     
     protected static final int CREATE_DIALOG = 0x0000000f;
     
@@ -51,11 +52,10 @@ public class ControlBarPlatter extends JPanel implements EventHandler<ControlBar
         updateUI();
     }
 
-    @Override
-    public Class<ControlBar> getGroupClass() {
-        return ControlBar.class;
-    }
 
-    
+    @Override
+    public boolean filter(InfoEvent event) {
+        return ControlBar.class.isAssignableFrom(event.getTarget());
+    }
 
 }

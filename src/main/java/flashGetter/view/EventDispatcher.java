@@ -12,7 +12,7 @@ import java.util.List;
  */
 public class EventDispatcher {
     
-    private List<EventHandler<?>> listeners;
+    private List<EventHandler> listeners;
     
     public static class InnerClass{
         
@@ -21,10 +21,10 @@ public class EventDispatcher {
     }
     
     private EventDispatcher() {
-        listeners = new ArrayList<EventHandler<?>>();
+        listeners = new ArrayList<EventHandler>();
     }
     
-    public void register(EventHandler<?> handler){
+    public void register(EventHandler handler){
         listeners.add(handler);
     }
     
@@ -39,7 +39,7 @@ public class EventDispatcher {
         if(event == null) return;
         
         listeners.stream()
-        .filter(target -> target.getGroupClass().isAssignableFrom(event.getTarget()))
+        .filter(target -> target.filter(event))
         .forEach(listener -> listener.invoke(event));
     }
 

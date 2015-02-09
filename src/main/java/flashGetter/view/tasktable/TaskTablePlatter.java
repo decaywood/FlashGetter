@@ -17,7 +17,7 @@ import flashGetter.view.EventHandler;
  * 2015年1月28日
  * 
  */
-public class TaskTablePlatter extends JScrollPane implements EventHandler<TaskTable>{
+public class TaskTablePlatter extends JScrollPane implements EventHandler{
     
     private Map<Class<? extends TaskTable>, TaskTable> tables;
     
@@ -46,8 +46,8 @@ public class TaskTablePlatter extends JScrollPane implements EventHandler<TaskTa
     }
 
     @Override
-    public Class<TaskTable> getGroupClass() {
-        return TaskTable.class;
+    public boolean filter(InfoEvent event) {
+        return TaskTable.class.isAssignableFrom(event.getTarget());
     }
 
 }

@@ -28,17 +28,17 @@ public class DownloadingExecutor implements DownloadingOperation {
         executor = Executors.newCachedThreadPool();
         taskSequences = new ArrayList<Long>();
     }
-    
+
 
     @Override
     public void createTask(String downloadAddr, String savePath) {
-        
+
         Long sequence = SequenceGenerator.generateSequence();
         TaskInfo taskInfo = new TaskInfo(sequence, downloadAddr, savePath);
         TaskMapper.InnerClass.instance.registerTask(sequence, taskInfo);
         taskSequences.add(sequence);
         TaskRunnable taskThread = TaskGenerator.generateTask(taskInfo);
-        
+
     }
 
     @Override

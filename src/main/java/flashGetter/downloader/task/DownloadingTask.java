@@ -44,7 +44,7 @@ public interface DownloadingTask {
     
     public void setRemainTime(String remainTime);
     
-    public void setDownloadSpeed(String speed);
+    public void setDownloadSpeed(double speed);
     
     public void setFinishTime(String finishTime);
     

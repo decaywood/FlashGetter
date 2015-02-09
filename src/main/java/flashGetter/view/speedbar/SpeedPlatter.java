@@ -12,6 +12,7 @@ import flashGetter.view.EventDispatcher;
 import flashGetter.view.EventHandler;
 import flashGetter.view.sidebar.SideBar;
 import flashGetter.view.sidebar.SideBarChanged;
+import flashGetter.view.tasktable.TaskTable;
 
 /**
  * @author decaywood
@@ -19,7 +20,7 @@ import flashGetter.view.sidebar.SideBarChanged;
  * 2015年1月30日
  * 
  */
-public class SpeedPlatter extends JPanel implements EventHandler<SpeedPlatter.AbstractOption>{
+public class SpeedPlatter extends JPanel implements EventHandler {
     
     private OptionPanel fold;
     private OptionPanel extend;
@@ -61,11 +62,10 @@ public class SpeedPlatter extends JPanel implements EventHandler<SpeedPlatter.Ab
         buttonPanel.updateUI();
     }
 
-    @Override
-    public Class<AbstractOption> getGroupClass() {
-        return AbstractOption.class;
-    }
 
-    
+    @Override
+    public boolean filter(InfoEvent event) {
+        return AbstractOption.class.isAssignableFrom(event.getTarget());
+    }
 
 }

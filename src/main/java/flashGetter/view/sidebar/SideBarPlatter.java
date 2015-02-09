@@ -16,7 +16,7 @@ import flashGetter.view.EventHandler;
  * 2015年1月31日
  * 
  */
-public class SideBarPlatter extends JPanel implements EventHandler<SideBarPlatter.SidebarPlatter>{
+public class SideBarPlatter extends JPanel implements EventHandler {
     
     private Map<Class<? extends JPanel>, JPanel> sideBars;
     
@@ -37,9 +37,11 @@ public class SideBarPlatter extends JPanel implements EventHandler<SideBarPlatte
         updateUI();
     }
 
+   
     @Override
-    public Class<SideBarPlatter.SidebarPlatter> getGroupClass() {
-        return SideBarPlatter.SidebarPlatter.class;
+    public boolean filter(InfoEvent event) {
+        return SideBarPlatter.SidebarPlatter.class.isAssignableFrom(event.getTarget());
     }
+    
 
 }

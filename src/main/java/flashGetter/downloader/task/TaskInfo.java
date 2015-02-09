@@ -36,15 +36,16 @@ public class TaskInfo implements DownloadingTask, DownloadedTask, DeletedTask, S
     private String finishTime;
     private String createTime;
     
-    private DoubleAdder progress; //dynamic
+    double progress;
+    
     private String remainTime; //dynamic
-    private LongAdder startOffset; //dynamic
+    
+    private long startOffset; //dynamic
     
     public TaskInfo(long taskID, String URL, String downloadSavePath) {
         this.taskID = taskID;
         this.url = URL;
         this.fileSavePath = downloadSavePath;
-        this.startOffset = new LongAdder();
     }
     
     public long getTaskID() {
@@ -65,8 +66,10 @@ public class TaskInfo implements DownloadingTask, DownloadedTask, DeletedTask, S
 
     @Override
     public void copyInfo(DownloadingTask task) {
+        
+        
         this.fileType = task.getFileType();
-        this.progress.add(task.getProgress());
+        this.progress = task.getProgress();
         this.remainTime = task.getRemainTime();
         this.downloadSpeed = task.getDownloadSpeed();
         this.finishTime = task.getFinishTime();
@@ -74,8 +77,9 @@ public class TaskInfo implements DownloadingTask, DownloadedTask, DeletedTask, S
         this.url = task.getDownloadURL();
         this.fileName = task.getFileName();
         this.fileSavePath = task.getSavePath();
-        startOffset.add(task.getStartOffset());
+        this.startOffset = task.getStartOffset();
         this.fileSize = task.getFileSize();
+        
     }
     
     /* getter
@@ -101,7 +105,7 @@ public class TaskInfo implements DownloadingTask, DownloadedTask, DeletedTask, S
 
     @Override
     public long getStartOffset() {
-        return startOffset.longValue();
+        return startOffset;
     }
 
     @Override
@@ -116,7 +120,7 @@ public class TaskInfo implements DownloadingTask, DownloadedTask, DeletedTask, S
 
     @Override
     public double getProgress() {
-        return progress.doubleValue();
+        return progress;
     }
 
     @Override
@@ -163,14 +167,15 @@ public class TaskInfo implements DownloadingTask, DownloadedTask, DeletedTask, S
     
     @Override
     public void moveStartOffset(long phase) {
-        this.startOffset = startOffset;
+        if(phase == 0) return;
+        this.startOffset = startOffset + phase;
     }
 
 
     @Override
     public void moveProgress(double progress) {
         if(progress == 0) return;
-        this.progress.add(progress);
+        this.progress = progress;
     }
 
     @Override
@@ -180,9 +185,9 @@ public class TaskInfo implements DownloadingTask, DownloadedTask, DeletedTask, S
     }
 
     @Override
-    public void setDownloadSpeed(String speed) {
-        if(speed == null) return;
-        this.downloadSpeed = speed;
+    public void setDownloadSpeed(double speed) {
+        if(speed == 0) return;
+        this.downloadSpeed = String.valueOf(speed);
     }
 
     @Override

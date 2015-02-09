@@ -6,6 +6,7 @@ import flashGetter.downloader.executor.DownloadingExecutor;
 import flashGetter.view.EventDispatcher;
 import flashGetter.view.EventHandler;
 import flashGetter.view.InfoEvent;
+import flashGetter.view.model.TaskTableModel;
 
 /**
  * @author decaywood
@@ -13,7 +14,7 @@ import flashGetter.view.InfoEvent;
  * 2015年2月4日
  * 
  */
-public class DownloadManager implements EventHandler<DownloadManager> {
+public class DownloadManager implements EventHandler {
     
     private static DownloadManager manager;
     
@@ -42,12 +43,11 @@ public class DownloadManager implements EventHandler<DownloadManager> {
             downloadingExecutor.createTask(event.getInfo(0), event.getInfo(1));
     }
 
-    @Override
-    public Class<DownloadManager> getGroupClass() {
-        return DownloadManager.class;
-    }
 
-    
+    @Override
+    public boolean filter(InfoEvent event) {
+        return DownloadManager.class.isAssignableFrom(event.getTarget());
+    }
  
 
     

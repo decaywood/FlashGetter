@@ -26,6 +26,7 @@ import flashGetter.util.FTPAddressParser;
 import flashGetter.util.FileSystemIconUtil;
 import flashGetter.util.TimeUtil;
 import flashGetter.util.FTPAddressParser.FTPInfo;
+import flashGetter.util.TimeUtil.SpeedCounter;
 
 /**
  * @author decaywood
@@ -37,14 +38,18 @@ public class FTPTaskThread implements Runnable, TaskRunnable{
     
     private static final Logger LOGGER = Logger.getLogger(FTPTaskThread.class);
     
+    private static final int BUFFER_SIZE = 1024 * 1024;
+    
     private FTPClient ftpClient;
     private DownloadingTask taskInfo;
     private FTPFile remotefile;
     private FTPInfo ftpInfo;
+    private SpeedCounter speedCounter;
     
     public FTPTaskThread(DownloadingTask task) {
        
         this.taskInfo = task;
+        this.speedCounter = TimeUtil.getSpeedCounter();
         
         initClient();
         refreshTaskInfo();
@@ -109,6 +114,8 @@ public class FTPTaskThread implements Runnable, TaskRunnable{
     public void initClient(){
         try {
             
+            LOGGER.info("download thread " + Thread.currentThread() + " init!");
+            
             ftpClient = new FTPClient();
             ftpClient.addProtocolCommandListener(new PrintCommandListener(new PrintWriter(System.out)));
             
@@ -116,6 +123,7 @@ public class FTPTaskThread implements Runnable, TaskRunnable{
             ftpInfo = FTPAddressParser.parseAdress(downloadURL);
             
             ftpClient.connect(ftpInfo.getServer(), ftpInfo.getPort());
+            ftpClient.setBufferSize(BUFFER_SIZE);
             ftpClient.setControlEncoding("GBK");
             ftpClient.enterLocalPassiveMode();
             ftpClient.setFileType(FTP.BINARY_FILE_TYPE);
@@ -138,6 +146,8 @@ public class FTPTaskThread implements Runnable, TaskRunnable{
 
     private void execute(){
         
+        LOGGER.info("download thread " + Thread.currentThread() + " begin!");
+        
         try {
             String fileName = taskInfo.getFileName();
             String savePath = taskInfo.getSavePath();
@@ -154,23 +164,28 @@ public class FTPTaskThread implements Runnable, TaskRunnable{
             ftpClient.setRestartOffset(startOffset); // begin from startOffset
             InputStream in = ftpClient.retrieveFileStream(ftpInfo.getFilePath());
             
-            byte[] buffer = new byte[1024 * 1024];
+            byte[] buffer = new byte[BUFFER_SIZE];
             int dataSize = 0;
             long fileSize = taskInfo.getFileSize();
             
             while ((dataSize = in.read(buffer)) != -1) {
+               
                 startOffset = taskInfo.getStartOffset();
                 fos.write(buffer, 0, dataSize);
                 double prog = startOffset * 1D / fileSize;
+                double speed = speedCounter.getSpeed(startOffset);
+                
+                taskInfo.setDownloadSpeed(speed);
                 taskInfo.moveStartOffset(dataSize); // atomic operation
                 taskInfo.moveProgress(prog);
                 taskInfo.serializeTask();
+                
             }
             
             taskInfo.setFinishTime(TimeUtil.getCurrentTime());
             taskInfo.getTempFilePath().delete();
             
-            LOGGER.info("download thread done!");
+            LOGGER.info("download thread " + Thread.currentThread() + " done!");
             fos.flush();
             fos.close();
             

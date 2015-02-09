@@ -10,6 +10,7 @@ import java.net.Inet4Address;
 import java.net.InetAddress;
 import java.util.Arrays;
 
+import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.input.AutoCloseInputStream;
 import org.apache.commons.io.output.FileWriterWithEncoding;
 import org.apache.commons.net.PrintCommandListener;
@@ -39,6 +40,11 @@ public class URLTest {
         DownloadingTask task = new TaskInfo(123, urlpath, "E:\\test\\result\\");
         FTPTaskThread thread = new FTPTaskThread(task);
         thread.run();
+        File file = new File("E:\\test\\Scala.pdf");
+        long checksum = FileUtils.checksumCRC32(file);
+        File file2 = new File("E:\\test\\result\\Scala.pdf");
+        long checksum2 = FileUtils.checksumCRC32(file2);
+        System.out.println(checksum +"  "+checksum2);
     }
 
 }

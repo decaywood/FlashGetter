@@ -12,6 +12,7 @@ import java.io.PrintWriter;
 import java.util.Arrays;
 import java.util.Optional;
 
+import org.apache.commons.io.FileUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.net.PrintCommandListener;
 import org.apache.commons.net.ftp.FTP;
@@ -19,8 +20,11 @@ import org.apache.commons.net.ftp.FTPClient;
 import org.apache.commons.net.ftp.FTPFile;
 import org.apache.commons.net.ftp.FTPReply;
 import org.apache.log4j.Logger;
+import org.joda.time.DateTime;
 
 import flashGetter.util.FTPAddressParser;
+import flashGetter.util.FileSystemIconUtil;
+import flashGetter.util.TimeUtil;
 import flashGetter.util.FTPAddressParser.FTPInfo;
 
 /**
@@ -61,7 +65,7 @@ public class FTPTaskThread implements Runnable, TaskRunnable{
              */
             this.taskInfo.setFileName(remotefile.getName());  
             this.taskInfo.setFileSize(remotefile.getSize());
-            
+           
             findTaskInfo();
             
         } catch (Exception e) {
@@ -72,20 +76,20 @@ public class FTPTaskThread implements Runnable, TaskRunnable{
     
     private void findTaskInfo(){
         
-        String taskPath = taskInfo.getTempFilePath();
-        File file = new File(taskPath);
+        File file = taskInfo.getTempFilePath();
         try {
             
             if(file.exists()){
           
                 ObjectInputStream ois = new ObjectInputStream(new FileInputStream(file));
-                TaskInfo info = (TaskInfo) ois.readObject();
+                DownloadingTask info = (DownloadingTask) ois.readObject();
                 ois.close();
                 taskInfo.copyInfo(info);
            
             } else {
             
                 ObjectOutputStream oos =  new ObjectOutputStream(new FileOutputStream(file));
+                taskInfo.setCreateTime(TimeUtil.getCurrentTime());
                 oos.writeObject(taskInfo);
                 oos.flush();
                 oos.close();
@@ -138,28 +142,40 @@ public class FTPTaskThread implements Runnable, TaskRunnable{
             String fileName = taskInfo.getFileName();
             String savePath = taskInfo.getSavePath();
             String filePath = savePath.concat(fileName);
-            
-            long startOffset = taskInfo.getStartOffset();
+           
             File outputFile = new File(filePath);
             
             if(outputFile.length() >= remotefile.getSize()) return; // downloading done
             
+            taskInfo.setFileType(FileSystemIconUtil.readSystemBigIcon(outputFile));
             FileOutputStream fos = new FileOutputStream(outputFile, true); // data append mode
             
+            long startOffset = taskInfo.getStartOffset();
             ftpClient.setRestartOffset(startOffset); // begin from startOffset
             InputStream in = ftpClient.retrieveFileStream(ftpInfo.getFilePath());
             
             byte[] buffer = new byte[1024 * 1024];
             int dataSize = 0;
+            long fileSize = taskInfo.getFileSize();
             
             while ((dataSize = in.read(buffer)) != -1) {
                 startOffset = taskInfo.getStartOffset();
                 fos.write(buffer, 0, dataSize);
-                taskInfo.setStartOffset(startOffset + dataSize);
+                double prog = startOffset * 1D / fileSize;
+                taskInfo.moveStartOffset(dataSize); // atomic operation
+                taskInfo.moveProgress(prog);
+                taskInfo.serializeTask();
             }
-            System.out.println("done");
+            
+            taskInfo.setFinishTime(TimeUtil.getCurrentTime());
+            taskInfo.getTempFilePath().delete();
+            
+            LOGGER.info("download thread done!");
             fos.flush();
             fos.close();
+            
+            
+            
         } catch (IOException e) {
             LOGGER.info("IO problem!", e);
         } 

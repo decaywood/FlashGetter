@@ -1,6 +1,12 @@
 package flashGetter.downloader.task;
 
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.ObjectOutputStream;
 import java.io.Serializable;
+import java.util.concurrent.atomic.DoubleAdder;
+import java.util.concurrent.atomic.LongAdder;
 
 import javax.swing.ImageIcon;
 
@@ -24,25 +30,57 @@ public class TaskInfo implements DownloadingTask, DownloadedTask, DeletedTask, S
     private ImageIcon fileType; 
     private String fileName;
     private long fileSize;
-    private String progress;
-    private String remainTime;
+    
     private String downloadSpeed;
     
     private String finishTime;
     private String createTime;
     
-    private long startOffset;
+    private DoubleAdder progress; //dynamic
+    private String remainTime; //dynamic
+    private LongAdder startOffset; //dynamic
     
     public TaskInfo(long taskID, String URL, String downloadSavePath) {
         this.taskID = taskID;
         this.url = URL;
         this.fileSavePath = downloadSavePath;
+        this.startOffset = new LongAdder();
     }
     
     public long getTaskID() {
         return taskID;
     }
     
+    private File file;
+    
+    @Override
+    public void serializeTask() throws IOException {
+        if(file == null)
+            file = getTempFilePath();
+        ObjectOutputStream oos =  new ObjectOutputStream(new FileOutputStream(file));
+        oos.writeObject(this);
+        oos.flush();
+        oos.close();
+    }
+
+    @Override
+    public void copyInfo(DownloadingTask task) {
+        this.fileType = task.getFileType();
+        this.progress.add(task.getProgress());
+        this.remainTime = task.getRemainTime();
+        this.downloadSpeed = task.getDownloadSpeed();
+        this.finishTime = task.getFinishTime();
+        this.createTime = task.getCreateTime();
+        this.url = task.getDownloadURL();
+        this.fileName = task.getFileName();
+        this.fileSavePath = task.getSavePath();
+        startOffset.add(task.getStartOffset());
+        this.fileSize = task.getFileSize();
+    }
+    
+    /* getter
+     * =======================================================================================================    
+     */    
     
     @Override
     public String getDownloadURL() {
@@ -60,36 +98,15 @@ public class TaskInfo implements DownloadingTask, DownloadedTask, DeletedTask, S
         return fileName;
     }
 
-    @Override
-    public void setFileName(String fileName) {
-        
-        if(this.fileName != null) return;
-        this.fileName = fileName;
-        
-    }
-    
-    
-
-    @Override
-    public void setFileSize(long fileSize) {
-        this.fileSize = fileSize;
-    }
 
     @Override
     public long getStartOffset() {
-        return startOffset;
+        return startOffset.longValue();
     }
 
     @Override
-    public void setStartOffset(long startOffset) {
-        double prog = startOffset / fileSize;
-        this.startOffset = startOffset;
-        this.progress = String.valueOf(prog);
-    }
-
-    @Override
-    public String getTempFilePath() {
-        return fileSavePath.concat(fileName).concat(".temp");
+    public File getTempFilePath() {
+        return new File(fileSavePath.concat(fileName).concat(".temp"));
     }
     
     @Override
@@ -98,23 +115,8 @@ public class TaskInfo implements DownloadingTask, DownloadedTask, DeletedTask, S
     }
 
     @Override
-    public void copyInfo(DownloadingTask task) {
-        this.fileType = task.getFileType();
-        this.progress = task.getProgress();
-        this.remainTime = task.getRemainTime();
-        this.downloadSpeed = task.getDownloadSpeed();
-        this.finishTime = task.getFinishTime();
-        this.createTime = task.getCreateTime();
-        this.url = task.getDownloadURL();
-        this.fileName = task.getFileName();
-        this.fileSavePath = task.getSavePath();
-        this.startOffset = task.getStartOffset();
-        this.fileSize = task.getFileSize();
-    }
-
-    @Override
-    public String getProgress() {
-        return progress;
+    public double getProgress() {
+        return progress.doubleValue();
     }
 
     @Override
@@ -141,44 +143,75 @@ public class TaskInfo implements DownloadingTask, DownloadedTask, DeletedTask, S
     public ImageIcon getFileType() {
         return fileType;
     }
+    
+    /* setter
+     * =======================================================================================================    
+     */
 
     @Override
-    public void setProgress(String progress) {
-        this.progress = progress;
+    public void setFileName(String fileName) {
+        if(fileName == null) return;
+        this.fileName = fileName;
+    }
+    
+    @Override
+    public void setFileSize(long fileSize) {
+        if(fileSize == 0) return;
+        this.fileSize = fileSize;
+    }
+   
+    
+    @Override
+    public void moveStartOffset(long phase) {
+        this.startOffset = startOffset;
+    }
+
+
+    @Override
+    public void moveProgress(double progress) {
+        if(progress == 0) return;
+        this.progress.add(progress);
     }
 
     @Override
     public void setRemainTime(String remainTime) {
+        if(remainTime == null) return;
         this.remainTime = remainTime;
     }
 
     @Override
     public void setDownloadSpeed(String speed) {
+        if(speed == null) return;
         this.downloadSpeed = speed;
     }
 
     @Override
     public void setFinishTime(String finishTime) {
+        if(finishTime == null) return;
         this.finishTime = finishTime;
     }
 
     @Override
     public void setCreateTime(String createTime) {
+        if(createTime == null) return;
         this.createTime = createTime;
     }
 
     @Override
     public void setDownloadURL(String url) {
+        if(url == null) return;
         this.url = url;
     }
 
     @Override
     public void setSavePath(String savePath) {
+        if(savePath == null) return;
         this.fileSavePath = savePath;
     }
 
     @Override
     public void setFileType(ImageIcon fileType) {
+        if(fileType == null) return;
         this.fileType = fileType;
     }
 

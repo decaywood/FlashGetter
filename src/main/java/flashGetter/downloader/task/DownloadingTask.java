@@ -1,5 +1,9 @@
 package flashGetter.downloader.task;
 
+import java.io.File;
+import java.io.IOException;
+import java.util.concurrent.atomic.AtomicInteger;
+
 import javax.swing.ImageIcon;
 
 /**
@@ -10,7 +14,7 @@ import javax.swing.ImageIcon;
  */
 public interface DownloadingTask {
     
-    public String getProgress();
+    public double getProgress();
     
     public String getRemainTime();
     
@@ -26,8 +30,6 @@ public interface DownloadingTask {
     
     public String getSavePath();
     
-    public String getTempFilePath();
-    
     public String getFileName();
     
     public long getFileSize();
@@ -35,8 +37,10 @@ public interface DownloadingTask {
     public ImageIcon getFileType();
     
     public void copyInfo(DownloadingTask task);
+    public void serializeTask() throws IOException ;
+    public File getTempFilePath();
     
-  public void setProgress(String progress);
+    public void moveProgress(double progress);
     
     public void setRemainTime(String remainTime);
     
@@ -46,7 +50,7 @@ public interface DownloadingTask {
     
     public void setCreateTime(String createTime);
     
-    public void setStartOffset(long startOffset);
+    public void moveStartOffset(long phase);
     
     public void setDownloadURL(String url);
     

@@ -28,6 +28,7 @@ public class DownloadingExecutor implements DownloadingOperation {
         executor = Executors.newCachedThreadPool();
         taskSequences = new ArrayList<Long>();
     }
+    
 
     @Override
     public void createTask(String downloadAddr, String savePath) {

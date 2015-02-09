@@ -4,11 +4,25 @@ FlashGetter
 更重要的是应用自己的一些在软件结构上的创新设计（从结果上来看，新的设计似乎能够大大减少冗余代码，
  大幅度的松散耦合）。至于软件本身的功能，这不是讨论的重点，但是它可以提供基本的文件下载功能以
   及相对于Java Swing对用户更加友好的界面。
-### 界面的架构设计
+  
+  the main purpose of this project is to put the abstract programming
+and the new feature of java8 into practice(especially using function 
+programming in collection), furthermore, using the creative design
+ onto software structure is the key. as for the software itself, it doens't
+ make any sense in talking about its function, but it can offer the basic
+ download function and more user friendly surface
+  
+### 界面的架构设计 the framework of surface
 
    基本结构基于功能的继承关系，将部分可通用的UI组件进行抽象，实现复用的最大化
+   
+ the structure of this software is based on inheritance relationships
+ of function, abstract the component,and reuse them
 
 ####特点：约定优先于配置，根据继承层次控制信息分发范围这是本程序结构上的一大创新（这不代表限定在类层次）。
+####advantage: regulation is superior to configure, dispatching information
+####according to class inherit structure is the creative point on structure 
+
    传统的界面设计模式为使用普通的监听者模式，将所有需要响应的界面注册到不同范围的消息分发器上，
 某个组件要发送消息给另一个或者一批组件时，必须选择相应的分发器进行消息传递,这样的设计缺点很明显，
 为了对某一范围的组件进行消息分发，要不使用多个针对特定范围的分发器分发消息，要不就只能广播发送然后
@@ -16,6 +30,7 @@ FlashGetter
 如果软件日后需要拓展，面对复杂的逻辑，开发者可能无从下手，显然，这会大大提升软件的维护成本。
         我们以一个简单的例子开始：例如 类 class1 class2  想往classTarget1发送消息，
 而class4，class5想往classTarget2发送消息那么需要进行以下步骤：
+
 
         * 第一步是在classtarget1、classtarget2两个类继承ViewEventHandler<C>接口
         C为泛型参数，为接收范围类。

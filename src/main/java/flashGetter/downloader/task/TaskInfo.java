@@ -1,10 +1,5 @@
 package flashGetter.downloader.task;
 
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
-import java.io.IOException;
-import java.io.ObjectInputStream;
 import java.io.Serializable;
 
 import javax.swing.ImageIcon;
@@ -23,13 +18,10 @@ public class TaskInfo implements DownloadingTask, DownloadedTask, DeletedTask, S
     
     private final transient long taskID;
     
-    private String SerializeName;
-    
-    
     private String url;
     private String fileSavePath;
     
-    private ImageIcon fileType;
+    private ImageIcon fileType; 
     private String fileName;
     private long fileSize;
     private String progress;
@@ -52,47 +44,6 @@ public class TaskInfo implements DownloadingTask, DownloadedTask, DeletedTask, S
     }
     
     
-    private void readTask(){
-        
-        if(SerializeName == null) return;
-        
-        String taskPath = fileSavePath.concat(SerializeName);
-        File file = new File(taskPath);
-        
-        if(file.exists()){
-            try {
-                ObjectInputStream objectInputStream = new ObjectInputStream(new FileInputStream(file));
-                TaskInfo info = (TaskInfo) objectInputStream.readObject();
-                objectInputStream.close();
-                copyInfo(info);
-            } catch (ClassNotFoundException e) {
-                LOGGER.info("Task Not Found!", e);
-            } catch (FileNotFoundException e) {
-                LOGGER.info("File Not Found!", e);
-            } catch (IOException e) {
-                LOGGER.info("IO problem!", e);
-            }  
-        }  
-        
-    }
-    
-    private void copyInfo(TaskInfo info){
-        
-        this.SerializeName = info.SerializeName;
-        this.url = info.url;
-        this.fileSavePath = info.fileSavePath;
-        
-        this.fileType = info.fileType;
-        this.fileName = info.fileName;
-        this.fileSize = info.fileSize;
-        this.progress = info.progress;
-        this.remainTime = info.remainTime;
-        this.downloadSpeed = info.downloadSpeed;
-        
-        this.finishTime = info.finishTime;
-        this.createTime = info.createTime;
-    }
-    
     @Override
     public String getDownloadURL() {
         return url;
@@ -113,10 +64,7 @@ public class TaskInfo implements DownloadingTask, DownloadedTask, DeletedTask, S
     public void setFileName(String fileName) {
         
         if(this.fileName != null) return;
-        
         this.fileName = fileName;
-        this.SerializeName = fileName.concat(".temp");
-        readTask();
         
     }
     
@@ -137,6 +85,101 @@ public class TaskInfo implements DownloadingTask, DownloadedTask, DeletedTask, S
         double prog = startOffset / fileSize;
         this.startOffset = startOffset;
         this.progress = String.valueOf(prog);
+    }
+
+    @Override
+    public String getTempFilePath() {
+        return fileSavePath.concat(fileName).concat(".temp");
+    }
+    
+    @Override
+    public long getFileSize() {
+        return fileSize;
+    }
+
+    @Override
+    public void copyInfo(DownloadingTask task) {
+        this.fileType = task.getFileType();
+        this.progress = task.getProgress();
+        this.remainTime = task.getRemainTime();
+        this.downloadSpeed = task.getDownloadSpeed();
+        this.finishTime = task.getFinishTime();
+        this.createTime = task.getCreateTime();
+        this.url = task.getDownloadURL();
+        this.fileName = task.getFileName();
+        this.fileSavePath = task.getSavePath();
+        this.startOffset = task.getStartOffset();
+        this.fileSize = task.getFileSize();
+    }
+
+    @Override
+    public String getProgress() {
+        return progress;
+    }
+
+    @Override
+    public String getRemainTime() {
+        return remainTime;
+    }
+
+    @Override
+    public String getDownloadSpeed() {
+        return downloadSpeed;
+    }
+
+    @Override
+    public String getFinishTime() {
+        return finishTime;
+    }
+
+    @Override
+    public String getCreateTime() {
+        return createTime;
+    }
+
+    @Override
+    public ImageIcon getFileType() {
+        return fileType;
+    }
+
+    @Override
+    public void setProgress(String progress) {
+        this.progress = progress;
+    }
+
+    @Override
+    public void setRemainTime(String remainTime) {
+        this.remainTime = remainTime;
+    }
+
+    @Override
+    public void setDownloadSpeed(String speed) {
+        this.downloadSpeed = speed;
+    }
+
+    @Override
+    public void setFinishTime(String finishTime) {
+        this.finishTime = finishTime;
+    }
+
+    @Override
+    public void setCreateTime(String createTime) {
+        this.createTime = createTime;
+    }
+
+    @Override
+    public void setDownloadURL(String url) {
+        this.url = url;
+    }
+
+    @Override
+    public void setSavePath(String savePath) {
+        this.fileSavePath = savePath;
+    }
+
+    @Override
+    public void setFileType(ImageIcon fileType) {
+        this.fileType = fileType;
     }
 
     

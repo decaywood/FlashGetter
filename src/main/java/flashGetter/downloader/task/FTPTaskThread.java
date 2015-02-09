@@ -1,9 +1,13 @@
 package flashGetter.downloader.task;
 
 import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
 import java.io.PrintWriter;
 import java.util.Arrays;
 import java.util.Optional;
@@ -37,24 +41,65 @@ public class FTPTaskThread implements Runnable, TaskRunnable{
     public FTPTaskThread(DownloadingTask task) {
        
         this.taskInfo = task;
+        
         initClient();
         refreshTaskInfo();
     }
     
-    public void refreshTaskInfo(){
+   
+    
+    
+    private void refreshTaskInfo(){
         try {
             
             FTPFile[] files = ftpClient.listFiles();
             this.remotefile = Arrays.stream(files)
                     .filter(file -> file.getName().equals(ftpInfo.getFileName())).findFirst().get();
             
-            this.taskInfo.setFileName(remotefile.getName());
+            /*
+             * according to fileName,it can confirm the temp file path
+             */
+            this.taskInfo.setFileName(remotefile.getName());  
             this.taskInfo.setFileSize(remotefile.getSize());
+            
+            findTaskInfo();
             
         } catch (Exception e) {
             LOGGER.info("No Files!", e);
         }
         
+    }
+    
+    private void findTaskInfo(){
+        
+        String taskPath = taskInfo.getTempFilePath();
+        File file = new File(taskPath);
+        try {
+            
+            if(file.exists()){
+          
+                ObjectInputStream ois = new ObjectInputStream(new FileInputStream(file));
+                TaskInfo info = (TaskInfo) ois.readObject();
+                ois.close();
+                taskInfo.copyInfo(info);
+           
+            } else {
+            
+                ObjectOutputStream oos =  new ObjectOutputStream(new FileOutputStream(file));
+                oos.writeObject(taskInfo);
+                oos.flush();
+                oos.close();
+            
+            }
+
+        } catch (ClassNotFoundException e) {
+            LOGGER.info("Task Not Found!", e);
+        } catch (FileNotFoundException e) {
+            LOGGER.info("File Not Found!", e);
+        } catch (IOException e) {
+            LOGGER.info("IO problem!", e);
+        }  
+       
     }
     
     public void initClient(){

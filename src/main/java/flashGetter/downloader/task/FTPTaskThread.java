@@ -22,6 +22,9 @@ import org.apache.commons.net.ftp.FTPReply;
 import org.apache.log4j.Logger;
 import org.joda.time.DateTime;
 
+import flashGetter.downloader.DownloadingOperation;
+import flashGetter.downloader.TaskEvent;
+import flashGetter.downloader.TaskEvent.TaskEventType;
 import flashGetter.util.FTPAddressParser;
 import flashGetter.util.FileSystemIconUtil;
 import flashGetter.util.TimeUtil;
@@ -34,7 +37,7 @@ import flashGetter.util.TimeUtil.SpeedCounter;
  * 2015年2月6日
  * 
  */
-public class FTPTaskThread implements Runnable, TaskRunnable{
+public class FTPTaskThread implements TaskRunnable{
     
     private static final Logger LOGGER = Logger.getLogger(FTPTaskThread.class);
     
@@ -45,10 +48,17 @@ public class FTPTaskThread implements Runnable, TaskRunnable{
     private FTPFile remotefile;
     private FTPInfo ftpInfo;
     private SpeedCounter speedCounter;
+    private DownloadingOperation executor;
     
-    public FTPTaskThread(DownloadingTask task) {
+    /*
+     * thread visible
+     */
+    private volatile boolean terminate = false;
+    
+    public FTPTaskThread(DownloadingTask task, DownloadingOperation executor) {
        
         this.taskInfo = task;
+        this.executor = executor;
         this.speedCounter = TimeUtil.getSpeedCounter();
         
         initClient();
@@ -168,7 +178,11 @@ public class FTPTaskThread implements Runnable, TaskRunnable{
             int dataSize = 0;
             long fileSize = taskInfo.getFileSize();
             
-            while ((dataSize = in.read(buffer)) != -1) {
+            TaskEvent event = new TaskEvent();
+            event.setTaskEventType(TaskEventType.INFORMATION_UPDATE);
+            event.setTaskID(taskInfo.getTaskID());
+            
+            while ((dataSize = in.read(buffer)) != -1 && !terminate) {
                
                 startOffset = taskInfo.getStartOffset();
                 fos.write(buffer, 0, dataSize);
@@ -180,16 +194,22 @@ public class FTPTaskThread implements Runnable, TaskRunnable{
                 taskInfo.moveProgress(prog);
                 taskInfo.serializeTask();
                 
+                executor.fireTaskInfo(event);
+                
             }
+            
+            fos.flush();
+            fos.close();
+            
+            if(terminate) return;
             
             taskInfo.setFinishTime(TimeUtil.getCurrentTime());
             taskInfo.getTempFilePath().delete();
             
             LOGGER.info("download thread " + Thread.currentThread() + " done!");
-            fos.flush();
-            fos.close();
             
-            
+            event.setTaskEventType(TaskEventType.DOWNLOADING_FINISHED);
+            executor.fireTaskInfo(event);
             
         } catch (IOException e) {
             LOGGER.info("IO problem!", e);
@@ -201,6 +221,9 @@ public class FTPTaskThread implements Runnable, TaskRunnable{
         execute();
     }
     
-    
+    @Override
+    public void terminateTask(){
+        terminate = true;
+    }
 
 }

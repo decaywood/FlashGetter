@@ -2,6 +2,7 @@ package flashGetter.downloader;
 
 import java.net.URL;
 
+import flashGetter.downloader.TaskEvent.TaskEventType;
 import flashGetter.downloader.executor.DownloadingExecutor;
 import flashGetter.view.EventDispatcher;
 import flashGetter.view.EventHandler;
@@ -30,17 +31,38 @@ public class DownloadManager implements EventHandler {
     
     
     private DownloadingOperation downloadingExecutor;
+    private DownloadedOperation downloadedExecutor;
+    private DeletedOperation deletedExecutor;
     
     public DownloadManager() {
         downloadingExecutor = new DownloadingExecutor();
+        downloadingExecutor.addManagerListener(event -> {
+             if(!event.typeEqual(TaskEventType.DOWNLOADING_FINISHED)) return;
+             
+        });
+        
+        downloadingExecutor.addManagerListener(event -> {
+            if(!event.typeEqual(TaskEventType.INFORMATION_UPDATE)) return;
+        });
+//        downloadedExecutor = 
+//        deletedExecutor = 
         EventDispatcher.InnerClass.instance.register(this);
     }
 
     @Override
     public void invoke(InfoEvent event) {
+        
         int operationKey = event.getOperationKey();
+        
         if(operationKey == CREATE_TASK)
             downloadingExecutor.createTask(event.getInfo(0), event.getInfo(1));
+        if(operationKey == START_TASK)
+            downloadingExecutor.startTask(event.getTaskIDs());
+        if(operationKey == PAUSE_TASK)
+            downloadingExecutor.pauseTask(event.getTaskIDs());
+        if(operationKey == DELETE_TASK)
+            downloadingExecutor.pauseTask(event.getTaskIDs());
+        
     }
 
 
@@ -48,7 +70,6 @@ public class DownloadManager implements EventHandler {
     public boolean filter(InfoEvent event) {
         return DownloadManager.class.isAssignableFrom(event.getTarget());
     }
- 
 
     
 

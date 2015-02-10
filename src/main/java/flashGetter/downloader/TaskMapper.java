@@ -17,6 +17,21 @@ public class TaskMapper {
     
     private final ConcurrentHashMap<Long, TaskInfo> taskMapper;
     
+    /*
+     * all task informations are managed in taskMapper
+     * the whole program can retrieve the task information(taskInfo)
+     * through it. any class instance can share task information 
+     * by transform the taskID rather than rebuild a instance.
+     * 
+     * but the only thing you should pay attention, the task 
+     * informations changed in instanceA, it would effect instanceB
+     * which rely on the task information,so think cautiously when you
+     * change task information.
+     * 
+     * it is designed to save heap memory
+     * 
+     */
+    
     private TaskMapper() {
         taskMapper = new ConcurrentHashMap<Long, TaskInfo>();
     }
@@ -24,6 +39,7 @@ public class TaskMapper {
     public static class InnerClass{
         public static final TaskMapper instance = new TaskMapper(); 
     }
+    
     
     public void registerTask(Long taskID, TaskInfo taskInfo){
         taskMapper.put(taskID, taskInfo);

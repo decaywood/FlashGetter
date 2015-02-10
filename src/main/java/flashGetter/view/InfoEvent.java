@@ -16,6 +16,15 @@ public class InfoEvent {
     
     private String[] info;
     
+    private Long[] taskIDs;
+    
+    public void setTaskID(Long... taskIDs) {
+        this.taskIDs = taskIDs;
+    }
+    
+    public Long[] getTaskIDs() {
+        return taskIDs;
+    }
     
     public InfoEvent setInfo(String... info) {
         this.info = info;

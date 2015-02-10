@@ -6,6 +6,6 @@ package flashGetter.downloader.task;
  * 2015年2月6日
  * 
  */
-public interface DownloadedTask {
+public interface DownloadedTask extends Task {
 
 }

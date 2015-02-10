@@ -6,6 +6,8 @@ package flashGetter.downloader.task;
  * 2015年2月8日
  * 
  */
-public interface TaskRunnable {
+public interface TaskRunnable extends Runnable {
+    
+    public void terminateTask();
 
 }

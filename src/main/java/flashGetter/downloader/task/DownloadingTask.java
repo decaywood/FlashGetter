@@ -12,7 +12,7 @@ import javax.swing.ImageIcon;
  * 2015年2月6日
  * 
  */
-public interface DownloadingTask {
+public interface DownloadingTask extends Task {
     
     public double getProgress();
     

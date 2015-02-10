@@ -38,7 +38,7 @@ public class URLTest {
     public static void main(String[] args) throws IOException {
         String urlpath = "ftp://flashgetter:123456@192.168.59.1:21/Scala.pdf";
         DownloadingTask task = new TaskInfo(123, urlpath, "E:\\test\\result\\");
-        FTPTaskThread thread = new FTPTaskThread(task);
+        FTPTaskThread thread = new FTPTaskThread(task, null);
         thread.run();
         File file = new File("E:\\test\\Scala.pdf");
         long checksum = FileUtils.checksumCRC32(file);

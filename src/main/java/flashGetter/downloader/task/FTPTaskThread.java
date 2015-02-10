@@ -30,6 +30,7 @@ import flashGetter.util.FileSystemIconUtil;
 import flashGetter.util.TimeUtil;
 import flashGetter.util.FTPAddressParser.FTPInfo;
 import flashGetter.util.TimeUtil.SpeedCounter;
+import flashGetter.util.TimeUtil.UpdateCounter;
 
 /**
  * @author decaywood
@@ -47,7 +48,6 @@ public class FTPTaskThread implements TaskRunnable{
     private DownloadingTask taskInfo;
     private FTPFile remotefile;
     private FTPInfo ftpInfo;
-    private SpeedCounter speedCounter;
     private DownloadingOperation executor;
     
     /*
@@ -59,7 +59,6 @@ public class FTPTaskThread implements TaskRunnable{
        
         this.taskInfo = task;
         this.executor = executor;
-        this.speedCounter = TimeUtil.getSpeedCounter();
         
         initClient();
         refreshTaskInfo();
@@ -182,6 +181,9 @@ public class FTPTaskThread implements TaskRunnable{
             event.setTaskEventType(TaskEventType.INFORMATION_UPDATE);
             event.setTaskID(taskInfo.getTaskID());
             
+            SpeedCounter speedCounter = TimeUtil.getSpeedCounter();
+            UpdateCounter updateCounter = TimeUtil.getUpdateCounter();
+            
             while ((dataSize = in.read(buffer)) != -1 && !terminate) {
                
                 startOffset = taskInfo.getStartOffset();
@@ -194,8 +196,8 @@ public class FTPTaskThread implements TaskRunnable{
                 taskInfo.moveProgress(prog);
                 taskInfo.serializeTask();
                 
-                executor.fireTaskInfo(event);
-                System.out.println(speed);
+                if(updateCounter.canUpdate())
+                    executor.fireTaskInfo(event);
             }
             
             fos.flush();
@@ -215,6 +217,8 @@ public class FTPTaskThread implements TaskRunnable{
             LOGGER.info("IO problem!", e);
         } 
     }
+    
+    
     
     @Override
     public void run() {

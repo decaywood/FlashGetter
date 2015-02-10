@@ -1,8 +1,8 @@
 package flashGetter.util;
 
-import java.util.concurrent.atomic.LongAdder;
-
 import org.joda.time.DateTime;
+
+import flashGetter.downloader.TaskEvent;
 
 /**
  * @author decaywood
@@ -33,6 +33,25 @@ public class TimeUtil {
         }
         
     }
+    
+    
+    public static class UpdateCounter {
+        
+        private long oldTime = System.currentTimeMillis();
+        
+        private UpdateCounter() {}
+        
+        public boolean canUpdate() {
+            
+            long currentTime = System.currentTimeMillis();
+            if(currentTime - oldTime < 1000) return false;
+            
+            this.oldTime = currentTime;
+            return false;
+            
+        }
+        
+    }
 
     private static final String DEFAULT_FORMAT = "YYYY-MM-DD HH:MM:SS EE";
     
@@ -54,6 +73,10 @@ public class TimeUtil {
     
     public static SpeedCounter getSpeedCounter(){
         return new SpeedCounter();
+    }
+    
+    public static UpdateCounter getUpdateCounter(){
+        return new UpdateCounter();
     }
     
 }

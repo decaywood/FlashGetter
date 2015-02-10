@@ -37,8 +37,16 @@ public interface DownloadingTask extends Task {
     public ImageIcon getFileType();
     
     public void copyInfo(DownloadingTask task);
+    
     public void serializeTask() throws IOException ;
+    
     public File getTempFilePath();
+    
+    public void lock();
+    
+    public void unLock();
+    
+    public boolean isLock();
     
     public void moveProgress(double progress);
     

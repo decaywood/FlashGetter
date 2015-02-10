@@ -22,7 +22,16 @@ public class TaskInfo implements DownloadingTask, DownloadedTask, DeletedTask, S
     
     private static final Logger LOGGER = Logger.getLogger(TaskInfo.class);
     
+    /*
+     * unique identified ID
+     */
     private final transient long taskID;
+    /*
+     * the lock is used to prevent more than one downloading thread
+     * from bundling the same task at the same time, it would result 
+     * in mess of data
+     */
+    private volatile boolean lock;
     
     private String url;
     private String fileSavePath;
@@ -52,6 +61,9 @@ public class TaskInfo implements DownloadingTask, DownloadedTask, DeletedTask, S
         return taskID;
     }
     
+    /*
+     * temporary file path
+     */
     private File file;
     
     @Override
@@ -218,6 +230,21 @@ public class TaskInfo implements DownloadingTask, DownloadedTask, DeletedTask, S
     public void setFileType(ImageIcon fileType) {
         if(fileType == null) return;
         this.fileType = fileType;
+    }
+
+    @Override
+    public void lock() {
+        this.lock = true;
+    }
+
+    @Override
+    public void unLock() {
+        this.lock = false;
+    }
+
+    @Override
+    public boolean isLock() {
+        return lock;
     }
 
     

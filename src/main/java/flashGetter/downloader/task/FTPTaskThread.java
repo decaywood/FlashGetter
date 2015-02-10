@@ -195,7 +195,7 @@ public class FTPTaskThread implements TaskRunnable{
                 taskInfo.serializeTask();
                 
                 executor.fireTaskInfo(event);
-                
+                System.out.println(speed);
             }
             
             fos.flush();

@@ -73,6 +73,7 @@ public class DownloadingExecutor implements DownloadingOperation {
         TaskMapper.InnerClass.instance.registerTask(sequence, taskInfo);
         TaskRunnable taskThread = TaskGenerator.generateTask(taskInfo, this); // TaskThread
         taskTable.put(sequence, taskThread);
+        taskInfo.lock();
         executor.execute(taskThread);
     }
 
@@ -81,7 +82,13 @@ public class DownloadingExecutor implements DownloadingOperation {
      */
     @Override
     public void startTask(Long... taskIDs) {
-        Arrays.stream(taskIDs).forEach(taskNumber -> taskTable.get(taskNumber).notify());
+        Arrays.stream(taskIDs).forEach(taskNumber -> {
+            TaskInfo taskInfo = TaskMapper.InnerClass.instance.getTaskInfo(taskNumber);
+            if(taskInfo.isLock()) return;
+            TaskRunnable taskThread = TaskGenerator.generateTask(taskInfo, this);
+            taskTable.put(taskInfo.getTaskID(), taskThread);
+            executor.execute(taskThread);
+        });
     }
 
     /*
@@ -90,12 +97,9 @@ public class DownloadingExecutor implements DownloadingOperation {
      */
     @Override
     public void pauseTask(Long... taskIDs) {
-        Arrays.stream(taskIDs).forEach(taskNumber -> {
-            try {
-                taskTable.get(taskNumber).wait(); 
-            } catch (InterruptedException e) {
-                LOGGER.info("Task Thread wait error!", e);
-            }
+        Arrays.stream(taskIDs).forEach(taskID -> {
+            taskTable.get(taskID).terminateTask(); 
+            TaskMapper.InnerClass.instance.getTaskInfo(taskID).unLock();
         });
     }
 

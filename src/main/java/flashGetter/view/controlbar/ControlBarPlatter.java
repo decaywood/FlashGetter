@@ -20,7 +20,9 @@ import flashGetter.view.model.TaskTableModel;
  */
 public class ControlBarPlatter extends JPanel implements EventHandler {
     
-    protected static final int CREATE_DIALOG = 0x0000000f;
+    public static enum ActionType{
+        CREATE_DIALOG
+    }
     
     private Map<Class<? extends ControlBar>, ControlBar> controlBars;
     
@@ -43,7 +45,7 @@ public class ControlBarPlatter extends JPanel implements EventHandler {
 
     @Override
     public void invoke(InfoEvent event) {
-        if(event.getOperationKey() == CREATE_DIALOG){
+        if(event.getOperationKey() == ActionType.CREATE_DIALOG){
             new TaskDialog();
             return;
         }

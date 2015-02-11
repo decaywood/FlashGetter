@@ -4,6 +4,7 @@ import java.awt.event.MouseAdapter;
 
 import flashGetter.Resources;
 import flashGetter.view.InfoEvent;
+import flashGetter.view.controlbar.ControlBarPlatter.ActionType;
 
 /**
  * @author decaywood
@@ -21,7 +22,7 @@ public class DownloadedControlBar extends ControlBar {
                 null,
                 "Create a Task", 
                 new InfoEvent()
-        .setOperationKey(ControlBarPlatter.CREATE_DIALOG)
+        .setOperationKey(ActionType.CREATE_DIALOG)
         .setTarget(ControlBar.class));
         
         addPanel(Resources.deleteTask, 

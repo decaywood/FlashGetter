@@ -7,6 +7,12 @@ package flashGetter.downloader.task;
  * 
  */
 public interface Task {
+    
+    public static enum TaskState{
+        TASK_BEGIN,
+        TASK_FINISHED,
+        TASK_UPDATE
+    }
 
     public long getTaskID();
     

@@ -13,8 +13,11 @@ import javax.swing.JPanel;
 import javax.swing.JTextArea;
 import javax.swing.JTextField;
 
+import org.apache.commons.lang3.StringUtils;
+
 import flashGetter.Resources;
 import flashGetter.downloader.DownloadManager;
+import flashGetter.downloader.DownloadManager.TaskEventType;
 import flashGetter.view.EventDispatcher;
 import flashGetter.view.InfoEvent;
 import flashGetter.view.MainFrame;
@@ -84,11 +87,11 @@ public class TaskDialog extends JDialog {
         buttonOK.setFont(font);
         buttonOK.addActionListener(l -> {
             String downloadAddr = textArea.getText();
-            String savePath = jTextField.getText();
+            String savePath = getFilePath(jTextField.getText());
             InfoEvent event = new InfoEvent()
             .setTarget(DownloadManager.class)
             .setInfo(downloadAddr, savePath)
-            .setOperationKey(DownloadManager.CREATE_TASK);
+            .setOperationKey(TaskEventType.TASK_CREATE);
             EventDispatcher.InnerClass.instance.fireEvent(event);
             dispose();
         });
@@ -104,6 +107,11 @@ public class TaskDialog extends JDialog {
         
         add(buttons, BorderLayout.SOUTH);
         
+    }
+    
+    private String getFilePath(String path){
+        String replacement = path.endsWith("\\") ? path : path + "\\";
+        return replacement;
     }
 
 }

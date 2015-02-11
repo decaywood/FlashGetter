@@ -10,18 +10,17 @@ import java.util.concurrent.Executors;
 
 import org.apache.log4j.Logger;
 
-import flashGetter.downloader.DownloadManager;
 import flashGetter.downloader.DownloadingOperation;
 import flashGetter.downloader.ManagerListener;
 import flashGetter.downloader.TaskEvent;
 import flashGetter.downloader.TaskMapper;
-import flashGetter.downloader.TaskEvent.TaskEventType;
-import flashGetter.downloader.task.FTPTaskThread;
 import flashGetter.downloader.task.TaskInfo;
 import flashGetter.downloader.task.TaskRunnable;
+import flashGetter.downloader.task.Task.TaskState;
 import flashGetter.util.SequenceGenerator;
 import flashGetter.util.TaskGenerator;
-import flashGetter.view.EventDispatcher;
+import flashGetter.util.TimeUtil;
+import flashGetter.util.TimeUtil.UpdateCounter;
 
 /**
  * @author decaywood
@@ -36,11 +35,13 @@ public class DownloadingExecutor implements DownloadingOperation {
     private ExecutorService executor;
     private Map<Long, TaskRunnable> taskTable;
     private List<ManagerListener> listeners;
+    private UpdateCounter updateCounter;
     
     public DownloadingExecutor() {
         this.executor = Executors.newCachedThreadPool();
         this.taskTable = new ConcurrentHashMap<Long, TaskRunnable>();
         this.listeners = new ArrayList<ManagerListener>();
+        this.updateCounter = TimeUtil.getUpdateCounter();
     }
 
     public void addManagerListener(ManagerListener listener){
@@ -53,15 +54,8 @@ public class DownloadingExecutor implements DownloadingOperation {
      */
     @Override
     public synchronized void fireTaskInfo(TaskEvent event){
-        
-        if(event.typeEqual(TaskEventType.DOWNLOADING_FINISHED)){
-            finishTask(event.getTaskID());
-            listeners.forEach(listener -> listener.onEvent(event));
-        }
-        
-        else if(event.typeEqual(TaskEventType.INFORMATION_UPDATE))
-            listeners.forEach(listener -> listener.onEvent(event));
-        
+        if(!event.typeEqual(TaskState.TASK_UPDATE) || updateCounter.canUpdate())
+        listeners.forEach(listener -> listener.onEvent(event));
     }
     
 
@@ -72,6 +66,12 @@ public class DownloadingExecutor implements DownloadingOperation {
         TaskInfo taskInfo = new TaskInfo(sequence, downloadAddr, savePath);
         TaskMapper.InnerClass.instance.registerTask(sequence, taskInfo);
         TaskRunnable taskThread = TaskGenerator.generateTask(taskInfo, this); // TaskThread
+        
+        if(taskThread == null){
+            LOGGER.info("URL Not matched", new Exception("URL Error!"));
+            return;
+        }
+        
         taskTable.put(sequence, taskThread);
         taskInfo.lock();
         executor.execute(taskThread);

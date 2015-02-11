@@ -10,25 +10,21 @@ import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.io.PrintWriter;
 import java.util.Arrays;
-import java.util.Optional;
 
-import org.apache.commons.io.FileUtils;
-import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.net.PrintCommandListener;
 import org.apache.commons.net.ftp.FTP;
 import org.apache.commons.net.ftp.FTPClient;
 import org.apache.commons.net.ftp.FTPFile;
 import org.apache.commons.net.ftp.FTPReply;
 import org.apache.log4j.Logger;
-import org.joda.time.DateTime;
 
 import flashGetter.downloader.DownloadingOperation;
 import flashGetter.downloader.TaskEvent;
-import flashGetter.downloader.TaskEvent.TaskEventType;
+import flashGetter.downloader.task.Task.TaskState;
 import flashGetter.util.FTPAddressParser;
+import flashGetter.util.FTPAddressParser.FTPInfo;
 import flashGetter.util.FileSystemIconUtil;
 import flashGetter.util.TimeUtil;
-import flashGetter.util.FTPAddressParser.FTPInfo;
 import flashGetter.util.TimeUtil.SpeedCounter;
 import flashGetter.util.TimeUtil.UpdateCounter;
 
@@ -157,6 +153,11 @@ public class FTPTaskThread implements TaskRunnable{
         
         LOGGER.info("download thread " + Thread.currentThread() + " begin!");
         
+        TaskEvent event = new TaskEvent();
+        event.setTaskEventType(TaskState.TASK_BEGIN);
+        event.setTaskID(taskInfo.getTaskID());
+        executor.fireTaskInfo(event);
+        
         try {
             String fileName = taskInfo.getFileName();
             String savePath = taskInfo.getSavePath();
@@ -177,12 +178,12 @@ public class FTPTaskThread implements TaskRunnable{
             int dataSize = 0;
             long fileSize = taskInfo.getFileSize();
             
-            TaskEvent event = new TaskEvent();
-            event.setTaskEventType(TaskEventType.INFORMATION_UPDATE);
+            event = new TaskEvent();
+            event.setTaskEventType(TaskState.TASK_UPDATE);
             event.setTaskID(taskInfo.getTaskID());
             
             SpeedCounter speedCounter = TimeUtil.getSpeedCounter();
-            UpdateCounter updateCounter = TimeUtil.getUpdateCounter();
+           
             
             while ((dataSize = in.read(buffer)) != -1 && !terminate) {
                
@@ -196,8 +197,7 @@ public class FTPTaskThread implements TaskRunnable{
                 taskInfo.moveProgress(prog);
                 taskInfo.serializeTask();
                 
-                if(updateCounter.canUpdate())
-                    executor.fireTaskInfo(event);
+                executor.fireTaskInfo(event);
             }
             
             fos.flush();
@@ -210,7 +210,9 @@ public class FTPTaskThread implements TaskRunnable{
             
             LOGGER.info("download thread " + Thread.currentThread() + " done!");
             
-            event.setTaskEventType(TaskEventType.DOWNLOADING_FINISHED);
+            event = new TaskEvent();
+            event.setTaskID(taskInfo.getTaskID());
+            event.setTaskEventType(TaskState.TASK_FINISHED);
             executor.fireTaskInfo(event);
             
         } catch (IOException e) {

@@ -18,14 +18,17 @@ public class SideBarOptionPanel extends OptionPanel implements EventHandler {
     
     private InfoEvent sideBarEvent;
     private boolean isChoosed;
-    private int type;
+    private OptionType type;
     
-    public static final int DOWNLOADING = 0x000000ff;
-    public static final int DOWNLOADED =  0x0000ff00;
-    public static final int DELETED =     0x00ff0000;
+    public static enum OptionType{
+        DOWNLOADING,
+        DOWNLOADED,
+        DELETED
+    }
+    
     
     public SideBarOptionPanel(
-            int type,
+            OptionType type,
             ImageIcon icon1,
             ImageIcon icon2,
             String option,
@@ -34,7 +37,7 @@ public class SideBarOptionPanel extends OptionPanel implements EventHandler {
     }
     
     public SideBarOptionPanel(
-            int type,
+            OptionType type,
             ImageIcon icon1,
             ImageIcon icon2,
             String option,

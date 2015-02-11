@@ -2,6 +2,8 @@ package flashGetter.view;
 
 import java.awt.event.MouseEvent;
 
+import flashGetter.downloader.DownloadManager.TaskEventType;
+
 
 /**
  * @author decaywood
@@ -12,14 +14,15 @@ import java.awt.event.MouseEvent;
 public class InfoEvent {
     
     private Class<?> target;
-    private int operationKey;
+    private Enum<?> operationKey;
     
     private String[] info;
     
     private Long[] taskIDs;
     
-    public void setTaskID(Long... taskIDs) {
+    public InfoEvent setTaskID(Long... taskIDs) {
         this.taskIDs = taskIDs;
+        return this;
     }
     
     public Long[] getTaskIDs() {
@@ -40,7 +43,7 @@ public class InfoEvent {
         return this;
     }
     
-    public InfoEvent setOperationKey(int key) {
+    public InfoEvent setOperationKey(Enum<?> key) {
         this.operationKey = key;
         return this;
     }
@@ -49,7 +52,7 @@ public class InfoEvent {
         return target;
     }
     
-    public int getOperationKey() {
+    public Enum<?> getOperationKey() {
         return operationKey;
     }
 

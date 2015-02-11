@@ -41,6 +41,7 @@ public class TaskMapper {
     }
     
     
+    
     public void registerTask(Long taskID, TaskInfo taskInfo){
         taskMapper.put(taskID, taskInfo);
     }
@@ -48,6 +49,8 @@ public class TaskMapper {
     public TaskInfo getTaskInfo(Long taskID){
         return taskMapper.get(taskID);
     }
+    
+     
     
     public Stream<TaskInfo> getTaskInfoStream(){
         return taskMapper.values().stream();

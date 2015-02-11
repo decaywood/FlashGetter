@@ -1,11 +1,18 @@
 package flashGetter.view.model;
 
+import java.util.Arrays;
+import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
+
+import javax.swing.ImageIcon;
 import javax.swing.table.DefaultTableModel;
 
+import flashGetter.downloader.TaskMapper;
+import flashGetter.downloader.task.Task.TaskState;
+import flashGetter.downloader.task.TaskInfo;
 import flashGetter.view.EventDispatcher;
 import flashGetter.view.EventHandler;
 import flashGetter.view.InfoEvent;
-import flashGetter.view.sidebar.SideBarPlatter;
 
 /**
  * @author decaywood
@@ -13,15 +20,13 @@ import flashGetter.view.sidebar.SideBarPlatter;
  * 2015年1月28日
  * 
  */
-public class TaskTableModel extends DefaultTableModel implements EventHandler {
+public abstract class TaskTableModel extends DefaultTableModel implements EventHandler {
     
     private int columnCount;
-    private Class<? extends TaskTableModel> ID;
     
-    public TaskTableModel(int number, Class<? extends TaskTableModel> id) {
+    public TaskTableModel(int number) {
         
         EventDispatcher.InnerClass.instance.register(this);
-        ID = id;
         columnCount = number;
         
     }
@@ -36,15 +41,22 @@ public class TaskTableModel extends DefaultTableModel implements EventHandler {
 
     @Override
     public void invoke(InfoEvent event) {
-        if(event.getTarget() != ID) return;
-        int key = event.getOperationKey();
-        
+        if(!match(event.getTarget())) return;
+        TaskState key = (TaskState) event.getOperationKey();
+        if(key == TaskState.TASK_BEGIN || key == TaskState.TASK_UPDATE){
+//            Arrays.stream(event.getTaskIDs()).forEach(taskID -> updateRow(taskID));
+        }
+             
         //handle....
         
 //        setValueAt(aValue, row, column);
         
     }
+    
 
+    abstract boolean match(Class<?> clazz);
+    abstract void updateRow(int row, Long taskID);
+    
     @Override
     public boolean filter(InfoEvent event) {
         return TaskTableModel.class.isAssignableFrom(event.getTarget());

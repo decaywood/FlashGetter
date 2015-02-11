@@ -7,6 +7,7 @@ import flashGetter.view.EventDispatcher;
 import flashGetter.view.EventHandler;
 import flashGetter.view.InfoEvent;
 import flashGetter.view.MainFrame;
+import flashGetter.view.controlbar.ControlBarPlatter.ActionType;
 
 /**
  * @author decaywood
@@ -23,7 +24,7 @@ public class DownloadingControlBar extends ControlBar {
                 null,
                 "Create a Task",
                 new InfoEvent()
-        .setOperationKey(ControlBarPlatter.CREATE_DIALOG)
+        .setOperationKey(ActionType.CREATE_DIALOG)
         .setTarget(ControlBar.class));
         
         addPanel(Resources.startTask,

@@ -1,14 +1,12 @@
 package flashGetter.downloader;
 
-import java.net.URL;
-
-import flashGetter.downloader.TaskEvent.TaskEventType;
 import flashGetter.downloader.executor.DownloadingExecutor;
+import flashGetter.downloader.task.Task.TaskState;
 import flashGetter.view.EventDispatcher;
 import flashGetter.view.EventHandler;
 import flashGetter.view.InfoEvent;
+import flashGetter.view.model.DownloadingTableModel;
 import flashGetter.view.model.TaskTableModel;
-
 /**
  * @author decaywood
  * 
@@ -24,10 +22,13 @@ public class DownloadManager implements EventHandler {
         manager = new DownloadManager();
     }
     
-    public static final int CREATE_TASK = 0x0000000f;
-    public static final int START_TASK  = 0x000000f0;
-    public static final int PAUSE_TASK  = 0x00000f00;
-    public static final int DELETE_TASK = 0x0000f000;
+    public static enum TaskEventType {
+        TASK_CREATE,
+        TASK_START,
+        TASK_PAUSE,
+        TASK_DELETE,
+    }
+     
     
     
     private DownloadingOperation downloadingExecutor;
@@ -36,14 +37,15 @@ public class DownloadManager implements EventHandler {
     
     public DownloadManager() {
         downloadingExecutor = new DownloadingExecutor();
-        downloadingExecutor.addManagerListener(event -> {
-             if(!event.typeEqual(TaskEventType.DOWNLOADING_FINISHED)) return;
-             
-        });
         
-        downloadingExecutor.addManagerListener(event -> {
-            if(!event.typeEqual(TaskEventType.INFORMATION_UPDATE)) return;
-        });
+        downloadingExecutor.addManagerListener(event -> 
+        sendInfoEvent(event, DownloadingTableModel.class, TaskState.TASK_BEGIN));
+        
+        downloadingExecutor.addManagerListener(event -> 
+        sendInfoEvent(event, DownloadingTableModel.class, TaskState.TASK_UPDATE));
+        
+        downloadingExecutor.addManagerListener(event -> 
+        sendInfoEvent(event, DownloadingTableModel.class, TaskState.TASK_FINISHED));
 //        downloadedExecutor = 
 //        deletedExecutor = 
         EventDispatcher.InnerClass.instance.register(this);
@@ -52,20 +54,35 @@ public class DownloadManager implements EventHandler {
     @Override
     public void invoke(InfoEvent event) {
         
-        int operationKey = event.getOperationKey();
+        TaskEventType operationKey = (TaskEventType) event.getOperationKey();
         
-        if(operationKey == CREATE_TASK)
+        if(operationKey == TaskEventType.TASK_CREATE)
             downloadingExecutor.createTask(event.getInfo(0), event.getInfo(1));
-        if(operationKey == START_TASK)
+        if(operationKey == TaskEventType.TASK_START)
             downloadingExecutor.startTask(event.getTaskIDs());
-        if(operationKey == PAUSE_TASK)
+        if(operationKey == TaskEventType.TASK_PAUSE)
             downloadingExecutor.pauseTask(event.getTaskIDs());
-        if(operationKey == DELETE_TASK)
-            downloadingExecutor.pauseTask(event.getTaskIDs());
+        if(operationKey == TaskEventType.TASK_DELETE)
+            downloadingExecutor.deleteTask(event.getTaskIDs());
         
     }
 
 
+    private void sendInfoEvent(
+            TaskEvent event,
+            Class<? extends TaskTableModel> target, 
+            TaskState state){
+        
+        if(!event.typeEqual(state)) return;
+        InfoEvent infoEvent = new InfoEvent();
+        infoEvent
+        .setTarget(DownloadingTableModel.class)
+        .setTaskID(event.getTaskID())
+        .setOperationKey(state);
+        EventDispatcher.InnerClass.instance.fireEvent(infoEvent);
+        
+    }
+    
     @Override
     public boolean filter(InfoEvent event) {
         return DownloadManager.class.isAssignableFrom(event.getTarget());

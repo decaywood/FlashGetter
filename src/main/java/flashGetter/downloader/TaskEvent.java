@@ -1,5 +1,9 @@
 package flashGetter.downloader;
 
+import flashGetter.downloader.DownloadManager.TaskEventType;
+import flashGetter.downloader.task.Task.TaskState;
+
+
 /**
  * @author decaywood
  * 
@@ -8,15 +12,12 @@ package flashGetter.downloader;
  */
 public class TaskEvent {
     
-    private TaskEventType taskEventType;
+    private TaskState taskEventType;
     private long TaskID;
     
-    public static enum TaskEventType {
-        INFORMATION_UPDATE,
-        DOWNLOADING_FINISHED
-    }
+   
     
-    public void setTaskEventType(TaskEventType taskEventType) {
+    public void setTaskEventType(TaskState taskEventType) {
         this.taskEventType = taskEventType;
     }
     
@@ -28,7 +29,7 @@ public class TaskEvent {
         return TaskID;
     }
     
-    public boolean typeEqual(TaskEventType type){
+    public boolean typeEqual(TaskState type){
         return taskEventType == type;
     }
 

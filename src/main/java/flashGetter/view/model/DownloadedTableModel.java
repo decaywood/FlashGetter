@@ -9,7 +9,18 @@ package flashGetter.view.model;
 public class DownloadedTableModel extends TaskTableModel {
 
     public DownloadedTableModel() {
-        super(4, DownloadedTableModel.class);
+        super(4);
+    }
+
+    @Override
+    boolean match(Class<?> clazz) {
+        return false;
+    }
+
+    @Override
+    void updateRow(int row, Long taskID) {
+        // TODO Auto-generated method stub
+        
     }
 
 }

@@ -1,6 +1,6 @@
 package flashGetter.downloader;
 
-import flashGetter.downloader.task.TaskInfo;
+import flashGetter.downloader.task.Task;
 
 /**
  * @author decaywood
@@ -22,6 +22,6 @@ public interface DownloadingOperation {
     
     public void addManagerListener(ManagerListener listener);
     
-    public void fireTaskInfo(TaskEvent event);
+    public void fireTaskInfo(Task event);
     
 }

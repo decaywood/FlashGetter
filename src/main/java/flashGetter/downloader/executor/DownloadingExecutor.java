@@ -12,11 +12,11 @@ import org.apache.log4j.Logger;
 
 import flashGetter.downloader.DownloadingOperation;
 import flashGetter.downloader.ManagerListener;
-import flashGetter.downloader.TaskEvent;
 import flashGetter.downloader.TaskMapper;
+import flashGetter.downloader.task.Task;
+import flashGetter.downloader.task.Task.TaskState;
 import flashGetter.downloader.task.TaskInfo;
 import flashGetter.downloader.task.TaskRunnable;
-import flashGetter.downloader.task.Task.TaskState;
 import flashGetter.util.SequenceGenerator;
 import flashGetter.util.TaskGenerator;
 import flashGetter.util.TimeUtil;
@@ -53,8 +53,8 @@ public class DownloadingExecutor implements DownloadingOperation {
      * invoke this method when thread changed its state
      */
     @Override
-    public synchronized void fireTaskInfo(TaskEvent event){
-        if(!event.typeEqual(TaskState.TASK_UPDATE) || updateCounter.canUpdate())
+    public synchronized void fireTaskInfo(Task event){
+        if(!event.stateEqual(TaskState.TASK_UPDATE) || updateCounter.canUpdate())
         listeners.forEach(listener -> listener.onEvent(event));
     }
     

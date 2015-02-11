@@ -1,6 +1,8 @@
 package flashGetter.downloader;
 
 import flashGetter.downloader.executor.DownloadingExecutor;
+import flashGetter.downloader.task.Task;
+import flashGetter.downloader.task.TaskInfo;
 import flashGetter.downloader.task.Task.TaskState;
 import flashGetter.view.EventDispatcher;
 import flashGetter.view.EventHandler;
@@ -69,11 +71,11 @@ public class DownloadManager implements EventHandler {
 
 
     private void sendInfoEvent(
-            TaskEvent event,
+            Task event,
             Class<? extends TaskTableModel> target, 
             TaskState state){
         
-        if(!event.typeEqual(state)) return;
+        if(!event.stateEqual(state)) return;
         InfoEvent infoEvent = new InfoEvent();
         infoEvent
         .setTarget(DownloadingTableModel.class)

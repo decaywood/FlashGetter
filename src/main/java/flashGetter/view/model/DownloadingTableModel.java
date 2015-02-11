@@ -2,8 +2,10 @@ package flashGetter.view.model;
 
 import javax.swing.ImageIcon;
 
-import flashGetter.downloader.TaskMapper;
+import org.apache.log4j.Logger;
+
 import flashGetter.downloader.task.TaskInfo;
+import flashGetter.util.ParameterUnitUtil;
 
 /**
  * @author decaywood
@@ -12,6 +14,8 @@ import flashGetter.downloader.task.TaskInfo;
  * 
  */
 public class DownloadingTableModel extends TaskTableModel {
+    
+    private static final Logger LOGGER = Logger.getLogger(DownloadingTableModel.class);
 
     public DownloadingTableModel() {
         super(6);
@@ -23,23 +27,38 @@ public class DownloadingTableModel extends TaskTableModel {
     }
 
     @Override
-    void updateRow(int row, Long taskID) {
+    void updateRow(int row, TaskInfo taskInfo) {
         
-        TaskInfo taskInfo = TaskMapper.InnerClass.instance.getTaskInfo(taskID);
+        if(getRowCount() <= row) return;
+        
         ImageIcon fileType = taskInfo.getFileType();
         String fileName = taskInfo.getFileName();
-        long fileSize = taskInfo.getFileSize();
+        String fileSize = ParameterUnitUtil.getFileSize(taskInfo.getFileSize());
         double progress = taskInfo.getProgress();
-        String remianTime = taskInfo.getRemainTime();
-        String speed = taskInfo.getDownloadSpeed();
+        String remainTime = taskInfo.getRemainTime();
+        String speed = ParameterUnitUtil.getDownloadSpeed(taskInfo.getDownloadSpeed());
+        
+        LOGGER.info("fileType : "+fileType+" fileName : "+fileName+" fileSize : "+fileSize
+                +" prog : " +progress+" speed : "+speed);
         
         setValueAt(fileType, row, 0);
         setValueAt(fileName, row, 1);
         setValueAt(fileSize, row, 2);
         setValueAt(progress, row, 3);
-        setValueAt(remianTime, row, 4);
+        setValueAt(remainTime, row, 4);
         setValueAt(speed, row, 5);
         
+    }
+
+    @Override
+    void addRow(TaskInfo taskInfo) {
+        ImageIcon fileType = taskInfo.getFileType();
+        String fileName = taskInfo.getFileName();
+        String fileSize = ParameterUnitUtil.getFileSize(taskInfo.getFileSize());
+        double progress = taskInfo.getProgress();
+        String remainTime = taskInfo.getRemainTime();
+        String speed = ParameterUnitUtil.getDownloadSpeed(taskInfo.getDownloadSpeed());
+        addRow(new Object[]{fileType, fileName, fileSize, progress, remainTime, speed});
     }
 
 }

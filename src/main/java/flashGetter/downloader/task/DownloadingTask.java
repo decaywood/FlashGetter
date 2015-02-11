@@ -18,7 +18,7 @@ public interface DownloadingTask extends Task {
     
     public String getRemainTime();
     
-    public String getDownloadSpeed();
+    public double getDownloadSpeed();
     
     public String getFinishTime();
     

@@ -15,5 +15,7 @@ public interface Task {
     }
 
     public long getTaskID();
+    public void changeTaskState(TaskState state);
+    public boolean stateEqual(TaskState state);
     
 }

@@ -38,14 +38,21 @@ public abstract class TaskTableModel extends DefaultTableModel implements EventH
     }
  
 
-
+    private int tempIndex = 0;
     @Override
     public void invoke(InfoEvent event) {
         if(!match(event.getTarget())) return;
         TaskState key = (TaskState) event.getOperationKey();
-        if(key == TaskState.TASK_BEGIN || key == TaskState.TASK_UPDATE){
-//            Arrays.stream(event.getTaskIDs()).forEach(taskID -> updateRow(taskID));
+        
+        if(key == TaskState.TASK_BEGIN){
+            TaskMapper.InnerClass.instance.getBeginTaskInfo()
+            .forEach(taskInfo -> addRow(taskInfo));
+        }else if(key == TaskState.TASK_UPDATE){
+            TaskMapper.InnerClass.instance.getUpdateTaskInfo()
+            .forEach(taskInfo -> updateRow(tempIndex++, taskInfo));
+            tempIndex = 0;
         }
+            
              
         //handle....
         
@@ -55,7 +62,8 @@ public abstract class TaskTableModel extends DefaultTableModel implements EventH
     
 
     abstract boolean match(Class<?> clazz);
-    abstract void updateRow(int row, Long taskID);
+    abstract void updateRow(int row, TaskInfo taskInfo);
+    abstract void addRow(TaskInfo taskInfo);
     
     @Override
     public boolean filter(InfoEvent event) {

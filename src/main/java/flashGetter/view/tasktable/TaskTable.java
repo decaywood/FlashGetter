@@ -86,18 +86,18 @@ public abstract class TaskTable<T extends TaskTableModel> extends JTable impleme
         fileIconRenderer = new FileIconRenderer();
         
         nameCellRenderer = new StringCellRenderer(" xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx.rmvb ".length(),
-                data -> "name not be implemented yet");
+                data -> data);
         
         sizeCellRenderer = new StringCellRenderer(" xxx xb ".length(),
-                data -> "size not be implemented yet");
+                data -> data);
         
         progressBarCellRender = new ProgressBarCellRender();
         
         timeCellRenderer = new StringCellRenderer(" xxxx-xx-xx xx:xx:xx ".length(),
-                data -> "time not be implemented yet");
+                data -> data);
         
         speedCellRenderer = new StringCellRenderer(" xxx xb/s ".length(),
-                data -> "speed not be implemented yet");
+                data -> data);
        
 //      setRowSorter(new DownloadingTaskTableRowSorter());
         

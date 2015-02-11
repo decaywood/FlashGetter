@@ -5,8 +5,6 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.ObjectOutputStream;
 import java.io.Serializable;
-import java.util.concurrent.atomic.DoubleAdder;
-import java.util.concurrent.atomic.LongAdder;
 
 import javax.swing.ImageIcon;
 
@@ -40,7 +38,7 @@ public class TaskInfo implements DownloadingTask, DownloadedTask, DeletedTask, S
     private String fileName;
     private long fileSize;
     
-    private String downloadSpeed;
+    private double downloadSpeed;
     
     private String finishTime;
     private String createTime;
@@ -50,6 +48,8 @@ public class TaskInfo implements DownloadingTask, DownloadedTask, DeletedTask, S
     private String remainTime; //dynamic
     
     private long startOffset; //dynamic
+    
+    private TaskState taskState;
     
     public TaskInfo(long taskID, String URL, String downloadSavePath) {
         this.taskID = taskID;
@@ -98,6 +98,8 @@ public class TaskInfo implements DownloadingTask, DownloadedTask, DeletedTask, S
      * =======================================================================================================    
      */    
     
+    
+    
     @Override
     public String getDownloadURL() {
         return url;
@@ -141,7 +143,7 @@ public class TaskInfo implements DownloadingTask, DownloadedTask, DeletedTask, S
     }
 
     @Override
-    public String getDownloadSpeed() {
+    public double getDownloadSpeed() {
         return downloadSpeed;
     }
 
@@ -199,7 +201,7 @@ public class TaskInfo implements DownloadingTask, DownloadedTask, DeletedTask, S
     @Override
     public void setDownloadSpeed(double speed) {
         if(speed == 0) return;
-        this.downloadSpeed = String.valueOf(speed);
+        this.downloadSpeed = speed;
     }
 
     @Override
@@ -245,6 +247,16 @@ public class TaskInfo implements DownloadingTask, DownloadedTask, DeletedTask, S
     @Override
     public boolean isLock() {
         return lock;
+    }
+
+    @Override
+    public void changeTaskState(TaskState state) {
+        this.taskState = state;
+    }
+
+    @Override
+    public boolean stateEqual(TaskState state) {
+        return taskState == state;
     }
 
     

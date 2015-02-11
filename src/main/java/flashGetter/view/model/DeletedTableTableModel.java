@@ -1,5 +1,7 @@
 package flashGetter.view.model;
 
+import flashGetter.downloader.task.TaskInfo;
+
 /**
  * @author decaywood
  * 
@@ -18,9 +20,17 @@ public class DeletedTableTableModel extends TaskTableModel {
     }
 
     @Override
-    void updateRow(int row, Long taskID) {
+    void updateRow(int row, TaskInfo taskInfo) {
         // TODO Auto-generated method stub
         
     }
+
+    @Override
+    void addRow(TaskInfo taskInfo) {
+        // TODO Auto-generated method stub
+        
+    }
+
+    
 
 }

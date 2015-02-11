@@ -36,7 +36,7 @@ public class URLTest {
     
 
     public static void main(String[] args) throws IOException {
-        String urlpath = "ftp://flashgetter:123456@192.168.59.1:21/Scala.pdf";
+        String urlpath = "ftp://flashgetter:123456@192.168.59.1:21/testMovie.rmvb";
         DownloadingTask task = new TaskInfo(123, urlpath, "E:\\test\\result\\");
         FTPTaskThread thread = new FTPTaskThread(task, null);
         thread.run();

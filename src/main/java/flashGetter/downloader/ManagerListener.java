@@ -1,5 +1,7 @@
 package flashGetter.downloader;
 
+import flashGetter.downloader.task.Task;
+
 /**
  * @author decaywood
  * 
@@ -12,7 +14,7 @@ package flashGetter.downloader;
 @FunctionalInterface
 public interface ManagerListener {
     
-    public void onEvent(TaskEvent event);
+    public void onEvent(Task event);
     
     
 }

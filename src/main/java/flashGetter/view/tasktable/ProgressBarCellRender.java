@@ -1,11 +1,16 @@
 package flashGetter.view.tasktable;
 
 import java.awt.Component;
+import java.text.DecimalFormat;
 
 import javax.swing.JProgressBar;
 import javax.swing.JTable;
 import javax.swing.table.TableCellRenderer;
 import javax.swing.table.TableColumn;
+
+import org.apache.log4j.Logger;
+
+import flashGetter.util.ParameterUnitUtil;
 
 /**
  * @author decaywood
@@ -15,10 +20,16 @@ import javax.swing.table.TableColumn;
  */
 public class ProgressBarCellRender extends JProgressBar implements WidthScaleCellRenderer {
 
+    private static final Logger LOGGER = Logger.getLogger(ProgressBarCellRender.class);
+    private DecimalFormat format = new DecimalFormat("###.## %"); 
+    
     @Override
     public Component getTableCellRendererComponent(JTable table, Object value,
             boolean isSelected, boolean hasFocus, int row, int column) {
-        setValue((Integer)value);
+        LOGGER.info("row : "+row+"col : "+column +" -> " + value);
+        double percentage = (double) value;
+        setString(format.format(percentage));
+        setValue((int)percentage);
         setStringPainted(true);
         return this;
     }

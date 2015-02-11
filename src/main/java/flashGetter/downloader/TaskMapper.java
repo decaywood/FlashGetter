@@ -5,6 +5,7 @@ import java.util.List;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.stream.Stream;
 
+import flashGetter.downloader.task.Task.TaskState;
 import flashGetter.downloader.task.TaskInfo;
 
 /**
@@ -50,7 +51,13 @@ public class TaskMapper {
         return taskMapper.get(taskID);
     }
     
-     
+    public Stream<TaskInfo> getUpdateTaskInfo(){
+        return taskMapper.values().stream().filter(taskInfo -> taskInfo.stateEqual(TaskState.TASK_UPDATE));
+    }
+    
+    public Stream<TaskInfo> getBeginTaskInfo(){
+        return taskMapper.values().stream().filter(taskInfo -> taskInfo.stateEqual(TaskState.TASK_BEGIN));
+    }
     
     public Stream<TaskInfo> getTaskInfoStream(){
         return taskMapper.values().stream();

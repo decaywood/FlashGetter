@@ -2,8 +2,6 @@ package flashGetter.util;
 
 import org.joda.time.DateTime;
 
-import flashGetter.downloader.TaskEvent;
-
 /**
  * @author decaywood
  * 
@@ -47,7 +45,7 @@ public class TimeUtil {
             if(currentTime - oldTime < 1000) return false;
             
             this.oldTime = currentTime;
-            return false;
+            return true;
             
         }
         

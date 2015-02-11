@@ -11,6 +11,8 @@ import javax.swing.table.TableCellEditor;
 import javax.swing.table.TableCellRenderer;
 import javax.swing.table.TableColumn;
 
+import org.apache.log4j.Logger;
+
 /**
  * @author decaywood
  * 
@@ -18,6 +20,8 @@ import javax.swing.table.TableColumn;
  * 
  */
 public class StringCellRenderer extends JLabel implements WidthScaleCellRenderer {
+    
+    private static final Logger LOGGER = Logger.getLogger(StringCellRenderer.class);
     
     private UnitParser parser;
     private int stringLength;
@@ -30,6 +34,7 @@ public class StringCellRenderer extends JLabel implements WidthScaleCellRenderer
     @Override
     public Component getTableCellRendererComponent(JTable table, Object value,
             boolean isSelected, boolean hasFocus, int row, int column) {
+        LOGGER.info("row : "+row+"col : "+column +" -> " + value);
         setForeground(Color.LIGHT_GRAY);
         setText(parser.parseUnit((String)value));
         return this;

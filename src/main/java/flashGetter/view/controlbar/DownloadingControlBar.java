@@ -1,13 +1,10 @@
 package flashGetter.view.controlbar;
 
-import javax.swing.JDialog;
-
 import flashGetter.Resources;
-import flashGetter.view.EventDispatcher;
-import flashGetter.view.EventHandler;
+import flashGetter.downloader.DownloadManager.TaskEventType;
 import flashGetter.view.InfoEvent;
-import flashGetter.view.MainFrame;
 import flashGetter.view.controlbar.ControlBarPlatter.ActionType;
+import flashGetter.view.tasktable.DownloadingTable;
 
 /**
  * @author decaywood
@@ -24,26 +21,32 @@ public class DownloadingControlBar extends ControlBar {
                 null,
                 "Create a Task",
                 new InfoEvent()
-        .setOperationKey(ActionType.CREATE_DIALOG)
-        .setTarget(ControlBar.class));
+                .setOperationKey(ActionType.CREATE_DIALOG)
+                .setTarget(ControlBar.class));
         
         addPanel(Resources.startTask,
                 Resources.startTaskChoosed, 
                 null,
                 "Start Task",
-                new InfoEvent());
+                new InfoEvent()
+                .setTarget(DownloadingTable.class)
+                .setOperationKey(TaskEventType.TASK_START));
         
         addPanel(Resources.pauseTask,
                 Resources.pauseTaskChoosed, 
                 null, 
                 "Pause Task", 
-                new InfoEvent());
+                new InfoEvent()
+                .setTarget(DownloadingTable.class)
+                .setOperationKey(TaskEventType.TASK_PAUSE));
         
         addPanel(Resources.deleteTask,
                 Resources.deleteTaskChoosed,
                 null,
                 "Delete Task",
-                new InfoEvent());
+                new InfoEvent()
+                .setTarget(DownloadingTable.class)
+                .setOperationKey(TaskEventType.TASK_DELETE));
         
     }
 

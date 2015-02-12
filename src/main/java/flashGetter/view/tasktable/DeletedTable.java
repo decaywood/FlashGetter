@@ -1,8 +1,12 @@
 package flashGetter.view.tasktable;
 
+import java.util.Arrays;
+
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 
+import flashGetter.downloader.TaskMapper;
+import flashGetter.view.InfoEvent;
 import flashGetter.view.model.DeletedTableTableModel;
 
 /**
@@ -33,14 +37,21 @@ public class DeletedTable extends TaskTable<DeletedTableTableModel> {
         
     }
     
-    public static void main(String[] args) {
-        JFrame jFrame = new JFrame();
-//        jFrame.add(new TaskTablePlatter(new DownloadedTable()));
-        
-        jFrame.setVisible(true);
-        jFrame.pack();
-        
+    @Override
+    public void invoke(InfoEvent event) {
+        TaskMapper mapper = TaskMapper.InnerClass.instance;
+        int[] selectedRows = getSelectedRows();
+        long[] taskIDs = Arrays.stream(selectedRows)
+        .mapToLong(index -> mapper.getTaskID(TaskMapper.DELETED_MASK, index))
+        .toArray();
+        event.setTaskID(taskIDs);
     }
+    
+    @Override
+    public boolean filter(InfoEvent event) {
+        return DeletedTable.class.isAssignableFrom(event.getTarget());
+    }
+    
     
 
 }

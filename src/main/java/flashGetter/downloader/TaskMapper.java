@@ -16,6 +16,21 @@ import flashGetter.downloader.task.TaskInfo;
  */
 public class TaskMapper {
     
+    /*
+     * each mask will combined with the row index to
+     * distinct which table the index working for
+     */
+    public static final int DOWNLOADING_MASK = 0xf0000000;
+    public static final int DOWNLOADED_MASK  = 0xff000000;
+    public static final int DELETED_MASK     = 0xfff00000;
+    
+    /*
+     * it aims to map the relation from row index to task id 
+     * in order to offer a convenient way to pause or delete
+     * downloading task in table view 
+     */
+    private final ConcurrentHashMap<Integer, Long> rowIndex2TaskIDMapper;
+    
     private final ConcurrentHashMap<Long, TaskInfo> taskMapper;
     
     /*
@@ -35,6 +50,7 @@ public class TaskMapper {
     
     private TaskMapper() {
         taskMapper = new ConcurrentHashMap<Long, TaskInfo>();
+        rowIndex2TaskIDMapper = new ConcurrentHashMap<Integer, Long>();
     }
     
     public static class InnerClass{
@@ -49,6 +65,16 @@ public class TaskMapper {
     
     public TaskInfo getTaskInfo(Long taskID){
         return taskMapper.get(taskID);
+    }
+    
+    public void updateRowIndexMapper(int mask, int rowIndex, Long taskID){
+        int index = mask ^ rowIndex;
+        rowIndex2TaskIDMapper.put(index, taskID);
+    }
+    
+    public Long getTaskID(int mask, int rowIndex){
+        int index = mask ^ rowIndex;
+        return rowIndex2TaskIDMapper.get(index);
     }
     
     public Stream<TaskInfo> getUpdateTaskInfo(){

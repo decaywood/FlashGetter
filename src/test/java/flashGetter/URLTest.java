@@ -37,6 +37,10 @@ public class URLTest {
 
     public static void main(String[] args) throws IOException {
         String urlpath = "ftp://flashgetter:123456@192.168.59.1:21/testMovie.rmvb";
+        String downloadAddr = "ftp://flashgetter:123456@192.168.59.1:21/testMovie.rmvb";
+        String downloadAddr1 = "ftp://flashgetter:123456@192.168.59.1:21/testSong.mp3";
+        String downloadAddr2 = "ftp://flashgetter:123456@192.168.59.1:21/Scala.pdf";
+        String downloadAddr3 = "ftp://flashgetter:123456@192.168.59.1:21/testRar.rar";
         DownloadingTask task = new TaskInfo(123, urlpath, "E:\\test\\result\\");
         FTPTaskThread thread = new FTPTaskThread(task, null);
         thread.run();

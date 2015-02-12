@@ -1,8 +1,14 @@
 package flashGetter.view.tasktable;
 
+import java.util.Arrays;
+
 import javax.swing.ImageIcon;
 import javax.swing.JLabel;
 
+import flashGetter.downloader.DownloadManager;
+import flashGetter.downloader.TaskMapper;
+import flashGetter.view.EventDispatcher;
+import flashGetter.view.InfoEvent;
 import flashGetter.view.model.DownloadingTableModel;
 
 
@@ -32,5 +38,25 @@ public class DownloadingTable extends TaskTable<DownloadingTableModel> {
         
     }
     
+   
+    
+    @Override
+    public void invoke(InfoEvent event) {
+        TaskMapper mapper = TaskMapper.InnerClass.instance;
+        int[] selectedRows = getSelectedRows();
+         
+        long[] taskIDs = Arrays.stream(selectedRows)
+        .mapToLong(index -> mapper.getTaskID(TaskMapper.DOWNLOADING_MASK, index))
+        .toArray();
+        event.setTaskID(taskIDs);
+        event.setTarget(DownloadManager.class);
+        EventDispatcher.InnerClass.instance.fireEvent(event);
+    }
+    
+    
+    @Override
+    public boolean filter(InfoEvent event) {
+        return DownloadingTable.class.isAssignableFrom(event.getTarget());
+    }
  
 }

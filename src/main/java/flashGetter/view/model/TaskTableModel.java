@@ -48,9 +48,16 @@ public abstract class TaskTableModel extends DefaultTableModel implements EventH
             TaskMapper.InnerClass.instance.getBeginTaskInfo()
             .forEach(taskInfo -> addRow(taskInfo));
         }else if(key == TaskState.TASK_UPDATE){
-            TaskMapper.InnerClass.instance.getUpdateTaskInfo()
-            .forEach(taskInfo -> updateRow(tempIndex++, taskInfo));
             tempIndex = 0;
+            TaskMapper mapper = TaskMapper.InnerClass.instance;
+            mapper.getUpdateTaskInfo().forEach(taskInfo -> {
+                updateRow(tempIndex, taskInfo);
+                mapper.updateRowIndexMapper(TaskMapper.DOWNLOADING_MASK ,tempIndex, taskInfo.getTaskID());
+                tempIndex++;
+            });
+            
+        }else if(key == TaskState.TASK_FINISHED){
+            
         }
             
              

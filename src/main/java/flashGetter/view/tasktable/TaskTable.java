@@ -1,15 +1,22 @@
 package flashGetter.view.tasktable;
 
+import java.awt.Color;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 import javax.swing.JTable;
+import javax.swing.ListSelectionModel;
 import javax.swing.table.JTableHeader;
 import javax.swing.table.TableCellRenderer;
 import javax.swing.table.TableColumn;
 
+import flashGetter.downloader.TaskMapper;
+import flashGetter.view.EventDispatcher;
+import flashGetter.view.EventHandler;
+import flashGetter.view.InfoEvent;
 import flashGetter.view.model.TaskTableModel;
 
 /**
@@ -18,7 +25,22 @@ import flashGetter.view.model.TaskTableModel;
  * 2015年1月28日
  * 
  */
-public abstract class TaskTable<T extends TaskTableModel> extends JTable implements MouseListener{
+public abstract class TaskTable<T extends TaskTableModel> extends JTable
+implements MouseListener, EventHandler{
+    
+    /*
+     * EventHandler:  *** invoke()
+     * 
+     * the informations are send from control bar,
+     * the control bar defined the table type(downloading, downloaded, or deleted)
+     * The subType of taskTable could append other needed information such as
+     * taskID related to selected rows in table(downloadingTable, downloadedTable, or deletedTable),
+     * then send these infoEvents to downloadManager,
+     * the downloadManager would handle these requirement according to the operationType,
+     * 
+     * see the subClass of taskTable for details
+     * 
+     */
     
     public static final int ROW_HEIGHT = 30;
     
@@ -44,15 +66,18 @@ public abstract class TaskTable<T extends TaskTableModel> extends JTable impleme
     
     public TaskTable(T tableModel) {
         
+        EventDispatcher.InnerClass.instance.register(this);
+        
         headerLabels = new ArrayList<TableHeadRenderer>();
         columnCellRenderers = new ArrayList<WidthScaleCellRenderer>();
                 
         this.tableModel = tableModel;
         setModel(tableModel);
         setRowHeight(ROW_HEIGHT);
-        
+        setSelectionMode(ListSelectionModel.MULTIPLE_INTERVAL_SELECTION);
+        setSelectionBackground(Color.white);
         tableHeader.addMouseListener(this);
-        
+       
         /**
          * headIcon
          */
@@ -79,7 +104,7 @@ public abstract class TaskTable<T extends TaskTableModel> extends JTable impleme
         
         speedLabel = new TableHeadRenderer("Download Speed");
         speedLabel.setToolTipText("Download Speed");
-        
+       
         /**
          * cellRenderer per column
          */
@@ -137,6 +162,7 @@ public abstract class TaskTable<T extends TaskTableModel> extends JTable impleme
         label.pressLabel();
         getTableHeader().repaint();
     }
+    
     
     @Override
     public void mouseClicked(MouseEvent e) {}

@@ -68,7 +68,7 @@ public class DownloadingExecutor implements DownloadingOperation {
         TaskRunnable taskThread = TaskGenerator.generateTask(taskInfo, this); // TaskThread
         
         if(taskThread == null){
-            LOGGER.info("URL Not matched", new Exception("URL Error!"));
+            LOGGER.error("URL Not matched", new Exception("URL Error!"));
             return;
         }
         
@@ -81,7 +81,7 @@ public class DownloadingExecutor implements DownloadingOperation {
      *  wake task according to taskID 
      */
     @Override
-    public void startTask(Long... taskIDs) {
+    public void startTask(long... taskIDs) {
         Arrays.stream(taskIDs).forEach(taskNumber -> {
             TaskInfo taskInfo = TaskMapper.InnerClass.instance.getTaskInfo(taskNumber);
             if(taskInfo.isLock()) return;
@@ -96,7 +96,10 @@ public class DownloadingExecutor implements DownloadingOperation {
      *  the lock of it invoked wait method
      */
     @Override
-    public void pauseTask(Long... taskIDs) {
+    public void pauseTask(long... taskIDs) {
+        
+        if(taskIDs == null) return;
+        
         Arrays.stream(taskIDs).forEach(taskID -> {
             taskTable.get(taskID).terminateTask(); 
             TaskMapper.InnerClass.instance.getTaskInfo(taskID).unLock();
@@ -107,18 +110,18 @@ public class DownloadingExecutor implements DownloadingOperation {
      *  terminateTask, remove it from table, update change 
      */
     @Override
-    public void deleteTask(Long... taskIDs) {
+    public void deleteTask(long... taskIDs) {
         Arrays.stream(taskIDs).forEach(taskID -> taskTable.get(taskID).terminateTask());
         removeFromTaskTable(taskIDs);
     }
 
     @Override
-    public void finishTask(Long... taskIDs) {
+    public void finishTask(long... taskIDs) {
         removeFromTaskTable(taskIDs);
     }
 
     
-    private void removeFromTaskTable(Long... taskIDs){
+    private void removeFromTaskTable(long... taskIDs){
         Arrays.stream(taskIDs).forEach(taskID -> taskTable.remove(taskID));
     }
    

@@ -11,7 +11,8 @@ public interface Task {
     public static enum TaskState{
         TASK_BEGIN,
         TASK_FINISHED,
-        TASK_UPDATE
+        TASK_UPDATE,
+        TASK_DELETED
     }
 
     public long getTaskID();

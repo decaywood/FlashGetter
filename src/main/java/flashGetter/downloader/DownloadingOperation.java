@@ -12,13 +12,13 @@ public interface DownloadingOperation {
 
     public void createTask(String downloadAddr, String savePath);
     
-    public void startTask(Long... taskIDs);
+    public void startTask(long... taskIDs);
     
-    public void pauseTask(Long... taskIDs);
+    public void pauseTask(long... taskIDs);
     
-    public void deleteTask(Long... taskIDs);
+    public void deleteTask(long... taskIDs);
     
-    public void finishTask(Long... taskIDs);
+    public void finishTask(long... taskIDs);
     
     public void addManagerListener(ManagerListener listener);
     

@@ -18,14 +18,14 @@ public class InfoEvent {
     
     private String[] info;
     
-    private Long[] taskIDs;
+    private long[] taskIDs;
     
-    public InfoEvent setTaskID(Long... taskIDs) {
+    public InfoEvent setTaskID(long... taskIDs) {
         this.taskIDs = taskIDs;
         return this;
     }
     
-    public Long[] getTaskIDs() {
+    public long[] getTaskIDs() {
         return taskIDs;
     }
     

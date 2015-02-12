@@ -5,12 +5,9 @@ import java.text.DecimalFormat;
 
 import javax.swing.JProgressBar;
 import javax.swing.JTable;
-import javax.swing.table.TableCellRenderer;
 import javax.swing.table.TableColumn;
 
 import org.apache.log4j.Logger;
-
-import flashGetter.util.ParameterUnitUtil;
 
 /**
  * @author decaywood
@@ -29,14 +26,14 @@ public class ProgressBarCellRender extends JProgressBar implements WidthScaleCel
         LOGGER.info("row : "+row+"col : "+column +" -> " + value);
         double percentage = (double) value;
         setString(format.format(percentage));
-        setValue((int)percentage);
+        setValue((int) (percentage * 100));
         setStringPainted(true);
         return this;
     }
 
     @Override
     public void scaleWidth(TableColumn column) {
-        column.setMaxWidth(TaskTable.ROW_HEIGHT * 50);
+//        column.setPreferredWidth(TaskTable.ROW_HEIGHT * 25);
     }
 
 }

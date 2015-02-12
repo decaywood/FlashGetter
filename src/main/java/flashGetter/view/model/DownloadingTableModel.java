@@ -4,6 +4,7 @@ import javax.swing.ImageIcon;
 
 import org.apache.log4j.Logger;
 
+import flashGetter.downloader.TaskMapper;
 import flashGetter.downloader.task.TaskInfo;
 import flashGetter.util.ParameterUnitUtil;
 
@@ -27,7 +28,7 @@ public class DownloadingTableModel extends TaskTableModel {
     }
 
     @Override
-    void updateRow(int row, TaskInfo taskInfo) {
+    synchronized void updateRow(int row, TaskInfo taskInfo) {
         
         if(getRowCount() <= row) return;
         
@@ -51,7 +52,13 @@ public class DownloadingTableModel extends TaskTableModel {
     }
 
     @Override
-    void addRow(TaskInfo taskInfo) {
+    synchronized void addRow(TaskInfo taskInfo) {
+        
+        int rowIndex = getRowCount();
+        
+        TaskMapper.InnerClass.instance
+        .updateRowIndexMapper(TaskMapper.DOWNLOADING_MASK, rowIndex, taskInfo.getTaskID());
+        
         ImageIcon fileType = taskInfo.getFileType();
         String fileName = taskInfo.getFileName();
         String fileSize = ParameterUnitUtil.getFileSize(taskInfo.getFileSize());

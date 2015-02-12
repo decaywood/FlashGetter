@@ -43,8 +43,7 @@ public class StringCellRenderer extends JLabel implements WidthScaleCellRenderer
     @Override
     public void scaleWidth(TableColumn column) {
         if(stringLength == Integer.MAX_VALUE) return;
-        column.setMaxWidth(stringLength * 15);
-        column.setMinWidth(stringLength * 10);
+        column.setPreferredWidth(stringLength * 15);
     }
 
     

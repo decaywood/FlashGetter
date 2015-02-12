@@ -10,6 +10,8 @@ import javax.swing.ImageIcon;
 
 import org.apache.log4j.Logger;
 
+import flashGetter.util.FileSystemIconUtil;
+
 /**
  * @author decaywood
  * 
@@ -159,6 +161,8 @@ public class TaskInfo implements DownloadingTask, DownloadedTask, DeletedTask, S
 
     @Override
     public ImageIcon getFileType() {
+        fileType = fileType != null ? fileType
+                : FileSystemIconUtil.readSystemSmallIcon(fileSavePath.concat(fileName)); 
         return fileType;
     }
     
@@ -251,6 +255,7 @@ public class TaskInfo implements DownloadingTask, DownloadedTask, DeletedTask, S
 
     @Override
     public void changeTaskState(TaskState state) {
+        if(taskState != null && state == TaskState.TASK_BEGIN) return;
         this.taskState = state;
     }
 

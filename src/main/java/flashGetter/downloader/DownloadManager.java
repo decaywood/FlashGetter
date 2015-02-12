@@ -2,7 +2,6 @@ package flashGetter.downloader;
 
 import flashGetter.downloader.executor.DownloadingExecutor;
 import flashGetter.downloader.task.Task;
-import flashGetter.downloader.task.TaskInfo;
 import flashGetter.downloader.task.Task.TaskState;
 import flashGetter.view.EventDispatcher;
 import flashGetter.view.EventHandler;

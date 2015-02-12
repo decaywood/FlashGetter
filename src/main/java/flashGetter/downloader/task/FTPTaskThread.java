@@ -75,7 +75,6 @@ public class FTPTaskThread implements TaskRunnable{
             String filePath = taskInfo.getSavePath() + fileName;
             this.taskInfo.setFileName(fileName);  
             this.taskInfo.setFileSize(remotefile.getSize());
-            this.taskInfo.setFileType(FileSystemIconUtil.readSystemSmallIcon(filePath));
             
             findTaskInfo();
             
@@ -160,7 +159,6 @@ public class FTPTaskThread implements TaskRunnable{
             String fileName = taskInfo.getFileName();
             String savePath = taskInfo.getSavePath();
             String filePath = savePath.concat(fileName);
-           
             File outputFile = new File(filePath);
             
             if(outputFile.length() >= remotefile.getSize()) return; // downloading done
@@ -183,7 +181,7 @@ public class FTPTaskThread implements TaskRunnable{
             
             while ((dataSize = in.read(buffer)) != -1 && !terminate) {
                 try {
-                    Thread.sleep(3000);
+                    Thread.sleep(1000);
                 } catch (InterruptedException e) {
                     e.printStackTrace();
                 }
@@ -227,6 +225,8 @@ public class FTPTaskThread implements TaskRunnable{
     
     @Override
     public void terminateTask(){
+        taskInfo.setDownloadSpeed(0);
+        executor.fireTaskInfo(taskInfo);
         terminate = true;
     }
 

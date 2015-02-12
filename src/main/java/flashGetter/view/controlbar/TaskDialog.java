@@ -57,6 +57,7 @@ public class TaskDialog extends JDialog {
         });
        
         jTextField = new JTextField();
+        jTextField.setText("E:\\test\\result\\");
         jTextField.setFont(font);
        
         
@@ -86,15 +87,16 @@ public class TaskDialog extends JDialog {
         JButton buttonOK = new JButton("Confirm");
         buttonOK.setFont(font);
         buttonOK.addActionListener(l -> {
-//            String downloadAddr = textArea.getText();
-//            String savePath = getFilePath(jTextField.getText());
-            String downloadAddr = "ftp://flashgetter:123456@192.168.59.1:21/testMovie.rmvb";
-            String savePath = "E:\\test\\result\\";
+            String downloadAddr = textArea.getText();
+            String savePath = getFilePath(jTextField.getText());
+           
             InfoEvent event = new InfoEvent()
             .setTarget(DownloadManager.class)
             .setInfo(downloadAddr, savePath)
             .setOperationKey(TaskEventType.TASK_CREATE);
+            
             EventDispatcher.InnerClass.instance.fireEvent(event);
+            
             dispose();
         });
         

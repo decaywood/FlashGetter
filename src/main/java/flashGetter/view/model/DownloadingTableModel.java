@@ -23,12 +23,12 @@ public class DownloadingTableModel extends TaskTableModel {
     }
 
     @Override
-    boolean match(Class<?> clazz) {
+    protected boolean match(Class<?> clazz) {
         return DownloadingTableModel.class == clazz;
     }
 
     @Override
-    synchronized void updateRow(int row, TaskInfo taskInfo) {
+    protected synchronized void updateRow(int row, TaskInfo taskInfo) {
         
         if(getRowCount() <= row) return;
         
@@ -52,7 +52,7 @@ public class DownloadingTableModel extends TaskTableModel {
     }
 
     @Override
-    synchronized void addRow(TaskInfo taskInfo) {
+    protected synchronized void addRow(TaskInfo taskInfo) {
         
         int rowIndex = getRowCount();
         
@@ -67,5 +67,7 @@ public class DownloadingTableModel extends TaskTableModel {
         String speed = ParameterUnitUtil.getDownloadSpeed(taskInfo.getDownloadSpeed());
         addRow(new Object[]{fileType, fileName, fileSize, progress, remainTime, speed});
     }
+    
+ 
 
 }

@@ -38,9 +38,15 @@ public abstract class TaskTableModel extends DefaultTableModel implements EventH
     }
  
 
+    
+    /*
+     *  the influence of synchronization to performance is not
+     *  considerable enough to care about, because the task information
+     *  shown in JTable doesn't require high real-time performance 
+     */
     private int tempIndex = 0;
     @Override
-    public void invoke(InfoEvent event) {
+    public synchronized void invoke(InfoEvent event) {
         if(!match(event.getTarget())) return;
         TaskState key = (TaskState) event.getOperationKey();
         
@@ -56,8 +62,13 @@ public abstract class TaskTableModel extends DefaultTableModel implements EventH
                 tempIndex++;
             });
             
-        }else if(key == TaskState.TASK_FINISHED){
-            
+        }else if(key == TaskState.TASK_FINISHED || key == TaskState.TASK_DELETED){
+            TaskMapper mapper = TaskMapper.InnerClass.instance;
+            mapper.getMapStream((K, V) -> {
+                boolean contains = Arrays.binarySearch(event.getTaskIDs(), V) >= 0;
+                int index = K ^ TaskMapper.DOWNLOADING_MASK; 
+                if(contains) removeRow(index);
+            });
         }
             
              
@@ -68,9 +79,9 @@ public abstract class TaskTableModel extends DefaultTableModel implements EventH
     }
     
 
-    abstract boolean match(Class<?> clazz);
-    abstract void updateRow(int row, TaskInfo taskInfo);
-    abstract void addRow(TaskInfo taskInfo);
+    protected abstract boolean match(Class<?> clazz);
+    protected abstract void updateRow(int row, TaskInfo taskInfo);
+    protected abstract void addRow(TaskInfo taskInfo);
     
     @Override
     public boolean filter(InfoEvent event) {

@@ -59,6 +59,14 @@ public class DownloadingExecutor implements DownloadingOperation {
     }
     
 
+    /*
+     *  when invoke the createTask method, the task info should be locked 
+     *  in order to prevent from invoking restart method, it would result
+     *  in IO synchronized problem.
+     *  
+     *  see startTask method for detail
+     *  
+     */
     @Override
     public void createTask(String downloadAddr, String savePath) {
 
@@ -92,8 +100,8 @@ public class DownloadingExecutor implements DownloadingOperation {
     }
 
     /*
-     *  other thread can invoke synchronized method when the thread which possesses
-     *  the lock of it invoked wait method
+     *  when invoked pauseTask method, no thread occupied the IO resources 
+     *  so the lock can be released
      */
     @Override
     public void pauseTask(long... taskIDs) {
@@ -111,19 +119,26 @@ public class DownloadingExecutor implements DownloadingOperation {
      */
     @Override
     public void deleteTask(long... taskIDs) {
-        Arrays.stream(taskIDs).forEach(taskID -> taskTable.get(taskID).terminateTask());
-        removeFromTaskTable(taskIDs);
+        removeOperation(TaskState.TASK_DELETED, taskIDs);
     }
 
     @Override
     public void finishTask(long... taskIDs) {
-        removeFromTaskTable(taskIDs);
+        removeOperation(TaskState.TASK_FINISHED, taskIDs);
     }
 
-    
-    private void removeFromTaskTable(long... taskIDs){
-        Arrays.stream(taskIDs).forEach(taskID -> taskTable.remove(taskID));
+    private synchronized void removeOperation(TaskState taskState, long... taskIDs){
+        Arrays.stream(taskIDs).forEach(taskID -> {
+           
+            taskTable.get(taskID).terminateTask();
+//            taskTable.remove(taskID);
+            Task taskInfo = TaskMapper.InnerClass.instance.getTaskInfo(taskID);
+            taskInfo.changeTaskState(taskState);
+            fireTaskInfo(taskInfo);
+            
+        });
     }
+    
    
 
 }

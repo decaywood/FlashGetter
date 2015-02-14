@@ -180,6 +180,9 @@ public class FTPTaskThread implements TaskRunnable{
            
             
             while ((dataSize = in.read(buffer)) != -1 && !terminate) {
+                
+                executor.fireTaskInfo(taskInfo);
+                
                 try {
                     Thread.sleep(1000);
                 } catch (InterruptedException e) {
@@ -195,7 +198,6 @@ public class FTPTaskThread implements TaskRunnable{
                 taskInfo.moveProgress(prog);
                 taskInfo.serializeTask();
                 
-                executor.fireTaskInfo(taskInfo);
             }
             
             fos.flush();
@@ -208,8 +210,7 @@ public class FTPTaskThread implements TaskRunnable{
             
             LOGGER.info("download thread " + Thread.currentThread() + " done!");
             
-            taskInfo.changeTaskState(TaskState.TASK_FINISHED);
-            executor.fireTaskInfo(taskInfo);
+            executor.finishTask(taskInfo.getTaskID());
             
         } catch (IOException e) {
             LOGGER.info("IO problem!", e);
@@ -225,8 +226,6 @@ public class FTPTaskThread implements TaskRunnable{
     
     @Override
     public void terminateTask(){
-        taskInfo.setDownloadSpeed(0);
-        executor.fireTaskInfo(taskInfo);
         terminate = true;
     }
 

@@ -15,18 +15,18 @@ public class DownloadedTableModel extends TaskTableModel {
     }
 
     @Override
-    boolean match(Class<?> clazz) {
+    protected boolean match(Class<?> clazz) {
         return false;
     }
 
     @Override
-    void updateRow(int row, TaskInfo taskInfo) {
+    protected void updateRow(int row, TaskInfo taskInfo) {
         // TODO Auto-generated method stub
         
     }
 
     @Override
-    void addRow(TaskInfo taskInfo) {
+    protected void addRow(TaskInfo taskInfo) {
         // TODO Auto-generated method stub
         
     }

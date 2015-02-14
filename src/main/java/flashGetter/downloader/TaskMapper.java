@@ -3,6 +3,7 @@ package flashGetter.downloader;
 import java.util.Arrays;
 import java.util.List;
 import java.util.concurrent.ConcurrentHashMap;
+import java.util.function.BiConsumer;
 import java.util.stream.Stream;
 
 import flashGetter.downloader.task.Task.TaskState;
@@ -67,7 +68,15 @@ public class TaskMapper {
         return taskMapper.get(taskID);
     }
     
+    public void getMapStream(BiConsumer<Integer, Long> action){
+        rowIndex2TaskIDMapper.forEach(action);
+    }
+    
     public void updateRowIndexMapper(int mask, int rowIndex, Long taskID){
+        System.out.println(rowIndex + " -> " + taskID);
+        System.out.println(rowIndex + " -> " + taskID);
+        System.out.println(rowIndex + " -> " + taskID);
+        System.out.println(rowIndex + " -> " + taskID);
         int index = mask ^ rowIndex;
         rowIndex2TaskIDMapper.put(index, taskID);
     }
@@ -75,6 +84,10 @@ public class TaskMapper {
     public Long getTaskID(int mask, int rowIndex){
         int index = mask ^ rowIndex;
         return rowIndex2TaskIDMapper.get(index);
+    }
+    
+    public Stream<TaskInfo> getDeletedTaskInfo(){
+        return taskMapper.values().stream().filter(taskInfo -> taskInfo.stateEqual(TaskState.TASK_DELETED));
     }
     
     public Stream<TaskInfo> getUpdateTaskInfo(){

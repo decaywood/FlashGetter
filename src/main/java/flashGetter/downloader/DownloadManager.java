@@ -36,6 +36,10 @@ public class DownloadManager implements EventHandler {
     private DownloadedOperation downloadedExecutor;
     private DeletedOperation deletedExecutor;
     
+    /*
+     *  the main purpose of adding listener (rather than implement behavior 
+     *  inside the executor) is to build a regulation of transformation. 
+     */
     public DownloadManager() {
         downloadingExecutor = new DownloadingExecutor();
         
@@ -47,6 +51,9 @@ public class DownloadManager implements EventHandler {
         
         downloadingExecutor.addManagerListener(event -> 
         sendInfoEvent(event, DownloadingTableModel.class, TaskState.TASK_FINISHED));
+        
+        downloadingExecutor.addManagerListener(event -> 
+        sendInfoEvent(event, DownloadingTableModel.class, TaskState.TASK_DELETED));
 //        downloadedExecutor = 
 //        deletedExecutor = 
         EventDispatcher.InnerClass.instance.register(this);
@@ -63,8 +70,9 @@ public class DownloadManager implements EventHandler {
             downloadingExecutor.startTask(event.getTaskIDs());
         if(operationKey == TaskEventType.TASK_PAUSE)
             downloadingExecutor.pauseTask(event.getTaskIDs());
-        if(operationKey == TaskEventType.TASK_DELETE)
+        if(operationKey == TaskEventType.TASK_DELETE){
             downloadingExecutor.deleteTask(event.getTaskIDs());
+        }
         
     }
 

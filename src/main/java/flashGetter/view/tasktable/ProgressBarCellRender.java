@@ -23,7 +23,7 @@ public class ProgressBarCellRender extends JProgressBar implements WidthScaleCel
     @Override
     public Component getTableCellRendererComponent(JTable table, Object value,
             boolean isSelected, boolean hasFocus, int row, int column) {
-        LOGGER.info("row : "+row+"col : "+column +" -> " + value);
+//        LOGGER.info("row : "+row+"col : "+column +" -> " + value);
         double percentage = (double) value;
         setString(format.format(percentage));
         setValue((int) (percentage * 100));

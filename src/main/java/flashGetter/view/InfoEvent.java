@@ -55,5 +55,13 @@ public class InfoEvent {
     public Enum<?> getOperationKey() {
         return operationKey;
     }
+    
+    public InfoEvent newCopy() {
+        return new InfoEvent()
+        .setInfo(info)
+        .setOperationKey(operationKey)
+        .setTarget(target)
+        .setTaskID(taskIDs);
+    }
 
 }

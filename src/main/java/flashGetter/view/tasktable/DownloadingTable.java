@@ -48,9 +48,10 @@ public class DownloadingTable extends TaskTable<DownloadingTableModel> {
         long[] taskIDs = Arrays.stream(selectedRows)
         .mapToLong(index -> mapper.getTaskID(TaskMapper.DOWNLOADING_MASK, index))
         .toArray();
-        event.setTaskID(taskIDs);
-        event.setTarget(DownloadManager.class);
-        EventDispatcher.InnerClass.instance.fireEvent(event);
+        InfoEvent fireEvent = event.newCopy()
+        .setTaskID(taskIDs)
+        .setTarget(DownloadManager.class);
+        EventDispatcher.InnerClass.instance.fireEvent(fireEvent);
     }
     
     

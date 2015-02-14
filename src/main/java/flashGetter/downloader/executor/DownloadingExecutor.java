@@ -131,7 +131,7 @@ public class DownloadingExecutor implements DownloadingOperation {
         Arrays.stream(taskIDs).forEach(taskID -> {
            
             taskTable.get(taskID).terminateTask();
-//            taskTable.remove(taskID);
+            taskTable.remove(taskID);
             Task taskInfo = TaskMapper.InnerClass.instance.getTaskInfo(taskID);
             taskInfo.changeTaskState(taskState);
             fireTaskInfo(taskInfo);

@@ -27,7 +27,7 @@ public class FileIconRenderer extends JLabel implements WidthScaleCellRenderer {
     @Override
     public Component getTableCellRendererComponent(JTable table, Object value,
             boolean isSelected, boolean hasFocus, int row, int column) {
-        LOGGER.info("row : "+row+"col : "+column +" -> " + value);
+//        LOGGER.info("row : "+row+"col : "+column +" -> " + value);
         setIcon((ImageIcon)value);
         return this;
     }

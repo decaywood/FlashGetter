@@ -74,9 +74,6 @@ public class TaskMapper {
     
     public void updateRowIndexMapper(int mask, int rowIndex, Long taskID){
         System.out.println(rowIndex + " -> " + taskID);
-        System.out.println(rowIndex + " -> " + taskID);
-        System.out.println(rowIndex + " -> " + taskID);
-        System.out.println(rowIndex + " -> " + taskID);
         int index = mask ^ rowIndex;
         rowIndex2TaskIDMapper.put(index, taskID);
     }

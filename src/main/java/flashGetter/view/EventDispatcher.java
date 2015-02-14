@@ -4,6 +4,8 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
+import flashGetter.view.tasktable.DownloadingTable;
+
 /**
  * @author decaywood
  * 
@@ -40,7 +42,11 @@ public class EventDispatcher {
         
         listeners.stream()
         .filter(target -> target.filter(event))
-        .forEach(listener -> listener.invoke(event));
+        .forEach(listener -> {
+            listener.invoke(event);
+            if(event.getTarget() == DownloadingTable.class)
+            System.out.println(event.getTarget());
+        });
     }
 
 }

@@ -39,8 +39,8 @@ public class DownloadingTableModel extends TaskTableModel {
         String remainTime = taskInfo.getRemainTime();
         String speed = ParameterUnitUtil.getDownloadSpeed(taskInfo.getDownloadSpeed());
         
-        LOGGER.info("fileType : "+fileType+" fileName : "+fileName+" fileSize : "+fileSize
-                +" prog : " +progress+" speed : "+speed);
+//        LOGGER.info("fileType : "+fileType+" fileName : "+fileName+" fileSize : "+fileSize
+//                +" prog : " +progress+" speed : "+speed);
         
         setValueAt(fileType, row, 0);
         setValueAt(fileName, row, 1);

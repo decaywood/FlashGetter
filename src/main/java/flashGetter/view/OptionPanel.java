@@ -59,7 +59,7 @@ public class OptionPanel extends JPanel{
     
     protected void mousePressed(){
         if(!viewEvents.isEmpty())
-            viewEvents.forEach(event -> EventDispatcher.InnerClass.instance.fireEvent(event));
+            viewEvents.forEach(event -> EventDispatcher.InnerClass.instance.fireEvent(event.newCopy()));
     }
     
     protected void lightComponent(){

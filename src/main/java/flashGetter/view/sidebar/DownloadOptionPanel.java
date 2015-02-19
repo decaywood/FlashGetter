@@ -14,6 +14,9 @@ import flashGetter.view.sidebar.SideBarOptionPanel.OptionType;
 import flashGetter.view.tasktable.DeletedTable;
 import flashGetter.view.tasktable.DownloadedTable;
 import flashGetter.view.tasktable.DownloadingTable;
+import flashGetter.view.tasktable.TaskTablePlatter.IDeletedTaskTable;
+import flashGetter.view.tasktable.TaskTablePlatter.IDownloadedTaskTable;
+import flashGetter.view.tasktable.TaskTablePlatter.IDownloadingTaskTable;
 
 /**
  * @author decaywood
@@ -45,7 +48,7 @@ public class DownloadOptionPanel extends JPanel{
                 tag1,
                 true,
                 new InfoEvent().setTarget(DownloadingControlBar.class),
-                new InfoEvent().setTarget(DownloadingTable.class));
+                new InfoEvent().setTarget(IDownloadingTaskTable.class));
 
 
         JPanel downloadedPanel = new SideBarOptionPanel(OptionType.DOWNLOADED,
@@ -53,14 +56,14 @@ public class DownloadOptionPanel extends JPanel{
                        ImageUtil.readIcon(Resources.downloadedChoosed, 50), 
                        tag2,
                        new InfoEvent().setTarget(DownloadedControlBar.class),
-                       new InfoEvent().setTarget(DownloadedTable.class));
+                       new InfoEvent().setTarget(IDownloadedTaskTable.class));
         
         JPanel deletedPanel = new SideBarOptionPanel(OptionType.DELETED,
                 ImageUtil.readIcon(Resources.recycleStation, 50), 
                     ImageUtil.readIcon(Resources.recycleStationChoosed, 50), 
                     tag3,
                     new InfoEvent().setTarget(DeletedControlBar.class),
-                    new InfoEvent().setTarget(DeletedTable.class));
+                    new InfoEvent().setTarget(IDeletedTaskTable.class));
         
         add(new JPanel());
         add(downloadingPanel);

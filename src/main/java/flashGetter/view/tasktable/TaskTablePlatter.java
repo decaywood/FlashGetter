@@ -19,22 +19,28 @@ import flashGetter.view.EventHandler;
  */
 public class TaskTablePlatter extends JScrollPane implements EventHandler{
     
-    private Map<Class<? extends TaskTable>, TaskTable> tables;
+    public static interface ITaskTablePlatter{}
+    public static interface IDownloadingTaskTable extends ITaskTablePlatter{}
+    public static interface IDownloadedTaskTable extends ITaskTablePlatter{}
+    public static interface IDeletedTaskTable extends ITaskTablePlatter{}
+    
+    
+    private Map<Class<? extends ITaskTablePlatter>, TaskTable> tables;
     
     public TaskTablePlatter() {
         
         EventDispatcher.InnerClass.instance.register(this);
         
-        tables = new HashMap<Class<? extends TaskTable>, TaskTable>();
+        tables = new HashMap<Class<? extends ITaskTablePlatter>, TaskTable>();
         
-        tables.put(DownloadingTable.class, new DownloadingTable());
-        tables.put(DownloadedTable.class, new DownloadedTable());
-        tables.put(DeletedTable.class, new DeletedTable());
+        tables.put(IDownloadingTaskTable.class, new DownloadingTable());
+        tables.put(IDownloadedTaskTable.class, new DownloadedTable());
+        tables.put(IDeletedTaskTable.class, new DeletedTable());
         
         setHorizontalScrollBarPolicy(HORIZONTAL_SCROLLBAR_NEVER);
         setVerticalScrollBarPolicy(VERTICAL_SCROLLBAR_AS_NEEDED);
         
-        setViewportView((tables.get(DownloadingTable.class)));
+        setViewportView((tables.get(IDownloadingTaskTable.class)));
         
     }
 
@@ -47,7 +53,7 @@ public class TaskTablePlatter extends JScrollPane implements EventHandler{
 
     @Override
     public boolean filter(InfoEvent event) {
-        return TaskTable.class.isAssignableFrom(event.getTarget());
+        return ITaskTablePlatter.class.isAssignableFrom(event.getTarget());
     }
 
 }

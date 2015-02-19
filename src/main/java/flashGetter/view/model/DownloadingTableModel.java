@@ -1,12 +1,16 @@
 package flashGetter.view.model;
 
+import java.util.Arrays;
+
 import javax.swing.ImageIcon;
 
 import org.apache.log4j.Logger;
 
 import flashGetter.downloader.TaskMapper;
 import flashGetter.downloader.task.TaskInfo;
+import flashGetter.downloader.task.Task.TaskState;
 import flashGetter.util.ParameterUnitUtil;
+import flashGetter.view.InfoEvent;
 
 /**
  * @author decaywood
@@ -22,13 +26,9 @@ public class DownloadingTableModel extends TaskTableModel {
         super(6);
     }
 
-    @Override
-    protected boolean match(Class<?> clazz) {
-        return DownloadingTableModel.class == clazz;
-    }
+ 
 
-    @Override
-    protected synchronized void updateRow(int row, TaskInfo taskInfo) {
+    private synchronized void updateRow(int row, TaskInfo taskInfo) {
         
         if(getRowCount() <= row) return;
         
@@ -51,8 +51,7 @@ public class DownloadingTableModel extends TaskTableModel {
         
     }
 
-    @Override
-    protected synchronized void addRow(TaskInfo taskInfo) {
+    private synchronized void addRow(TaskInfo taskInfo) {
         
         int rowIndex = getRowCount();
         
@@ -66,6 +65,44 @@ public class DownloadingTableModel extends TaskTableModel {
         String remainTime = taskInfo.getRemainTime();
         String speed = ParameterUnitUtil.getDownloadSpeed(taskInfo.getDownloadSpeed());
         addRow(new Object[]{fileType, fileName, fileSize, progress, remainTime, speed});
+    }
+    
+    
+    @Override
+    protected boolean match(Class<?> clazz) {
+        return DownloadingTableModel.class == clazz;
+    }
+
+    private int tempIndex = 0;
+    @Override
+    protected void execute(InfoEvent event) {
+        
+        TaskState key = (TaskState) event.getOperationKey();
+        
+        if(key == TaskState.TASK_BEGIN){
+            TaskMapper.InnerClass.instance.getStateFiltedTaskInfo(TaskState.TASK_BEGIN)
+            .forEach(taskInfo -> addRow(taskInfo));
+        }else if(key == TaskState.TASK_UPDATE){
+            tempIndex = 0;
+            TaskMapper mapper = TaskMapper.InnerClass.instance;
+            mapper.getStateFiltedTaskInfo(TaskState.TASK_UPDATE).forEach(taskInfo -> {
+                updateRow(tempIndex, taskInfo);
+                mapper.updateRowIndexMapper(TaskMapper.DOWNLOADING_MASK ,tempIndex, taskInfo.getTaskID());
+                tempIndex++;
+            });
+            
+        }else if(key == TaskState.TASK_FINISHED || key == TaskState.TASK_DELETED){
+            TaskMapper mapper = TaskMapper.InnerClass.instance;
+            
+            mapper.getMapStream((K, V) -> {
+                boolean contains = Arrays.binarySearch(event.getTaskIDs(), V) >= 0;
+                if(contains){
+                    int index = K ^ TaskMapper.DOWNLOADING_MASK; 
+                    mapper.dropRowIndexMapper(K);
+                    removeRow(index);
+                }
+            });
+        }
     }
     
  

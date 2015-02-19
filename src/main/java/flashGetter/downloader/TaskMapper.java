@@ -73,9 +73,18 @@ public class TaskMapper {
     }
     
     public void updateRowIndexMapper(int mask, int rowIndex, Long taskID){
-        System.out.println(rowIndex + " -> " + taskID);
+//        System.out.println(rowIndex + " -> " + taskID);
         int index = mask ^ rowIndex;
         rowIndex2TaskIDMapper.put(index, taskID);
+    }
+    
+    public void dropRowIndexMapper(int mask, int rowIndex){
+      int index = mask ^ rowIndex;
+      dropRowIndexMapper(index);
+    }
+    
+    public void dropRowIndexMapper(int rowIndex){
+        rowIndex2TaskIDMapper.remove(rowIndex);
     }
     
     public Long getTaskID(int mask, int rowIndex){
@@ -83,17 +92,10 @@ public class TaskMapper {
         return rowIndex2TaskIDMapper.get(index);
     }
     
-    public Stream<TaskInfo> getDeletedTaskInfo(){
-        return taskMapper.values().stream().filter(taskInfo -> taskInfo.stateEqual(TaskState.TASK_DELETED));
+    public Stream<TaskInfo> getStateFiltedTaskInfo(TaskState state){
+        return taskMapper.values().stream().filter(taskInfo -> taskInfo.stateEqual(state));
     }
     
-    public Stream<TaskInfo> getUpdateTaskInfo(){
-        return taskMapper.values().stream().filter(taskInfo -> taskInfo.stateEqual(TaskState.TASK_UPDATE));
-    }
-    
-    public Stream<TaskInfo> getBeginTaskInfo(){
-        return taskMapper.values().stream().filter(taskInfo -> taskInfo.stateEqual(TaskState.TASK_BEGIN));
-    }
     
     public Stream<TaskInfo> getTaskInfoStream(){
         return taskMapper.values().stream();
@@ -101,7 +103,7 @@ public class TaskMapper {
     
     
     public void dropTask(Long[] taskIDs){
-        Arrays.stream(taskIDs);
+        dropTask(Arrays.stream(taskIDs));
     }
     
     public void dropTask(List<Long> taskIDs){

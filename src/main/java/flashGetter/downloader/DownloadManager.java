@@ -6,6 +6,8 @@ import flashGetter.downloader.task.Task.TaskState;
 import flashGetter.view.EventDispatcher;
 import flashGetter.view.EventHandler;
 import flashGetter.view.InfoEvent;
+import flashGetter.view.model.DeletedTableModel;
+import flashGetter.view.model.DownloadedTableModel;
 import flashGetter.view.model.DownloadingTableModel;
 import flashGetter.view.model.TaskTableModel;
 /**
@@ -43,17 +45,29 @@ public class DownloadManager implements EventHandler {
     public DownloadManager() {
         downloadingExecutor = new DownloadingExecutor();
         
-        downloadingExecutor.addManagerListener(event -> 
-        sendInfoEvent(event, DownloadingTableModel.class, TaskState.TASK_BEGIN));
+        downloadingExecutor.addManagerListener(event -> {
+            
+            if(event.stateEqual(TaskState.TASK_BEGIN))
+                sendInfoEvent(event, DownloadingTableModel.class, TaskState.TASK_BEGIN);
+            
+            else if(event.stateEqual(TaskState.TASK_UPDATE))
+                sendInfoEvent(event, DownloadingTableModel.class, TaskState.TASK_UPDATE);
+            
+            else if(event.stateEqual(TaskState.TASK_FINISHED)){
+                
+                sendInfoEvent(event, DownloadingTableModel.class, TaskState.TASK_FINISHED);
+                sendInfoEvent(event, DownloadedTableModel.class, TaskState.TASK_FINISHED);
+                
+            }
+            
+            else if(event.stateEqual(TaskState.TASK_DELETED)){
+                
+                sendInfoEvent(event, DownloadingTableModel.class, TaskState.TASK_DELETED);
+                sendInfoEvent(event, DeletedTableModel.class, TaskState.TASK_DELETED);
+                
+            }
+        });
         
-        downloadingExecutor.addManagerListener(event -> 
-        sendInfoEvent(event, DownloadingTableModel.class, TaskState.TASK_UPDATE));
-        
-        downloadingExecutor.addManagerListener(event -> 
-        sendInfoEvent(event, DownloadingTableModel.class, TaskState.TASK_FINISHED));
-        
-        downloadingExecutor.addManagerListener(event -> 
-        sendInfoEvent(event, DownloadingTableModel.class, TaskState.TASK_DELETED));
 //        downloadedExecutor = 
 //        deletedExecutor = 
         EventDispatcher.InnerClass.instance.register(this);
@@ -70,9 +84,9 @@ public class DownloadManager implements EventHandler {
             downloadingExecutor.startTask(event.getTaskIDs());
         if(operationKey == TaskEventType.TASK_PAUSE)
             downloadingExecutor.pauseTask(event.getTaskIDs());
-        if(operationKey == TaskEventType.TASK_DELETE){
+        if(operationKey == TaskEventType.TASK_DELETE)
             downloadingExecutor.deleteTask(event.getTaskIDs());
-        }
+        
         
     }
 
@@ -85,7 +99,7 @@ public class DownloadManager implements EventHandler {
         if(!event.stateEqual(state)) return;
         InfoEvent infoEvent = new InfoEvent();
         infoEvent
-        .setTarget(DownloadingTableModel.class)
+        .setTarget(target)
         .setTaskID(event.getTaskID())
         .setOperationKey(state);
         EventDispatcher.InnerClass.instance.fireEvent(infoEvent);

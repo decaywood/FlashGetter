@@ -44,44 +44,17 @@ public abstract class TaskTableModel extends DefaultTableModel implements EventH
      *  considerable enough to care about, because the task information
      *  shown in JTable doesn't require high real-time performance 
      */
-    private int tempIndex = 0;
+    
     @Override
     public synchronized void invoke(InfoEvent event) {
+        
         if(!match(event.getTarget())) return;
-        TaskState key = (TaskState) event.getOperationKey();
-        
-        if(key == TaskState.TASK_BEGIN){
-            TaskMapper.InnerClass.instance.getBeginTaskInfo()
-            .forEach(taskInfo -> addRow(taskInfo));
-        }else if(key == TaskState.TASK_UPDATE){
-            tempIndex = 0;
-            TaskMapper mapper = TaskMapper.InnerClass.instance;
-            mapper.getUpdateTaskInfo().forEach(taskInfo -> {
-                updateRow(tempIndex, taskInfo);
-                mapper.updateRowIndexMapper(TaskMapper.DOWNLOADING_MASK ,tempIndex, taskInfo.getTaskID());
-                tempIndex++;
-            });
-            
-        }else if(key == TaskState.TASK_FINISHED || key == TaskState.TASK_DELETED){
-            TaskMapper mapper = TaskMapper.InnerClass.instance;
-            mapper.getMapStream((K, V) -> {
-                boolean contains = Arrays.binarySearch(event.getTaskIDs(), V) >= 0;
-                int index = K ^ TaskMapper.DOWNLOADING_MASK; 
-                if(contains) removeRow(index);
-            });
-        }
-            
-             
-        //handle....
-        
-//        setValueAt(aValue, row, column);
+        execute(event);
         
     }
     
-
     protected abstract boolean match(Class<?> clazz);
-    protected abstract void updateRow(int row, TaskInfo taskInfo);
-    protected abstract void addRow(TaskInfo taskInfo);
+    protected abstract void execute(InfoEvent event);
     
     @Override
     public boolean filter(InfoEvent event) {

@@ -15,6 +15,7 @@ import flashGetter.downloader.ManagerListener;
 import flashGetter.downloader.TaskMapper;
 import flashGetter.downloader.task.Task;
 import flashGetter.downloader.task.Task.TaskState;
+import flashGetter.downloader.task.DownloadingTask;
 import flashGetter.downloader.task.TaskInfo;
 import flashGetter.downloader.task.TaskRunnable;
 import flashGetter.util.SequenceGenerator;
@@ -132,7 +133,8 @@ public class DownloadingExecutor implements DownloadingOperation {
            
             taskTable.get(taskID).terminateTask();
             taskTable.remove(taskID);
-            Task taskInfo = TaskMapper.InnerClass.instance.getTaskInfo(taskID);
+            DownloadingTask taskInfo = TaskMapper.InnerClass.instance.getTaskInfo(taskID);
+            taskInfo.setFinishTime(TimeUtil.getCurrentTime());
             taskInfo.changeTaskState(taskState);
             fireTaskInfo(taskInfo);
             

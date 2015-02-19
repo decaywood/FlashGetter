@@ -7,7 +7,7 @@ import javax.swing.JLabel;
 
 import flashGetter.downloader.TaskMapper;
 import flashGetter.view.InfoEvent;
-import flashGetter.view.model.DeletedTableTableModel;
+import flashGetter.view.model.DeletedTableModel;
 
 /**
  * @author decaywood
@@ -15,7 +15,7 @@ import flashGetter.view.model.DeletedTableTableModel;
  * 2015年1月30日
  * 
  */
-public class DeletedTable extends TaskTable<DeletedTableTableModel> {
+public class DeletedTable extends TaskTable<DeletedTableModel> {
     
    
 
@@ -32,8 +32,7 @@ public class DeletedTable extends TaskTable<DeletedTableTableModel> {
     
     public DeletedTable() {
         
-        super(new DeletedTableTableModel());
-        tableModel.addRow(new Object[]{new JLabel(),"aa","bbcc","dd"});
+        super(new DeletedTableModel());
         
     }
     

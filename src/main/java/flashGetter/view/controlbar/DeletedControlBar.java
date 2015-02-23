@@ -3,7 +3,10 @@ package flashGetter.view.controlbar;
 import java.awt.event.MouseAdapter;
 
 import flashGetter.Resources;
+import flashGetter.downloader.DownloadManager.TaskEventType;
 import flashGetter.view.InfoEvent;
+import flashGetter.view.tasktable.DeletedTable;
+import flashGetter.view.tasktable.DownloadingTable;
 
 /**
  * @author decaywood
@@ -19,19 +22,25 @@ public class DeletedControlBar extends ControlBar {
                 Resources.recoverTaskChoosed, 
                 null, 
                 "Create a Task",
-                new InfoEvent());
+                new InfoEvent()
+                .setTarget(DeletedTable.class)
+                .setOperationKey(TaskEventType.TASK_RECOVER));
         
         addPanel(Resources.removeTask, 
                 Resources.removeTaskChoosed, 
                 null, 
                 "Remove Task",
-                new InfoEvent());
+                new InfoEvent()
+                .setTarget(DeletedTable.class)
+                .setOperationKey(TaskEventType.TASK_REMOVE));
         
         addPanel(Resources.removeAllTask, 
                 Resources.removeAllTaskChoosed, 
                 null, 
                 "Remove All Task", 
-                new InfoEvent());
+                new InfoEvent()
+                .setTarget(DeletedTable.class)
+                .setOperationKey(TaskEventType.TASK_REMOVE_ALL));
         
     }
 

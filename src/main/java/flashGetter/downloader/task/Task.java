@@ -12,7 +12,16 @@ public interface Task {
         TASK_BEGIN,
         TASK_FINISHED,
         TASK_UPDATE,
+        TASK_RECOVER,
         TASK_DELETED
+        
+//        TASK_CREATE,
+//        TASK_START,
+//        TASK_PAUSE,
+//        TASK_DELETE,
+//        TASK_RECOVER,
+//        TASK_REMOVE,
+//        TASK_REMOVE_ALL
     }
 
     public long getTaskID();

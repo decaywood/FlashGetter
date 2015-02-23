@@ -7,8 +7,8 @@ import javax.swing.ImageIcon;
 import org.apache.log4j.Logger;
 
 import flashGetter.downloader.TaskMapper;
-import flashGetter.downloader.task.TaskInfo;
 import flashGetter.downloader.task.Task.TaskState;
+import flashGetter.downloader.task.TaskInfo;
 import flashGetter.util.ParameterUnitUtil;
 import flashGetter.view.InfoEvent;
 
@@ -28,9 +28,11 @@ public class DownloadingTableModel extends TaskTableModel {
 
  
 
-    private synchronized void updateRow(int row, TaskInfo taskInfo) {
+    private synchronized void addRow(TaskInfo taskInfo, int index) {
         
-        if(getRowCount() <= row) return;
+        TaskMapper.InnerClass.instance
+        .updateRowIndexMapper(TaskMapper.DOWNLOADING_MASK, index, taskInfo.getTaskID());
+        
         
         ImageIcon fileType = taskInfo.getFileType();
         String fileName = taskInfo.getFileName();
@@ -42,30 +44,19 @@ public class DownloadingTableModel extends TaskTableModel {
 //        LOGGER.info("fileType : "+fileType+" fileName : "+fileName+" fileSize : "+fileSize
 //                +" prog : " +progress+" speed : "+speed);
         
-        setValueAt(fileType, row, 0);
-        setValueAt(fileName, row, 1);
-        setValueAt(fileSize, row, 2);
-        setValueAt(progress, row, 3);
-        setValueAt(remainTime, row, 4);
-        setValueAt(speed, row, 5);
+        if(index == getRowCount()) addRow(new Object[]{fileType, fileName, fileSize, progress, remainTime, speed});
+        else {
+            setValueAt(fileType, index, 0);
+            setValueAt(fileName, index, 1);
+            setValueAt(fileSize, index, 2);
+            setValueAt(progress, index, 3);
+            setValueAt(remainTime, index, 4);
+            setValueAt(speed, index, 5);
+        }
         
     }
 
-    private synchronized void addRow(TaskInfo taskInfo) {
-        
-        int rowIndex = getRowCount();
-        
-        TaskMapper.InnerClass.instance
-        .updateRowIndexMapper(TaskMapper.DOWNLOADING_MASK, rowIndex, taskInfo.getTaskID());
-        
-        ImageIcon fileType = taskInfo.getFileType();
-        String fileName = taskInfo.getFileName();
-        String fileSize = ParameterUnitUtil.getFileSize(taskInfo.getFileSize());
-        double progress = taskInfo.getProgress();
-        String remainTime = taskInfo.getRemainTime();
-        String speed = ParameterUnitUtil.getDownloadSpeed(taskInfo.getDownloadSpeed());
-        addRow(new Object[]{fileType, fileName, fileSize, progress, remainTime, speed});
-    }
+  
     
     
     @Override
@@ -81,12 +72,12 @@ public class DownloadingTableModel extends TaskTableModel {
         
         if(key == TaskState.TASK_BEGIN){
             TaskMapper.InnerClass.instance.getStateFiltedTaskInfo(TaskState.TASK_BEGIN)
-            .forEach(taskInfo -> addRow(taskInfo));
+            .forEach(taskInfo -> addRow(taskInfo, getRowCount()));
         }else if(key == TaskState.TASK_UPDATE){
             tempIndex = 0;
             TaskMapper mapper = TaskMapper.InnerClass.instance;
             mapper.getStateFiltedTaskInfo(TaskState.TASK_UPDATE).forEach(taskInfo -> {
-                updateRow(tempIndex, taskInfo);
+                addRow(taskInfo, tempIndex);
                 mapper.updateRowIndexMapper(TaskMapper.DOWNLOADING_MASK ,tempIndex, taskInfo.getTaskID());
                 tempIndex++;
             });

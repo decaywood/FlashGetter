@@ -1,5 +1,7 @@
 package flashGetter.downloader;
 
+import flashGetter.downloader.task.Task;
+
 /**
  * @author decaywood
  * 
@@ -8,10 +10,15 @@ package flashGetter.downloader;
  */
 public interface DeletedOperation {
     
-    public void recoverTask();
+    public void offerDeletedTask(long... taskIDs);
     
-    public void removeTask();
+    public void recoverTask(long... taskIDs);
+    
+    public void removeTask(long... taskIDs);
     
     public void removeAllTask();
+    
+    public void addManagerListener(ManagerListener listener);
 
+    public void fireTaskInfo(Task event);
 }

@@ -5,7 +5,9 @@ import java.util.Arrays;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 
+import flashGetter.downloader.DownloadManager;
 import flashGetter.downloader.TaskMapper;
+import flashGetter.view.EventDispatcher;
 import flashGetter.view.InfoEvent;
 import flashGetter.view.model.DeletedTableModel;
 
@@ -43,7 +45,10 @@ public class DeletedTable extends TaskTable<DeletedTableModel> {
         long[] taskIDs = Arrays.stream(selectedRows)
         .mapToLong(index -> mapper.getTaskID(TaskMapper.DELETED_MASK, index))
         .toArray();
-        event.setTaskID(taskIDs);
+        InfoEvent fireEvent = event.newCopy()
+                .setTaskID(taskIDs)
+                .setTarget(DownloadManager.class);
+        EventDispatcher.InnerClass.instance.fireEvent(fireEvent);
     }
     
     @Override

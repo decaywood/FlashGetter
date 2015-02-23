@@ -1,5 +1,6 @@
 package flashGetter.downloader;
 
+import flashGetter.downloader.executor.DeletedExecutor;
 import flashGetter.downloader.executor.DownloadingExecutor;
 import flashGetter.downloader.task.Task;
 import flashGetter.downloader.task.Task.TaskState;
@@ -30,6 +31,9 @@ public class DownloadManager implements EventHandler {
         TASK_START,
         TASK_PAUSE,
         TASK_DELETE,
+        TASK_RECOVER,
+        TASK_REMOVE,
+        TASK_REMOVE_ALL
     }
      
     
@@ -63,30 +67,70 @@ public class DownloadManager implements EventHandler {
             else if(event.stateEqual(TaskState.TASK_DELETED)){
                 
                 sendInfoEvent(event, DownloadingTableModel.class, TaskState.TASK_DELETED);
+                
+            }
+          
+        });
+        
+        deletedExecutor = new DeletedExecutor();
+        
+        deletedExecutor.addManagerListener(event -> {
+            
+            if(event.stateEqual(TaskState.TASK_DELETED)){
+                
                 sendInfoEvent(event, DeletedTableModel.class, TaskState.TASK_DELETED);
                 
+            }
+            
+            else if(event.stateEqual(TaskState.TASK_RECOVER)){
+                downloadingExecutor.startTask(event.getTaskID());
             }
         });
         
 //        downloadedExecutor = 
-//        deletedExecutor = 
         EventDispatcher.InnerClass.instance.register(this);
     }
 
     @Override
     public void invoke(InfoEvent event) {
         
+        downloadingExecute(event);
+        
+        
+        deletedExecute(event);
+        
+    }
+    
+    private void deletedExecute(InfoEvent event){
+        TaskEventType operationKey = (TaskEventType) event.getOperationKey();
+        
+        if(operationKey == TaskEventType.TASK_REMOVE)
+            deletedExecutor.removeTask(event.getTaskIDs());
+        
+        else if(operationKey == TaskEventType.TASK_REMOVE_ALL)
+            deletedExecutor.removeAllTask();
+        
+        else if(operationKey == TaskEventType.TASK_RECOVER)
+            deletedExecutor.recoverTask(event.getTaskIDs());
+    }
+    
+    private void downloadingExecute(InfoEvent event){
+        
         TaskEventType operationKey = (TaskEventType) event.getOperationKey();
         
         if(operationKey == TaskEventType.TASK_CREATE)
             downloadingExecutor.createTask(event.getInfo(0), event.getInfo(1));
-        if(operationKey == TaskEventType.TASK_START)
-            downloadingExecutor.startTask(event.getTaskIDs());
-        if(operationKey == TaskEventType.TASK_PAUSE)
-            downloadingExecutor.pauseTask(event.getTaskIDs());
-        if(operationKey == TaskEventType.TASK_DELETE)
-            downloadingExecutor.deleteTask(event.getTaskIDs());
         
+        else if(operationKey == TaskEventType.TASK_START)
+            downloadingExecutor.startTask(event.getTaskIDs());
+        
+        else if(operationKey == TaskEventType.TASK_PAUSE)
+            downloadingExecutor.pauseTask(event.getTaskIDs());
+        
+        else if(operationKey == TaskEventType.TASK_DELETE){
+            downloadingExecutor.deleteTask(event.getTaskIDs());
+            deletedExecutor.offerDeletedTask(event.getTaskIDs());
+        }
         
     }
 

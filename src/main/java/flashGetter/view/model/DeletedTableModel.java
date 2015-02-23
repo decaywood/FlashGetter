@@ -27,27 +27,41 @@ public class DeletedTableModel extends TaskTableModel {
 
     
 
-    private void addRow(TaskInfo taskInfo) {
-        int rowIndex = getRowCount();
+    private void addRow(TaskInfo taskInfo, int index) {
         
         TaskMapper.InnerClass.instance
-        .updateRowIndexMapper(TaskMapper.DELETED_MASK, rowIndex, taskInfo.getTaskID());
+        .updateRowIndexMapper(TaskMapper.DELETED_MASK, index, taskInfo.getTaskID());
         
         ImageIcon fileType = taskInfo.getFileType();
         String fileName = taskInfo.getFileName();
         String fileSize = ParameterUnitUtil.getFileSize(taskInfo.getFileSize());
         String createTime = taskInfo.getCreateTime();
-        addRow(new Object[]{fileType, fileName, fileSize, createTime});
+        
+        if(index == getRowCount()) addRow(new Object[]{fileType, fileName, fileSize, createTime});
+        else {
+            setValueAt(fileType, index, 0);
+            setValueAt(fileName, index, 1);
+            setValueAt(fileSize, index, 2);
+            setValueAt(createTime, index, 3);
+        }
+        
+        
     }
 
+    private int index;
     @Override
     protected void execute(InfoEvent event) {
         
         TaskState key = (TaskState) event.getOperationKey();
         
         if(key == TaskState.TASK_DELETED){
-            TaskMapper.InnerClass.instance.getStateFiltedTaskInfo(TaskState.TASK_DELETED)
-            .forEach(taskInfo -> addRow(taskInfo));
+            index = 0;
+            TaskMapper mapper = TaskMapper.InnerClass.instance;
+            mapper.getStateFiltedTaskInfo(TaskState.TASK_DELETED)
+            .forEach(taskInfo -> {
+                addRow(taskInfo, index);
+                index++;
+            });
         }
  
     }

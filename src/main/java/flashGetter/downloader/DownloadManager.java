@@ -1,7 +1,7 @@
 package flashGetter.downloader;
 
-import flashGetter.downloader.executor.DownloadingExecutor;
 import flashGetter.downloader.task.Task;
+import flashGetter.downloader.task.TaskExecutor;
 import flashGetter.downloader.task.Task.TaskState;
 import flashGetter.view.EventDispatcher;
 import flashGetter.view.EventHandler;
@@ -43,7 +43,7 @@ public class DownloadManager implements EventHandler {
      *  inside the executor) is to build a regulation of transformation. 
      */
     public DownloadManager() {
-        downloadingExecutor = new DownloadingExecutor();
+        downloadingExecutor = new TaskExecutor();
         
         downloadingExecutor.addManagerListener(event -> {
             

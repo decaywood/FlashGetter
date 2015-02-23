@@ -1,4 +1,4 @@
-package flashGetter.downloader.executor;
+package flashGetter.downloader.task;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -13,11 +13,7 @@ import org.apache.log4j.Logger;
 import flashGetter.downloader.DownloadingOperation;
 import flashGetter.downloader.ManagerListener;
 import flashGetter.downloader.TaskMapper;
-import flashGetter.downloader.task.Task;
 import flashGetter.downloader.task.Task.TaskState;
-import flashGetter.downloader.task.DownloadingTask;
-import flashGetter.downloader.task.TaskInfo;
-import flashGetter.downloader.task.TaskRunnable;
 import flashGetter.util.SequenceGenerator;
 import flashGetter.util.TaskGenerator;
 import flashGetter.util.TimeUtil;
@@ -29,16 +25,16 @@ import flashGetter.util.TimeUtil.UpdateCounter;
  * 2015年2月6日
  * 
  */
-public class DownloadingExecutor implements DownloadingOperation {
+public class TaskExecutor implements DownloadingOperation {
     
-    private static final Logger LOGGER = Logger.getLogger(DownloadingExecutor.class);
+    private static final Logger LOGGER = Logger.getLogger(TaskExecutor.class);
     
     private ExecutorService executor;
     private Map<Long, TaskRunnable> taskTable;
     private List<ManagerListener> listeners;
     private UpdateCounter updateCounter;
     
-    public DownloadingExecutor() {
+    public TaskExecutor() {
         this.executor = Executors.newCachedThreadPool();
         this.taskTable = new ConcurrentHashMap<Long, TaskRunnable>();
         this.listeners = new ArrayList<ManagerListener>();

@@ -21,7 +21,7 @@ public class DeletedControlBar extends ControlBar {
         addPanel(Resources.recoverTask, 
                 Resources.recoverTaskChoosed, 
                 null, 
-                "Create a Task",
+                "Recover a Task",
                 new InfoEvent()
                 .setTarget(DeletedTable.class)
                 .setOperationKey(TaskEventType.TASK_RECOVER));

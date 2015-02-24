@@ -85,6 +85,11 @@ public class DownloadManager implements EventHandler {
             else if(event.stateEqual(TaskState.TASK_RECOVER)){
                 downloadingExecutor.startTask(event.getTaskID());
             }
+            
+            else if(event.stateEqual(TaskState.TASK_REMOVE)){
+                sendInfoEvent(event, DeletedTableModel.class, TaskState.TASK_REMOVE);
+            }
+            
         });
         
 //        downloadedExecutor = 
@@ -102,6 +107,8 @@ public class DownloadManager implements EventHandler {
     }
     
     private void deletedExecute(InfoEvent event){
+        
+        
         TaskEventType operationKey = (TaskEventType) event.getOperationKey();
         
         if(operationKey == TaskEventType.TASK_REMOVE)

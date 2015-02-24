@@ -13,7 +13,8 @@ public interface Task {
         TASK_FINISHED,
         TASK_UPDATE,
         TASK_RECOVER,
-        TASK_DELETED
+        TASK_DELETED,
+        TASK_REMOVE
         
 //        TASK_CREATE,
 //        TASK_START,

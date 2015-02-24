@@ -10,6 +10,7 @@ import flashGetter.downloader.TaskMapper;
 import flashGetter.downloader.task.Task;
 import flashGetter.downloader.task.Task.TaskState;
 
+
 /**
  * @author decaywood
  * 
@@ -28,7 +29,11 @@ public class DeletedExecutor implements DeletedOperation {
 
     @Override
     public void offerDeletedTask(long... taskIDs) {
-        Arrays.stream(taskIDs).forEach(taskID -> deletedTaskIDs.add(taskID));
+        Arrays.stream(taskIDs).forEach(taskID -> {
+            deletedTaskIDs.add(taskID);
+            Task task = TaskMapper.InnerClass.instance.getTaskInfo(taskID);
+            fireTaskInfo(task);
+        });
     }
 
     @Override
@@ -43,13 +48,19 @@ public class DeletedExecutor implements DeletedOperation {
     @Override
     public void removeTask(long... taskIDs) {
         Arrays.stream(taskIDs).mapToObj(taskID -> getTask(taskID))
-        .forEach(taskInfo -> fireTaskInfo(taskInfo));
+        .forEach(taskInfo -> {
+            taskInfo.changeTaskState(TaskState.TASK_REMOVE);
+            fireTaskInfo(taskInfo); 
+        });
     }
 
     @Override
     public void removeAllTask() {
         deletedTaskIDs.stream().map(taskID -> getTask(taskID))
-        .forEach(taskInfo -> fireTaskInfo(taskInfo));
+        .forEach(taskInfo -> {
+            taskInfo.changeTaskState(TaskState.TASK_REMOVE);
+            fireTaskInfo(taskInfo); 
+        });
     }
 
     @Override

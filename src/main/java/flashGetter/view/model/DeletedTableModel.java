@@ -1,5 +1,7 @@
 package flashGetter.view.model;
 
+import java.util.Arrays;
+
 import javax.swing.ImageIcon;
 
 import flashGetter.downloader.TaskMapper;
@@ -60,7 +62,21 @@ public class DeletedTableModel extends TaskTableModel {
             mapper.getStateFiltedTaskInfo(TaskState.TASK_DELETED)
             .forEach(taskInfo -> {
                 addRow(taskInfo, index);
+                mapper.updateRowIndexMapper(TaskMapper.DELETED_MASK, index, taskInfo.getTaskID());
                 index++;
+            });
+        }
+        
+        else if(key == TaskState.TASK_REMOVE){
+            TaskMapper mapper = TaskMapper.InnerClass.instance;
+            mapper.getMapStream((K, V) -> {
+                boolean contains = Arrays.binarySearch(event.getTaskIDs(), V) >= 0;
+                if(contains){
+                    int index = K ^ TaskMapper.DELETED_MASK; 
+                    mapper.dropRowIndexMapper(K);
+                    removeRow(index);
+                    mapper.dropTask(V);
+                }
             });
         }
  

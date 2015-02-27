@@ -46,8 +46,8 @@ public class DeletedTable extends TaskTable<DeletedTableModel> {
         .mapToLong(index -> mapper.getTaskID(TaskMapper.DELETED_MASK, index))
         .toArray();
         InfoEvent fireEvent = event.newCopy()
-                .setTaskID(taskIDs)
-                .setTarget(DownloadManager.class);
+        .setTaskID(taskIDs)
+        .setTarget(DownloadManager.class);
         EventDispatcher.InnerClass.instance.fireEvent(fireEvent);
     }
     

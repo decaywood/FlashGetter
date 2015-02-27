@@ -3,8 +3,11 @@ package flashGetter.view.controlbar;
 import java.awt.event.MouseAdapter;
 
 import flashGetter.Resources;
+import flashGetter.downloader.DownloadManager.TaskEventType;
 import flashGetter.view.InfoEvent;
 import flashGetter.view.controlbar.ControlBarPlatter.ActionType;
+import flashGetter.view.tasktable.DownloadedTable;
+import flashGetter.view.tasktable.DownloadingTable;
 
 /**
  * @author decaywood
@@ -29,7 +32,9 @@ public class DownloadedControlBar extends ControlBar {
                 Resources.deleteTaskChoosed, 
                 null, 
                 "Delete Task",
-                new InfoEvent());
+                new InfoEvent()
+            .setTarget(DownloadedTable.class)
+            .setOperationKey(TaskEventType.TASK_AFTER_DELETE));
         
     }
 

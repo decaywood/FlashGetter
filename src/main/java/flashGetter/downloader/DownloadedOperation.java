@@ -1,5 +1,7 @@
 package flashGetter.downloader;
 
+import flashGetter.downloader.task.Task;
+
 /**
  * @author decaywood
  * 
@@ -8,8 +10,12 @@ package flashGetter.downloader;
  */
 public interface DownloadedOperation {
     
-    public void createTask(String downloadAddr, String savePath);
+    public void deleteTask(long... taskIDs);
+    
+    public void addManagerListener(ManagerListener listener);
 
-    public void deleteTask(String[] taskNumber);
+    public void fireTaskInfo(Task event);
+    
+    public void offerFinishedTask(long taskID);
     
 }

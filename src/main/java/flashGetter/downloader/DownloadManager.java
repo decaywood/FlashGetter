@@ -1,6 +1,7 @@
 package flashGetter.downloader;
 
 import flashGetter.downloader.executor.DeletedExecutor;
+import flashGetter.downloader.executor.DownloadedExecutor;
 import flashGetter.downloader.executor.DownloadingExecutor;
 import flashGetter.downloader.task.Task;
 import flashGetter.downloader.task.Task.TaskState;
@@ -31,6 +32,7 @@ public class DownloadManager implements EventHandler {
         TASK_START,
         TASK_PAUSE,
         TASK_DELETE,
+        TASK_AFTER_DELETE,
         TASK_RECOVER,
         TASK_REMOVE,
         TASK_REMOVE_ALL
@@ -60,7 +62,7 @@ public class DownloadManager implements EventHandler {
             else if(event.stateEqual(TaskState.TASK_FINISHED)){
                 
                 sendInfoEvent(event, DownloadingTableModel.class, TaskState.TASK_FINISHED);
-                sendInfoEvent(event, DownloadedTableModel.class, TaskState.TASK_FINISHED);
+                downloadedExecutor.offerFinishedTask(event.getTaskID());
                 
             }
             
@@ -71,6 +73,25 @@ public class DownloadManager implements EventHandler {
             }
           
         });
+        
+        downloadedExecutor = new DownloadedExecutor();
+        
+        downloadedExecutor.addManagerListener(event -> {
+            
+            if(event.stateEqual(TaskState.TASK_FINISHED)){
+                
+                sendInfoEvent(event, DownloadedTableModel.class, TaskState.TASK_FINISHED);
+                
+            }
+            
+            else if(event.stateEqual(TaskState.TASK_DELETED)){
+                
+                sendInfoEvent(event, DownloadedTableModel.class, TaskState.TASK_DELETED);
+               
+            }
+            
+        });
+            
         
         deletedExecutor = new DeletedExecutor();
         
@@ -101,6 +122,7 @@ public class DownloadManager implements EventHandler {
         
         downloadingExecute(event);
         
+        downloadedExecute(event);
         
         deletedExecute(event);
         
@@ -119,6 +141,17 @@ public class DownloadManager implements EventHandler {
         
         else if(operationKey == TaskEventType.TASK_RECOVER)
             deletedExecutor.recoverTask(event.getTaskIDs());
+    }
+    
+    
+    private void downloadedExecute(InfoEvent event){
+        
+        TaskEventType operationKey = (TaskEventType) event.getOperationKey();
+        
+        if(operationKey == TaskEventType.TASK_AFTER_DELETE){
+            downloadedExecutor.deleteTask(event.getTaskIDs());
+        }
+        
     }
     
     private void downloadingExecute(InfoEvent event){

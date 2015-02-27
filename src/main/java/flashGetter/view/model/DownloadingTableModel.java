@@ -83,8 +83,8 @@ public class DownloadingTableModel extends TaskTableModel {
             });
             
         }else if(key == TaskState.TASK_FINISHED || key == TaskState.TASK_DELETED){
-            TaskMapper mapper = TaskMapper.InnerClass.instance;
             
+            TaskMapper mapper = TaskMapper.InnerClass.instance;
             mapper.getMapStream((K, V) -> {
                 boolean contains = Arrays.binarySearch(event.getTaskIDs(), V) >= 0;
                 if(contains){

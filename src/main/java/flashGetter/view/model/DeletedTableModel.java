@@ -29,7 +29,7 @@ public class DeletedTableModel extends TaskTableModel {
 
     
 
-    private void addRow(TaskInfo taskInfo, int index) {
+    private synchronized void addRow(TaskInfo taskInfo, int index) {
         
         TaskMapper.InnerClass.instance
         .updateRowIndexMapper(TaskMapper.DELETED_MASK, index, taskInfo.getTaskID());

@@ -27,35 +27,31 @@ public class DownloadedTableModel extends TaskTableModel {
         return DownloadedTableModel.class == clazz;
     }
 
-//    protected synchronized void updateRow(int row, TaskInfo taskInfo) {
-//        
-//        if(getRowCount() <= row) return;
-//        
-//        ImageIcon fileType = taskInfo.getFileType();
-//        String fileName = taskInfo.getFileName();
-//        String fileSize = ParameterUnitUtil.getFileSize(taskInfo.getFileSize());
-//        String finishTime = taskInfo.getFinishTime();
-//        
-//        setValueAt(fileType, row, 0);
-//        setValueAt(fileName, row, 1);
-//        setValueAt(fileSize, row, 2);
-//        setValueAt(finishTime, row, 3);
-//        
-//    }
+ 
 
-    private synchronized void addRow(TaskInfo taskInfo) {
-        
-        int rowIndex = getRowCount();
+    private synchronized void addRow(TaskInfo taskInfo, int index) {
         
         TaskMapper.InnerClass.instance
-        .updateRowIndexMapper(TaskMapper.DOWNLOADED_MASK, rowIndex, taskInfo.getTaskID());
+        .updateRowIndexMapper(TaskMapper.DOWNLOADED_MASK, index, taskInfo.getTaskID());
         
         ImageIcon fileType = taskInfo.getFileType();
         String fileName = taskInfo.getFileName();
         String fileSize = ParameterUnitUtil.getFileSize(taskInfo.getFileSize());
         String finishTime = taskInfo.getFinishTime();
-        addRow(new Object[]{fileType, fileName, fileSize, finishTime});
+        
+        if(index == getRowCount()) addRow(new Object[]{fileType, fileName, fileSize, finishTime});
+        else {
+            setValueAt(fileType, index, 0);
+            setValueAt(fileName, index, 1);
+            setValueAt(fileSize, index, 2);
+            setValueAt(finishTime, index, 3);
+        }
+        
     }
+    
+    private int index;
+    
+    
 
     @Override
     protected void execute(InfoEvent event) {
@@ -63,12 +59,26 @@ public class DownloadedTableModel extends TaskTableModel {
         TaskState key = (TaskState) event.getOperationKey();
         
         if(key == TaskState.TASK_FINISHED){
-            TaskMapper.InnerClass.instance.getStateFiltedTaskInfo(TaskState.TASK_FINISHED)
-            .forEach(taskInfo -> addRow(taskInfo));
+            index = 0;
+            TaskMapper mapper = TaskMapper.InnerClass.instance;
+            mapper.getStateFiltedTaskInfo(TaskState.TASK_FINISHED)
+            .forEach(taskInfo -> {
+                addRow(taskInfo, index);
+                mapper.updateRowIndexMapper(TaskMapper.DOWNLOADED_MASK, index, taskInfo.getTaskID());
+                index++;
+            });
         }
         
         else if(key == TaskState.TASK_DELETED){
-            
+            TaskMapper mapper = TaskMapper.InnerClass.instance;
+            mapper.getMapStream((K, V) -> {
+                boolean contains = Arrays.binarySearch(event.getTaskIDs(), V) >= 0;
+                if(contains){
+                    int index = K ^ TaskMapper.DOWNLOADED_MASK; 
+                    mapper.dropRowIndexMapper(K);
+                    removeRow(index);
+                }
+            });
         }
         
     }

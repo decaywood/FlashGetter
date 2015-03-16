@@ -39,7 +39,6 @@ public class TaskDialog extends JDialog {
         setSize(650, 200);
         setLayout(new BorderLayout());
         setDefaultCloseOperation(DISPOSE_ON_CLOSE);
-        setVisible(true);
         setTitle("New Task");
         setVisible(true); 
         
